@@ -1,5 +1,6 @@
 flask
-gunicorn
 line-bot-sdk
-openai
+gspread
+oauth2client
+gunicorn
 python-dotenv
