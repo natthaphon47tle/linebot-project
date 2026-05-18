@@ -52,11 +52,20 @@ creds = Credentials.from_service_account_file(
     scopes=scope
 )
 
-client = gspread.authorize(creds)
+try:
 
-sheet = client.open("LineBotUsers").sheet1
-tracking_sheet = client.open("LineBotUsers").worksheet("tracking")
-faq_sheet = client.open("LineBotUsers").worksheet("faq")
+    client = gspread.authorize(creds)
+
+    sheet = client.open("LineBotUsers").sheet1
+    tracking_sheet = client.open("LineBotUsers").worksheet("tracking")
+    faq_sheet = client.open("LineBotUsers").worksheet("faq")
+
+    print("Google Sheet Connected")
+
+except Exception as e:
+
+    print("Google Sheet Error")
+    print(e)
 
 # =========================
 # LOGIN SESSION
