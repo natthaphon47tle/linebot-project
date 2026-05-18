@@ -4,7 +4,7 @@ import gspread
 
 from dotenv import load_dotenv
 import os
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.service_account import Credentials
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
@@ -47,9 +47,9 @@ scope = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name(
+creds = Credentials.from_service_account_file(
     "linebotnew-496708-2b9b8ae43472.json",
-    scope
+    scope=scope
 )
 
 client = gspread.authorize(creds)
