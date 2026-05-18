@@ -3,8 +3,80 @@ import os
 import gspread
 
 from dotenv import load_dotenv
-import os
-from google.oauth2.service_account import Credentials
+import sqlite3
+
+# =========================
+# DATABASE
+# =========================
+
+conn = sqlite3.connect("database.db", check_same_thread=False)
+cursor = conn.cursor()
+
+# USERS TABLE
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    username TEXT,
+    password TEXT
+)
+""")
+
+# TRACKING TABLE
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS tracking (
+    tracking TEXT,
+    status TEXT,
+    location TEXT
+)
+""")
+
+# FAQ TABLE
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS faq (
+    keyword TEXT,
+    answer TEXT
+)
+""")
+
+conn.commit()
+
+# =========================
+# DEFAULT DATA
+# =========================
+
+# USERS
+cursor.execute("SELECT * FROM users")
+
+if not cursor.fetchall():
+
+    cursor.execute("""
+    INSERT INTO users VALUES
+    ('admin', '1234'),
+    ('leo', '9999')
+    """)
+
+# TRACKING
+cursor.execute("SELECT * FROM tracking")
+
+if not cursor.fetchall():
+
+    cursor.execute("""
+    INSERT INTO tracking VALUES
+    ('ABC123', 'In Transit', 'Bangkok'),
+    ('XYZ999', 'Delivered', 'Laem Chabang')
+    """)
+
+# FAQ
+cursor.execute("SELECT * FROM faq")
+
+if not cursor.fetchall():
+
+    cursor.execute("""
+    INSERT INTO faq VALUES
+    ('customs', 'บริการด้านพิธีการศุลกากร Import / Export'),
+    ('warehouse', 'บริการคลังสินค้าและกระจายสินค้า')
+    """)
+
+conn.commit()
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
