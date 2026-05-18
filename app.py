@@ -48,7 +48,7 @@ scope = [
 ]
 
 creds = ServiceAccountCredentials.from_json_keyfile_name(
-    "bdvm-bot-1ce75108630c.json",
+    "bdvm-bot-f184e79db81c.json",
     scope
 )
 
