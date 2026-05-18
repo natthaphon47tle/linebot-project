@@ -49,7 +49,7 @@ scope = [
 
 creds = Credentials.from_service_account_file(
     "linebotnew-496708-2b9b8ae43472.json",
-    scope=scope
+    scopes=scope
 )
 
 client = gspread.authorize(creds)
