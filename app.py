@@ -1,6 +1,5 @@
 from flask import Flask, request
 import os
-import gspread
 
 from dotenv import load_dotenv
 import sqlite3
@@ -110,34 +109,6 @@ app = Flask(__name__)
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
-# =========================
-# GOOGLE SHEET
-# =========================
-
-scope = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/drive"
-]
-
-creds = Credentials.from_service_account_file(
-    "line-bot-496709-f358902967e6.json",
-    scopes=scope
-)
-
-try:
-
-    client = gspread.authorize(creds)
-
-    sheet = client.open("LineBotUsers").sheet1
-    tracking_sheet = client.open("LineBotUsers").worksheet("tracking")
-    faq_sheet = client.open("LineBotUsers").worksheet("faq")
-
-    print("Google Sheet Connected")
-
-except Exception as e:
-
-    print("Google Sheet Error")
-    print(e)
 
 # =========================
 # LOGIN SESSION
@@ -191,15 +162,16 @@ def handle_message(event):
 
             _, username, password = text.split()
 
-            records = sheet.get_all_records()
+            cursor.execute("SELECT * FROM users")
+            records = cursor.fetchall()
 
             found = False
 
             for row in records:
 
                 if (
-                    row["username"] == username and
-                    str(row["password"]) == password
+                    row[0] == username and
+                    str(row[1]) == password
                 ):
 
                     found = True
@@ -342,13 +314,13 @@ def handle_message(event):
 
                 tracking_number = parts[1]
 
-                records = tracking_sheet.get_all_records()
-
+                cursor.execute("SELECT * FROM tracking")
+                records = cursor.fetchall()
                 found = False
 
                 for row in records:
 
-                    if row["tracking"] == tracking_number:
+                    if row[0] == tracking_number:
 
                         found = True
 
@@ -375,18 +347,18 @@ def handle_message(event):
 
                                         {
                                             "type": "text",
-                                            "text": f"Tracking : {row['tracking']}",
+                                            "text": f"Tracking : {row[0]}",
                                             "margin": "md"
                                         },
 
                                         {
                                             "type": "text",
-                                            "text": f"Status : {row['status']}"
+                                            "text": f"Status : {row[1]}"
                                         },
 
                                         {
                                             "type": "text",
-                                            "text": f"Location : {row['location']}"
+                                            "text": f"Location : {row[2]}"
                                         }
                                     ]
                                 }
@@ -409,15 +381,16 @@ def handle_message(event):
 
         else:
 
-            records = faq_sheet.get_all_records()
+            cursor.execute("SELECT * FROM faq")
+            records = cursor.fetchall()
 
             found = False
 
             for row in records:
 
-                if row["keyword"].lower() == text.lower():
+                if row[0].lower() == text.lower():
 
-                    reply = row["answer"]
+                    reply = row[1]
 
                     found = True
                     break
