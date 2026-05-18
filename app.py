@@ -48,7 +48,7 @@ scope = [
 ]
 
 creds = Credentials.from_service_account_file(
-    "linebotnew-496708-2b9b8ae43472.json",
+    "line-bot-496709-f358902967e6.json",
     scopes=scope
 )
 
