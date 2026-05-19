@@ -3,6 +3,7 @@ import os
 
 from dotenv import load_dotenv
 import sqlite3
+import pandas as pd
 
 # =========================
 # DATABASE
@@ -92,6 +93,7 @@ from linebot.models import (
 # =========================
 
 load_dotenv()
+supplier_df = pd.read_excel("Tracking& Reefer.xlsx")
 
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
@@ -212,10 +214,7 @@ def handle_message(event):
     # =========================
     # LOGIN SUCCESS
     # =========================
-
-    else:
-
-        # =========================
+                # =========================
         # MENU
         # =========================
 
@@ -230,6 +229,25 @@ def handle_message(event):
                 "5. customs\n"
                 "6. tracking <เลข>"
             )
+
+        # =========================
+        # TRUCKING & REEFER
+        # =========================
+
+        elif text.lower() == "trucking":
+
+            reply = "🚛 Trucking & Reefer\n\n"
+
+            for index, row in supplier_df.iterrows():
+
+                reply += (
+                    f"Company : {row['company']}\n"
+                    f"Contact : {row['contact']}\n"
+                    f"Email : {row['email']}\n"
+                    f"Tel : {row['tel']}\n"
+                    f"Base : {row['base']}\n\n"
+                )
+
 
         # =========================
         # SERVICE
