@@ -422,7 +422,11 @@ def handle_message(event):
         # CROSS BORDER
         # =========================
 
-        elif "crossborder" in text.lower():
+        elif (
+            "cross border" in text.lower()
+            or
+            "crossborder" in text.lower()
+        ):
 
             try:
 
