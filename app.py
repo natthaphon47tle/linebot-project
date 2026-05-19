@@ -250,7 +250,7 @@ def handle_message(event):
 
             try:
 
-                pd.read_excel("tracking_reefer.xlsx")
+                df = pd.read_excel("tracking_reefer.xlsx")
 
                 reply = "🚛 Trucking & Reefer\n\n"
 
