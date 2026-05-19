@@ -326,19 +326,8 @@ def handle_message(event):
                 "- Reefer Truck"
             )
 
+     
         # =========================
-        # CUSTOMS
-        # =========================
-
-        elif text.lower() == "customs":
-
-            reply = (
-                "📄 Customs Clearance\n\n"
-                "- Import\n"
-                "- Export\n"
-                "- Documentation"
-            )
-                # =========================
         # CUSTOMS
         # =========================
 
