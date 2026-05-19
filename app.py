@@ -338,6 +338,136 @@ def handle_message(event):
                 "- Export\n"
                 "- Documentation"
             )
+                # =========================
+        # CUSTOMS
+        # =========================
+
+        elif "customs" in text.lower():
+
+            try:
+
+                df = pd.read_excel("customs_clearance.xlsx")
+
+                reply = "📄 Customs Clearance\n\n"
+
+                for index, row in df.iterrows():
+
+                    reply += (
+                        f"Company : {row['company']}\n"
+                        f"Contact : {row['contact']}\n"
+                        f"Email : {row['email']}\n"
+                        f"Tel : {row['tel']}\n"
+                        f"Base : {row['base']}\n\n"
+                    )
+
+            except Exception as e:
+
+                reply = str(e)
+
+        # =========================
+        # INSURANCE
+        # =========================
+
+        elif "insurance" in text.lower():
+
+            try:
+
+                df = pd.read_excel("cargo_insurance.xlsx")
+
+                reply = "🛡 Cargo Insurance\n\n"
+
+                for index, row in df.iterrows():
+
+                    reply += (
+                        f"Company : {row['company']}\n"
+                        f"Department : {row['department']}\n"
+                        f"Contact : {row['contact']}\n"
+                        f"Email : {row['email']}\n"
+                        f"Tel : {row['tel']}\n"
+                        f"Note : {row['note']}\n\n"
+                    )
+
+            except Exception as e:
+
+                reply = str(e)
+
+        # =========================
+        # PACKING
+        # =========================
+
+        elif "packing" in text.lower():
+
+            try:
+
+                df = pd.read_excel("packing.xlsx")
+
+                reply = "📦 Packing Service\n\n"
+
+                for index, row in df.iterrows():
+
+                    reply += (
+                        f"Company : {row['company']}\n"
+                        f"Contact : {row['contact']}\n"
+                        f"Email : {row['email']}\n"
+                        f"Tel : {row['tel']}\n"
+                        f"Service : {row['service']}\n"
+                        f"Base : {row['base']}\n\n"
+                    )
+
+            except Exception as e:
+
+                reply = str(e)
+
+        # =========================
+        # CROSS BORDER
+        # =========================
+
+        elif "crossborder" in text.lower():
+
+            try:
+
+                df = pd.read_excel("cross_border.xlsx")
+
+                reply = "🌏 Cross Border\n\n"
+
+                for index, row in df.iterrows():
+
+                    reply += (
+                        f"Company : {row['company']}\n"
+                        f"Contact : {row['contact']}\n"
+                        f"Email : {row['email']}\n"
+                        f"Tel : {row['tel']}\n"
+                        f"Route : {row['route']}\n\n"
+                    )
+
+            except Exception as e:
+
+                reply = str(e)
+
+        # =========================
+        # COURIER
+        # =========================
+
+        elif "courier" in text.lower():
+
+            try:
+
+                df = pd.read_excel("courier.xlsx")
+
+                reply = "📦 Courier Service\n\n"
+
+                for index, row in df.iterrows():
+
+                    reply += (
+                        f"Company : {row['company']}\n"
+                        f"Contact : {row['contact']}\n"
+                        f"Email : {row['email']}\n"
+                        f"Tel : {row['tel']}\n\n"
+                    )
+
+            except Exception as e:
+
+                reply = str(e)
 
         # =========================
         # TRACKING
