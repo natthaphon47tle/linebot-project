@@ -262,7 +262,7 @@ def handle_message(event):
                         f"Contact : {row['contact']}\n"
                         f"Email : {row['email']}\n"
                         f"Tel : {row['tel']}\n"
-                        f"Base : {row['base']}\n\n"
+                        f"Base : {row['Base']}\n\n"
                     )
 
             except Exception as e:
