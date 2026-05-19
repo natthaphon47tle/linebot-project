@@ -3,6 +3,7 @@ import os
 
 from dotenv import load_dotenv
 import sqlite3
+from werkzeug.security import generate_password_hash, check_password_hash
 import pandas as pd
 
 # =========================
@@ -50,10 +51,18 @@ if not cursor.fetchall():
 
     cursor.execute("""
     INSERT INTO users VALUES
-    ('admin', '1234'),
-    ('leo', '9999')
-    """)
-
+(
+    'admin',
+    '{}'
+),
+(
+    'leo',
+    '{}'
+)
+""".format(
+    generate_password_hash('1234'),
+    generate_password_hash('9999')
+))
 # TRACKING
 cursor.execute("SELECT * FROM tracking")
 
@@ -173,7 +182,7 @@ def handle_message(event):
 
                 if (
                     row[0] == username and
-                    str(row[1]) == password
+                    check_password_hash(row[1], password)
                 ):
 
                     found = True
