@@ -225,21 +225,21 @@ def handle_message(event):
 
     else:
 
-    # =========================
-    # MENU
-    # =========================
+        # =========================
+        # MENU
+        # =========================
 
-    if text.lower() == "menu":
+        if text.lower() == "menu":
 
-        reply = (
-            "📋 MENU\n\n"
-            "1. service\n"
-            "2. contact\n"
-            "3. warehouse\n"
-            "4. transport\n"
-            "5. customs\n"
-            "6. tracking <เลข>"
-        )
+           reply = (
+               "📋 MENU\n\n"
+              "1. service\n"
+              "2. contact\n"
+              "3. warehouse\n"
+              "4. transport\n"
+              "5. customs\n"
+              "6. tracking <เลข>"
+          )
 
     # =========================
     # TRUCKING & REEFER
