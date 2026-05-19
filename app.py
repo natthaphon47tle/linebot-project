@@ -247,6 +247,7 @@ def handle_message(event):
         # =========================
 
         elif "trucking" in text.lower():
+            print(text)
 
             try:
 
