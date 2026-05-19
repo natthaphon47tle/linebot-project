@@ -102,7 +102,6 @@ from linebot.models import (
 # =========================
 
 load_dotenv()
-supplier_df = pd.read_excel("Tracking& Reefer.xlsx")
 
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
@@ -223,21 +222,24 @@ def handle_message(event):
     # =========================
     # LOGIN SUCCESS
     # =========================
-                # =========================
-        # MENU
-        # =========================
 
-        if text.lower() == "menu":
+    else:
 
-            reply = (
-                "📋 MENU\n\n"
-                "1. service\n"
-                "2. contact\n"
-                "3. warehouse\n"
-                "4. transport\n"
-                "5. customs\n"
-                "6. tracking <เลข>"
-            )
+    # =========================
+    # MENU
+    # =========================
+
+    if text.lower() == "menu":
+
+        reply = (
+            "📋 MENU\n\n"
+            "1. service\n"
+            "2. contact\n"
+            "3. warehouse\n"
+            "4. transport\n"
+            "5. customs\n"
+            "6. tracking <เลข>"
+        )
 
         # =========================
         # TRUCKING & REEFER
@@ -245,16 +247,27 @@ def handle_message(event):
 
         elif text.lower() == "trucking":
 
-            reply = "🚛 Trucking & Reefer\n\n"
+            try:
 
-            for index, row in supplier_df.iterrows():
+                df = pd.read_excel("Tracking& Reefer.xlsx")
 
-                reply += (
-                    f"Company : {row['company']}\n"
-                    f"Contact : {row['contact']}\n"
-                    f"Email : {row['email']}\n"
-                    f"Tel : {row['tel']}\n"
-                    f"Base : {row['base']}\n\n"
+                reply = "🚛 Trucking & Reefer\n\n"
+
+                for index, row in df.iterrows():
+
+                    reply += (
+                        f"Company : {row['company']}\n"
+                        f"Contact : {row['contact']}\n"
+                        f"Email : {row['email']}\n"
+                        f"Tel : {row['tel']}\n"
+                        f"Base : {row['base']}\n\n"
+                    )
+
+            except Exception as e:
+
+                reply = (
+                    "❌ ไม่สามารถอ่านไฟล์ Excel ได้\n\n"
+                    f"Error : {str(e)}"
                 )
 
 
