@@ -342,7 +342,7 @@ def handle_message(event):
         # TRACKING
         # =========================
 
-        elif text.lower().startswith("tracking"):
+        elif text.lower().startswith("tracking "):
 
             parts = text.split()
 
