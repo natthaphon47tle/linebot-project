@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import pandas as pd
+from openai import OpenAI
 
 # =========================
 # DATABASE
@@ -102,6 +103,9 @@ from linebot.models import (
 # =========================
 
 load_dotenv()
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY")
+)
 
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
@@ -541,30 +545,90 @@ def handle_message(event):
                     reply = "❌ ไม่พบ Tracking นี้"
 
         # =========================
+        # AI SEARCH
+        # =========================
+
+        else:
+
+            try:
+
+                # LOAD ALL EXCEL
+
+                trucking_df = pd.read_excel("tracking_reefer.xlsx")
+                customs_df = pd.read_excel("customs_clearance.xlsx")
+                insurance_df = pd.read_excel("cargo_insurance.xlsx")
+                packing_df = pd.read_excel("packing.xlsx")
+                cross_df = pd.read_excel("cross_border.xlsx")
+                courier_df = pd.read_excel("courier.xlsx")
+
+                # COMBINE DATA
+
+                all_data = f"""
+                TRUCKING:
+                {trucking_df.to_string()}
+
+                CUSTOMS:
+                {customs_df.to_string()}
+
+                INSURANCE:
+                {insurance_df.to_string()}
+
+                PACKING:
+                {packing_df.to_string()}
+
+                CROSS BORDER:
+                {cross_df.to_string()}
+
+                COURIER:
+                {courier_df.to_string()}
+                """
+
+                # AI
+
+                response = client.chat.completions.create(
+
+                    model="gpt-4.1-mini",
+
+                    messages=[
+
+                        {
+                            "role": "system",
+                            "content": """
+                            คุณคือ AI Logistics Assistant
+
+                            ตอบเฉพาะข้อมูลที่มีใน Excel เท่านั้น
+                            ถ้าไม่มีข้อมูลให้ตอบว่า:
+                            'ไม่พบข้อมูล'
+                            """
+                        },
+
+                        {
+                            "role": "user",
+                            "content": f"""
+                            ข้อมูลทั้งหมด:
+
+                            {all_data}
+
+                            คำถาม:
+                            {text}
+                            """
+                        }
+                    ]
+                )
+
+                reply = response.choices[0].message.content
+
+            except Exception as e:
+
+                reply = str(e)
+
+        # =========================
         # FAQ
         # =========================
 
         else:
 
-            cursor.execute("SELECT * FROM faq")
-            records = cursor.fetchall()
-
-            found = False
-
-            for row in records:
-
-                if row[0].lower() == text.lower():
-
-                    reply = row[1]
-
-                    found = True
-                    break
-
-            if not found:
-
-                reply = (
-                    "❌ ไม่พบข้อมูล\n\n"
-                    "พิมพ์ menu เพื่อดูเมนู"
+            
                 )
 
     # =========================
