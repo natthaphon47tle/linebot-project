@@ -223,7 +223,7 @@ def handle_message(event):
     # LOGIN SUCCESS
     # =========================
 
-else:
+    else:
 
     # =========================
     # MENU
@@ -241,34 +241,34 @@ else:
             "6. tracking <เลข>"
         )
 
-        # =========================
-        # TRUCKING & REEFER
-        # =========================
+    # =========================
+    # TRUCKING & REEFER
+    # =========================
 
-        elif text.lower() == "trucking":
+    elif text.lower() == "trucking":
 
-            try:
+        try:
 
-                df = pd.read_excel("Tracking& Reefer.xlsx")
+            df = pd.read_excel("Tracking& Reefer.xlsx")
 
-                reply = "🚛 Trucking & Reefer\n\n"
+            reply = "🚛 Trucking & Reefer\n\n"
 
-                for index, row in df.iterrows():
+            for index, row in df.iterrows():
 
-                    reply += (
-                        f"Company : {row['company']}\n"
-                        f"Contact : {row['contact']}\n"
-                        f"Email : {row['email']}\n"
-                        f"Tel : {row['tel']}\n"
-                        f"Base : {row['base']}\n\n"
-                    )
-
-            except Exception as e:
-
-                reply = (
-                    "❌ ไม่สามารถอ่านไฟล์ Excel ได้\n\n"
-                    f"Error : {str(e)}"
+                reply += (
+                    f"Company : {row['company']}\n"
+                    f"Contact : {row['contact']}\n"
+                    f"Email : {row['email']}\n"
+                    f"Tel : {row['tel']}\n"
+                    f"Base : {row['base']}\n\n"
                 )
+
+        except Exception as e:
+
+            reply = (
+                "❌ ไม่สามารถอ่านไฟล์ Excel ได้\n\n"
+                f"Error : {str(e)}"
+            )
 
 
         # =========================
