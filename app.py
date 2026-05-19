@@ -231,45 +231,45 @@ def handle_message(event):
 
         if text.lower() == "menu":
 
-           reply = (
-               "📋 MENU\n\n"
-              "1. service\n"
-              "2. contact\n"
-              "3. warehouse\n"
-              "4. transport\n"
-              "5. customs\n"
-              "6. tracking <เลข>"
-          )
-
-    # =========================
-    # TRUCKING & REEFER
-    # =========================
-
-    elif text.lower() == "trucking":
-
-        try:
-
-            df = pd.read_excel("Tracking& Reefer.xlsx")
-
-            reply = "🚛 Trucking & Reefer\n\n"
-
-            for index, row in df.iterrows():
-
-                reply += (
-                    f"Company : {row['company']}\n"
-                    f"Contact : {row['contact']}\n"
-                    f"Email : {row['email']}\n"
-                    f"Tel : {row['tel']}\n"
-                    f"Base : {row['base']}\n\n"
-                )
-
-        except Exception as e:
-
             reply = (
-                "❌ ไม่สามารถอ่านไฟล์ Excel ได้\n\n"
-                f"Error : {str(e)}"
+                "📋 MENU\n\n"
+                "1. service\n"
+                "2. contact\n"
+                "3. warehouse\n"
+                "4. transport\n"
+                "5. customs\n"
+                "6. tracking <เลข>\n"
+                "7. trucking"
             )
 
+        # =========================
+        # TRUCKING & REEFER
+        # =========================
+
+        elif text.lower() == "trucking":
+
+            try:
+
+                df = pd.read_excel("Tracking& Reefer.xlsx")
+
+                reply = "🚛 Trucking & Reefer\n\n"
+
+                for index, row in df.iterrows():
+
+                    reply += (
+                        f"Company : {row['company']}\n"
+                        f"Contact : {row['contact']}\n"
+                        f"Email : {row['email']}\n"
+                        f"Tel : {row['tel']}\n"
+                        f"Base : {row['base']}\n\n"
+                    )
+
+            except Exception as e:
+
+                reply = (
+                    "❌ ไม่สามารถอ่านไฟล์ Excel ได้\n\n"
+                    f"Error : {str(e)}"
+                )
 
         # =========================
         # SERVICE
@@ -356,6 +356,7 @@ def handle_message(event):
 
                 cursor.execute("SELECT * FROM tracking")
                 records = cursor.fetchall()
+
                 found = False
 
                 for row in records:
