@@ -168,10 +168,6 @@ logged_in_users.append(user_id)
 <p>กลับไปใช้งาน LINE BOT ได้เลย</p>
 """
 
-        return """
-<h2>❌ Login Failed</h2>
-"""
-
     return render_template("login.html")
 
 # =========================
