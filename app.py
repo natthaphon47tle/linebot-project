@@ -266,25 +266,20 @@ async function login() {
     const password =
     document.getElementById("password").value;
 
-    const response = await fetch("/save_user", {
+    const response = await fetch("/check_login", {
 
-    method: "POST",
+        method: "POST",
 
-    headers: {
-        "Content-Type": "application/json"
-    },
+        headers: {
+            "Content-Type": "application/json"
+        },
 
-    body: JSON.stringify({
-        user_id: profile.userId
-    })
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
 
-});
-
-console.log(await response.text());
-
-alert("✅ Login Success");
-
-liff.closeWindow();
+    });
 
     const result = await response.text();
 
@@ -326,6 +321,13 @@ liff.closeWindow();
         })
 
     });
+
+    document.getElementById("msg").innerHTML =
+    "✅ Login Success";
+
+}
+
+</script>
 
     liff.closeWindow();
 
