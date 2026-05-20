@@ -342,7 +342,7 @@ def handle_follow(event):
 
                             "label": "Login",
 
-                            "uri": "https://linebot-project-0qio.onrender.com/liff"
+                            "uri": "https://liff.line.me/2010145479-TA2Uw8Ik"
 
                         }
 
