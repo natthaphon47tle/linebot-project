@@ -584,6 +584,95 @@ def handle_message(event):
                 """
 
                 # AI
+                # SEARCH COMPANY
+
+                filtered_data = ""
+
+                company_name = text.replace("ข้อมูลบริษัท", "").strip()
+
+                # TRUCKING
+
+                trucking_match = trucking_df[
+                    trucking_df["company"]
+                    .str.contains(company_name, case=False, na=False)
+                ]
+
+                if not trucking_match.empty:
+
+                    filtered_data += (
+                        "\nTRUCKING:\n"
+                        + trucking_match.to_string()
+                    )
+
+                # CUSTOMS
+
+                customs_match = customs_df[
+                    customs_df["company"]
+                    .str.contains(company_name, case=False, na=False)
+                ]
+
+                if not customs_match.empty:
+
+                    filtered_data += (
+                        "\nCUSTOMS:\n"
+                        + customs_match.to_string()
+                    )
+
+                # INSURANCE
+
+                insurance_match = insurance_df[
+                    insurance_df["company"]
+                    .str.contains(company_name, case=False, na=False)
+                ]
+
+                if not insurance_match.empty:
+
+                    filtered_data += (
+                        "\nINSURANCE:\n"
+                        + insurance_match.to_string()
+                    )
+
+                # PACKING
+
+                packing_match = packing_df[
+                    packing_df["company"]
+                    .str.contains(company_name, case=False, na=False)
+                ]
+
+                if not packing_match.empty:
+
+                    filtered_data += (
+                        "\nPACKING:\n"
+                        + packing_match.to_string()
+                    )
+
+                # CROSS BORDER
+
+                cross_match = cross_df[
+                    cross_df["company"]
+                    .str.contains(company_name, case=False, na=False)
+                ]
+
+                if not cross_match.empty:
+
+                    filtered_data += (
+                        "\nCROSS BORDER:\n"
+                        + cross_match.to_string()
+                    )
+
+                # COURIER
+
+                courier_match = courier_df[
+                    courier_df["company"]
+                    .str.contains(company_name, case=False, na=False)
+                ]
+
+                if not courier_match.empty:
+
+                    filtered_data += (
+                        "\nCOURIER:\n"
+                        + courier_match.to_string()
+                    )
 
                 response = client.chat.completions.create(
 
@@ -607,7 +696,7 @@ def handle_message(event):
                             "content": f"""
                             ข้อมูลทั้งหมด:
 
-                            {all_data}
+                            {filtered_data}
 
                             คำถาม:
                             {text}
