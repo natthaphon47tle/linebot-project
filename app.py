@@ -266,20 +266,25 @@ async function login() {
     const password =
     document.getElementById("password").value;
 
-    const response = await fetch("/check_login", {
+    const response = await fetch("/save_user", {
 
-        method: "POST",
+    method: "POST",
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+    headers: {
+        "Content-Type": "application/json"
+    },
 
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
+    body: JSON.stringify({
+        user_id: profile.userId
+    })
 
-    });
+});
+
+console.log(await response.text());
+
+alert("✅ Login Success");
+
+liff.closeWindow();
 
     const result = await response.text();
 
@@ -368,12 +373,17 @@ def check_login():
 @app.route("/save_user", methods=["POST"])
 def save_user():
 
-    data = request.json
+    data = request.get_json()
 
-    user_id = data["user_id"]
+    user_id = data.get("user_id")
+
+    print("SAVE USER:", user_id)
 
     if user_id not in logged_in_users:
+
         logged_in_users.append(user_id)
+
+    print("ALL LOGIN USERS:", logged_in_users)
 
     return "OK"
 
