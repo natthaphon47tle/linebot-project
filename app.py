@@ -709,7 +709,20 @@ def handle_message(event):
 
             except Exception as e:
 
-                reply = str(e)
+                                reply = (
+                    "⚠ AI quota หมด\n"
+                    "กำลังใช้ระบบค้นหาปกติ\n\n"
+                )
+
+                # NORMAL SEARCH
+
+                if filtered_data != "":
+
+                    reply += filtered_data
+
+                else:
+
+                    reply += "ไม่พบข้อมูล"
        
     # =========================
     # REPLY
