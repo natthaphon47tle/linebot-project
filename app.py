@@ -194,6 +194,9 @@ async function main() {
 
     await liff.init({
         liffId: "2010145479-TA2Uw8Ik"
+
+        withLoginOnExternalBrowser: true
+
     });
 
     if (!liff.isLoggedIn()) {
@@ -218,7 +221,8 @@ async function main() {
 
     .then(() => {
 
-        liff.closeWindow();
+        document.body.innerHTML =
+        "<h2>✅ Login Success</h2>";
 
     });
 
