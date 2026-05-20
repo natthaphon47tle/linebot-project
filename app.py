@@ -136,6 +136,10 @@ COMPANY_PASSWORD = "BDVM2026"
 # =========================
 # HOME
 # =========================
+@app.route("/")
+def home():
+
+    return "LINE BOT RUNNING"
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -172,7 +176,7 @@ def login():
 @app.route("/liff")
 def liff():
 
-    return f"""
+    return """
 <!DOCTYPE html>
 
 <html>
@@ -185,33 +189,33 @@ def liff():
 
 <style>
 
-body{{
+body{
     font-family:Arial;
     background:#f4f4f4;
     display:flex;
     justify-content:center;
     align-items:center;
     height:100vh;
-}}
+}
 
-.box{{
+.box{
     background:white;
     padding:30px;
     border-radius:20px;
     width:320px;
     text-align:center;
     box-shadow:0 0 10px rgba(0,0,0,0.1);
-}}
+}
 
-input{{
+input{
     width:100%;
     padding:12px;
     margin-top:15px;
     border-radius:10px;
     border:1px solid #ccc;
-}}
+}
 
-button{{
+button{
     width:100%;
     padding:12px;
     margin-top:20px;
@@ -220,7 +224,7 @@ button{{
     border:none;
     border-radius:10px;
     font-size:16px;
-}}
+}
 
 </style>
 
@@ -232,12 +236,16 @@ button{{
 
 <h2>🔐 BDVM LOGIN</h2>
 
-<p>กรุณาใส่รหัสบริษัท</p>
+<input
+    type="text"
+    id="username"
+    placeholder="Username"
+>
 
 <input
     type="password"
     id="password"
-    placeholder="Company Password"
+    placeholder="Password"
 >
 
 <button onclick="login()">
@@ -250,53 +258,73 @@ Login
 
 <script>
 
-async function login() {{
+async function login() {
+
+    const username =
+    document.getElementById("username").value;
 
     const password =
     document.getElementById("password").value;
 
-    if (password !== "{COMPANY_PASSWORD}") {{
+    const response = await fetch("/check_login", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+
+    });
+
+    const result = await response.text();
+
+    if (result !== "SUCCESS") {
 
         document.getElementById("msg").innerHTML =
-        "❌ รหัสไม่ถูกต้อง";
+        "❌ Username หรือ Password ไม่ถูกต้อง";
 
         return;
-    }}
+    }
 
-    await liff.init({{
+    await liff.init({
 
         liffId: "2010145479-TA2Uw8Ik",
 
         withLoginOnExternalBrowser: true
 
-    }});
+    });
 
-    if (!liff.isLoggedIn()) {{
+    if (!liff.isLoggedIn()) {
 
         liff.login();
 
         return;
-    }}
+    }
 
     const profile = await liff.getProfile();
 
-    await fetch("/save_user", {{
+    await fetch("/save_user", {
 
         method: "POST",
 
-        headers: {{
+        headers: {
             "Content-Type": "application/json"
-        }},
+        },
 
-        body: JSON.stringify({{
+        body: JSON.stringify({
             user_id: profile.userId
-        }})
+        })
 
-    }});
+    });
 
     liff.closeWindow();
 
-}}
+}
 
 </script>
 
@@ -305,6 +333,37 @@ async function login() {{
 </html>
 """
 
+
+# =========================
+# CHECK LOGIN
+# =========================
+
+@app.route("/check_login", methods=["POST"])
+def check_login():
+
+    data = request.json
+
+    username = data["username"]
+    password = data["password"]
+
+    cursor.execute("SELECT * FROM users")
+    records = cursor.fetchall()
+
+    for row in records:
+
+        if (
+            row[0] == username and
+            check_password_hash(row[1], password)
+        ):
+
+            return "SUCCESS"
+
+    return "FAIL"
+
+
+# =========================
+# SAVE USER
+# =========================
 
 @app.route("/save_user", methods=["POST"])
 def save_user():
@@ -442,6 +501,9 @@ def handle_message(event):
 
     user_id = event.source.user_id
     text = event.message.text.strip()
+
+    print("CURRENT USER:", user_id)
+    print("LOGIN USERS:", logged_in_users)
 
     # =========================
     # LOGOUT
@@ -587,7 +649,7 @@ def handle_message(event):
                 "6. courier"
             )
 
-                # =========================
+        # =========================
         # TRUCKING
         # =========================
 
