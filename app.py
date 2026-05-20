@@ -210,17 +210,17 @@ def handle_message(event):
         if user_id in logged_in_users:
             logged_in_users.remove(user_id)
 
-        reply = "✅ Logout สำเร็จ"
+       reply = "✅ Logout สำเร็จ"
 
-    # =========================
-    # NOT LOGIN
-    # =========================
+   # =========================
+   # NOT LOGIN
+   # =========================
 
-        elif user_id not in logged_in_users:
+   elif user_id not in logged_in_users:
 
-        profile = line_bot_api.get_profile(
-            event.source.user_id
-        )
+       profile = line_bot_api.get_profile(
+        event.source.user_id
+       )
 
         display_name = profile.display_name
 
@@ -329,12 +329,11 @@ def handle_message(event):
 
     else:
 
-        
         # =========================
         # MENU
         # =========================
 
-        elif text.lower() == "menu":
+        if text.lower() == "menu":
 
             reply = (
                 "📋 MENU\n\n"
