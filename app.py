@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template, redirect, session
 import os
 
 from dotenv import load_dotenv
@@ -115,6 +115,7 @@ LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 # =========================
 
 app = Flask(__name__)
+app.secret_key = "bdvm_secret"
 
 # =========================
 # LINE API
@@ -136,6 +137,36 @@ logged_in_users = []
 
 @app.route("/")
 def home():
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        password = request.form["password"]
+
+        cursor.execute("SELECT * FROM users")
+        records = cursor.fetchall()
+
+        for row in records:
+
+            if (
+                row[0] == username and
+                check_password_hash(row[1], password)
+            ):
+
+                session["user"] = username
+
+                return """
+                <h2>✅ Login Success</h2>
+                <p>กลับไปที่ LINE ได้เลย</p>
+                """
+
+        return """
+        <h2>❌ Login Failed</h2>
+        """
+
+    return render_template("login.html")
     return "LINE BOT RUNNING"
 
 # =========================
