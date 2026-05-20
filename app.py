@@ -173,7 +173,17 @@ def login():
 
 <script>
 
-    window.location.href = "line://app";
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(
+        navigator.userAgent
+    );
+
+    if (isMobile) {
+
+        window.location.href = "line://app";
+
+    }
+
 
 </script>
 
