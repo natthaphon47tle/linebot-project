@@ -264,20 +264,32 @@ def handle_message(event):
     else:
 
         # =========================
+        # LOGIN PAGE
+        # =========================
+
+        if text.lower() == "login":
+
+            reply = (
+                "🔐 Login Website\n\n"
+                "คลิกลิงก์ด้านล่าง:\n"
+                "https://linebot-project-0qio.onrender.com/login"
+            )
+
+        # =========================
         # MENU
         # =========================
 
-        if text.lower() == "menu":
+        elif text.lower() == "menu":
 
             reply = (
                 "📋 MENU\n\n"
-                "1. service\n"
-                "2. contact\n"
-                "3. warehouse\n"
-                "4. transport\n"
-                "5. customs\n"
-                "6. tracking <เลข>\n"
-                "7. trucking"
+                "1. trucking\n"
+                "2. customs\n"
+                "3. insurance\n"
+                "4. packing\n"
+                "5. cross border\n"
+                "6. courier\n"
+                "7. login"
             )
 
         # =========================
