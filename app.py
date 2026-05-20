@@ -200,7 +200,6 @@ def handle_message(event):
     user_id = event.source.user_id
     text = event.message.text.strip()
 
-   
     # =========================
     # LOGOUT
     # =========================
@@ -210,17 +209,17 @@ def handle_message(event):
         if user_id in logged_in_users:
             logged_in_users.remove(user_id)
 
-       reply = "✅ Logout สำเร็จ"
+        reply = "✅ Logout สำเร็จ"
 
-   # =========================
-   # NOT LOGIN
-   # =========================
+    # =========================
+    # NOT LOGIN
+    # =========================
 
-   elif user_id not in logged_in_users:
+    elif user_id not in logged_in_users:
 
-       profile = line_bot_api.get_profile(
-        event.source.user_id
-       )
+        profile = line_bot_api.get_profile(
+            event.source.user_id
+        )
 
         display_name = profile.display_name
 
@@ -342,474 +341,33 @@ def handle_message(event):
                 "3. insurance\n"
                 "4. packing\n"
                 "5. cross border\n"
-                "6. courier\n"
-                "7. login"
+                "6. courier"
             )
 
         # =========================
-        # TRUCKING & REEFER
+        # TRUCKING
         # =========================
 
-        if "trucking" in text.lower():
-            print(text)
+        elif "trucking" in text.lower():
 
-            try:
+            reply = "🚛 Trucking Service"
 
-                df = pd.read_excel("tracking_reefer.xlsx")
-
-                reply = "🚛 Trucking & Reefer\n\n"
-
-                for index, row in df.iterrows():
-
-                    reply += (
-                        f"Company : {row['company']}\n"
-                        f"Contact : {row['contact']}\n"
-                        f"Email : {row['email']}\n"
-                        f"Tel : {row['tel']}\n"
-                        f"Base : {row['Base']}\n\n"
-                    )
-
-            except Exception as e:
-
-                reply = (
-                    "❌ ไม่สามารถอ่านไฟล์ Excel ได้\n\n"
-                    f"{str(e)}"
-                )
-
-        # =========================
-        # SERVICE
-        # =========================
-
-        elif text.lower() == "service":
-
-            reply = (
-                "🚚 SERVICES\n\n"
-                "- Freight Forwarder\n"
-                "- Customs Clearance\n"
-                "- Truck Transport\n"
-                "- Warehouse\n"
-                "- Cross Border\n"
-                "- Cargo Insurance"
-            )
-
-        # =========================
-        # CONTACT
-        # =========================
-
-        elif text.lower() == "contact":
-
-            reply = (
-                "📞 CONTACT\n\n"
-                "Tel : 02-xxx-xxxx\n"
-                "Email : test@company.com"
-            )
-
-        # =========================
-        # WAREHOUSE
-        # =========================
-
-        elif text.lower() == "warehouse":
-
-            reply = (
-                "🏢 Warehouse Service\n\n"
-                "- Storage\n"
-                "- Inventory\n"
-                "- Distribution"
-            )
-
-        # =========================
-        # TRANSPORT
-        # =========================
-
-        elif text.lower() == "transport":
-
-            reply = (
-                "🚛 Transport Service\n\n"
-                "- Domestic\n"
-                "- Cross Border\n"
-                "- Reefer Truck"
-            )
-
-     
         # =========================
         # CUSTOMS
         # =========================
 
         elif "customs" in text.lower():
 
-            try:
-
-                df = pd.read_excel("customs_clearance.xlsx")
-
-                reply = "📄 Customs Clearance\n\n"
-
-                for index, row in df.iterrows():
-
-                    reply += (
-                        f"Company : {row['company']}\n"
-                        f"Contact : {row['contact']}\n"
-                        f"Email : {row['email']}\n"
-                        f"Tel : {row['tel']}\n"
-                        f"Base : {row['base']}\n\n"
-                    )
-
-            except Exception as e:
-
-                reply = str(e)
+            reply = "📄 Customs Clearance"
 
         # =========================
-        # INSURANCE
-        # =========================
-
-        elif "insurance" in text.lower():
-
-            try:
-
-                df = pd.read_excel("cargo_insurance.xlsx")
-
-                reply = "🛡 Cargo Insurance\n\n"
-
-                for index, row in df.iterrows():
-
-                    reply += (
-                        f"Company : {row['company']}\n"
-                        f"Department : {row['department']}\n"
-                        f"Contact : {row['contact']}\n"
-                        f"Email : {row['email']}\n"
-                        f"Tel : {row['tel']}\n"
-                        f"Note : {row['note']}\n\n"
-                    )
-
-            except Exception as e:
-
-                reply = str(e)
-
-        # =========================
-        # PACKING
-        # =========================
-
-        elif "packing" in text.lower():
-
-            try:
-
-                df = pd.read_excel("packing.xlsx")
-
-                reply = "📦 Packing Service\n\n"
-
-                for index, row in df.iterrows():
-
-                    reply += (
-                        f"Company : {row['company']}\n"
-                        f"Contact : {row['contact']}\n"
-                        f"Email : {row['email']}\n"
-                        f"Tel : {row['tel']}\n"
-                        f"Service : {row['service']}\n"
-                        f"Base : {row['base']}\n\n"
-                    )
-
-            except Exception as e:
-
-                reply = str(e)
-
-        # =========================
-        # CROSS BORDER
-        # =========================
-
-        elif (
-            "cross border" in text.lower()
-            or
-            "crossborder" in text.lower()
-        ):
-
-            try:
-
-                df = pd.read_excel("cross_border.xlsx")
-
-                reply = "🌏 Cross Border\n\n"
-
-                for index, row in df.iterrows():
-
-                    reply += (
-                        f"Company : {row['company']}\n"
-                        f"Contact : {row['contact']}\n"
-                        f"Email : {row['email']}\n"
-                        f"Tel : {row['tel']}\n"
-                        f"Route : {row['route']}\n\n"
-                    )
-
-            except Exception as e:
-
-                reply = str(e)
-
-        # =========================
-        # COURIER
-        # =========================
-
-        elif "courier" in text.lower():
-
-            try:
-
-                df = pd.read_excel("courier.xlsx")
-
-                reply = "📦 Courier Service\n\n"
-
-                for index, row in df.iterrows():
-
-                    reply += (
-                        f"Company : {row['company']}\n"
-                        f"Contact : {row['contact']}\n"
-                        f"Email : {row['email']}\n"
-                        f"Tel : {row['tel']}\n\n"
-                    )
-
-            except Exception as e:
-
-                reply = str(e)
-
-        # =========================
-        # TRACKING
-        # =========================
-
-        elif text.lower().startswith("tracking "):
-
-            parts = text.split()
-
-            if len(parts) < 2:
-
-                reply = "กรุณาระบุเลข Tracking"
-
-            else:
-
-                tracking_number = parts[1]
-
-                cursor.execute("SELECT * FROM tracking")
-                records = cursor.fetchall()
-
-                found = False
-
-                for row in records:
-
-                    if row[0] == tracking_number:
-
-                        found = True
-
-                        flex_message = FlexSendMessage(
-                            alt_text="Tracking Status",
-                            contents={
-                                "type": "bubble",
-                                "body": {
-                                    "type": "box",
-                                    "layout": "vertical",
-                                    "contents": [
-
-                                        {
-                                            "type": "text",
-                                            "text": "📦 Tracking Status",
-                                            "weight": "bold",
-                                            "size": "xl"
-                                        },
-
-                                        {
-                                            "type": "separator",
-                                            "margin": "md"
-                                        },
-
-                                        {
-                                            "type": "text",
-                                            "text": f"Tracking : {row[0]}",
-                                            "margin": "md"
-                                        },
-
-                                        {
-                                            "type": "text",
-                                            "text": f"Status : {row[1]}"
-                                        },
-
-                                        {
-                                            "type": "text",
-                                            "text": f"Location : {row[2]}"
-                                        }
-                                    ]
-                                }
-                            }
-                        )
-
-                        line_bot_api.reply_message(
-                            event.reply_token,
-                            flex_message
-                        )
-
-                        return
-
-                if not found:
-                    reply = "❌ ไม่พบ Tracking นี้"
-
-                # =========================
-        # AI SEARCH
+        # DEFAULT
         # =========================
 
         else:
 
-            try:
+            reply = "พิมพ์ menu เพื่อดูเมนู"
 
-                # LOAD ALL EXCEL
-
-                trucking_df = pd.read_excel("tracking_reefer.xlsx")
-                customs_df = pd.read_excel("customs_clearance.xlsx")
-                insurance_df = pd.read_excel("cargo_insurance.xlsx")
-                packing_df = pd.read_excel("packing.xlsx")
-                cross_df = pd.read_excel("cross_border.xlsx")
-                courier_df = pd.read_excel("courier.xlsx")
-
-                # SEARCH COMPANY
-
-                filtered_data = ""
-
-                company_name = text.replace(
-                    "ข้อมูลบริษัท",
-                    ""
-                ).strip()
-
-                # TRUCKING
-
-                trucking_match = trucking_df[
-                    trucking_df["company"]
-                    .str.contains(company_name, case=False, na=False)
-                ]
-
-                if not trucking_match.empty:
-
-                    filtered_data += (
-                        "\nTRUCKING:\n"
-                        + trucking_match.to_string()
-                    )
-
-                # CUSTOMS
-
-                customs_match = customs_df[
-                    customs_df["company"]
-                    .str.contains(company_name, case=False, na=False)
-                ]
-
-                if not customs_match.empty:
-
-                    filtered_data += (
-                        "\nCUSTOMS:\n"
-                        + customs_match.to_string()
-                    )
-
-                # INSURANCE
-
-                insurance_match = insurance_df[
-                    insurance_df["company"]
-                    .str.contains(company_name, case=False, na=False)
-                ]
-
-                if not insurance_match.empty:
-
-                    filtered_data += (
-                        "\nINSURANCE:\n"
-                        + insurance_match.to_string()
-                    )
-
-                # PACKING
-
-                packing_match = packing_df[
-                    packing_df["company"]
-                    .str.contains(company_name, case=False, na=False)
-                ]
-
-                if not packing_match.empty:
-
-                    filtered_data += (
-                        "\nPACKING:\n"
-                        + packing_match.to_string()
-                    )
-
-                # CROSS BORDER
-
-                cross_match = cross_df[
-                    cross_df["company"]
-                    .str.contains(company_name, case=False, na=False)
-                ]
-
-                if not cross_match.empty:
-
-                    filtered_data += (
-                        "\nCROSS BORDER:\n"
-                        + cross_match.to_string()
-                    )
-
-                # COURIER
-
-                courier_match = courier_df[
-                    courier_df["company"]
-                    .str.contains(company_name, case=False, na=False)
-                ]
-
-                if not courier_match.empty:
-
-                    filtered_data += (
-                        "\nCOURIER:\n"
-                        + courier_match.to_string()
-                    )
-
-                # AI
-
-                try:
-
-                    response = client.chat.completions.create(
-
-                        model="gpt-4.1-mini",
-
-                        messages=[
-
-                            {
-                                "role": "system",
-                                "content": """
-                                คุณคือ AI Logistics Assistant
-
-                                ตอบเฉพาะข้อมูลที่มีใน Excel เท่านั้น
-                                ถ้าไม่มีข้อมูลให้ตอบว่า:
-                                'ไม่พบข้อมูล'
-                                """
-                            },
-
-                            {
-                                "role": "user",
-                                "content": f"""
-                                ข้อมูลทั้งหมด:
-
-                                {filtered_data}
-
-                                คำถาม:
-                                {text}
-                                """
-                            }
-                        ]
-                    )
-
-                    reply = response.choices[0].message.content
-
-                except Exception as e:
-
-                    reply = (
-                        "⚠ AI quota หมด\n"
-                        "กำลังใช้ระบบค้นหาปกติ\n\n"
-                    )
-
-                    if filtered_data != "":
-
-                        reply += filtered_data
-
-                    else:
-
-                        reply += "ไม่พบข้อมูล"
-
-            except Exception as e:
-
-                reply = str(e)
-       
     # =========================
     # REPLY
     # =========================
