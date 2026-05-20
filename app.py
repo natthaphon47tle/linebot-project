@@ -162,7 +162,7 @@ def login():
 
                 session["user"] = username
 
-                return """
+return """
 <!DOCTYPE html>
 
 <html>
@@ -218,7 +218,7 @@ button{
     font-size:16px;
     cursor:pointer;
     width:100%;
-}ห
+}
 
 </style>
 
