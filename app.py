@@ -161,11 +161,35 @@ def login():
             ):
 
                 session["user"] = username
+logged_in_users.append(username)
 
                 return """
-                <h2>✅ Login Success</h2>
-                <p>กลับไปที่ LINE ได้เลย</p>
-                """
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<script>
+
+    window.location.href = "line://app";
+
+</script>
+
+</head>
+
+<body>
+
+<h2>✅ Login Success</h2>
+
+<p>กำลังกกลับไปที่ LINE...</p>
+
+</body>
+
+</html>
+"""
 
         return """
         <h2>❌ Login Failed</h2>
