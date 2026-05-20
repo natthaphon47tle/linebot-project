@@ -268,12 +268,111 @@ def handle_message(event):
         # =========================
 
         if text.lower() == "login":
-
-            reply = (
-                "🔐 Login Website\n\n"
-                "คลิกลิงก์ด้านล่าง:\n"
-                "https://linebot-project-0qio.onrender.com/login"
+            
+            profile = line_bot_api.get_profile(
+                event.source.user_id
             )
+
+            display_name = profile.display_name
+
+            flex_message = FlexSendMessage(
+
+                alt_text="Login",
+
+                contents={
+
+                    "type": "bubble",
+
+                    "hero": {
+
+                        "type": "image",
+
+                        "url": "https://i.imgur.com/0T9m8Qp.png",
+
+                        "size": "sm",
+
+                        "aspectRatio": "1:1",
+
+                        "aspectMode": "fit"
+
+                    },
+
+                    "body": {
+
+                        "type": "box",
+
+                        "layout": "vertical",
+
+                        "contents": [
+
+                            {
+
+                                "type": "text",
+
+                                "text": f"สวัสดีคุณ {display_name}",
+
+                                "weight": "bold",
+
+                                "size": "lg"
+
+                            },
+
+                            {
+
+                                "type": "text",
+
+                                "text": "กรุณากดปุ่มลงทะเบียนด้านล่างก่อนนะคะ",
+
+                                "wrap": True,
+
+                                "margin": "md"
+
+                            }
+
+                        ]
+
+                    },
+
+                    "footer": {
+
+                        "type": "box",
+
+                        "layout": "vertical",
+
+                        "contents": [
+
+                            {
+
+                                "type": "button",
+
+                                "style": "primary",
+
+                                "action": {
+
+                                    "type": "uri",
+
+                                    "label": "ลงทะเบียน",
+
+                                    "uri": "https://linebot-project-0qio.onrender.com/login"
+
+                                }
+
+                            }
+
+                        ]
+
+                    }
+
+                }
+
+            )
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                flex_message
+            )
+
+            return
 
         # =========================
         # MENU
