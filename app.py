@@ -472,7 +472,7 @@ def handle_message(event):
 
                                 "label": "Login",
 
-                                "uri": "https://linebot-project-0qio.onrender.com/login"
+                                "uri": "https://liff.line.me/2010145479-TA2Uw8Ik"
 
                             }
 
