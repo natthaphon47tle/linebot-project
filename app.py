@@ -161,7 +161,6 @@ def login():
             ):
 
                 session["user"] = username
-logged_in_users.append(username)
 
                 return """
 <!DOCTYPE html>
@@ -184,7 +183,7 @@ logged_in_users.append(username)
 
 <h2>✅ Login Success</h2>
 
-<p>กำลังกกลับไปที่ LINE...</p>
+<p>กำลังกลับไปที่ LINE...</p>
 
 </body>
 
@@ -192,8 +191,8 @@ logged_in_users.append(username)
 """
 
         return """
-        <h2>❌ Login Failed</h2>
-        """
+<h2>❌ Login Failed</h2>
+"""
 
     return render_template("login.html")
 
