@@ -131,6 +131,7 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 # =========================
 
 logged_in_users = []
+COMPANY_PASSWORD = "BDVM2026"
 
 # =========================
 # HOME
@@ -171,7 +172,7 @@ def login():
 @app.route("/liff")
 def liff():
 
-    return """
+    return f"""
 <!DOCTYPE html>
 
 <html>
@@ -182,52 +183,120 @@ def liff():
 
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
+<style>
+
+body{{
+    font-family:Arial;
+    background:#f4f4f4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}}
+
+.box{{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    width:320px;
+    text-align:center;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}}
+
+input{{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    border-radius:10px;
+    border:1px solid #ccc;
+}}
+
+button{{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    background:#06C755;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+}}
+
+</style>
+
 </head>
 
 <body>
 
-<h2>กำลัง Login...</h2>
+<div class="box">
+
+<h2>🔐 BDVM LOGIN</h2>
+
+<p>กรุณาใส่รหัสบริษัท</p>
+
+<input
+    type="password"
+    id="password"
+    placeholder="Company Password"
+>
+
+<button onclick="login()">
+Login
+</button>
+
+<p id="msg"></p>
+
+</div>
 
 <script>
 
-async function main() {
+async function login() {{
 
-    await liff.init({
+    const password =
+    document.getElementById("password").value;
+
+    if (password !== "{COMPANY_PASSWORD}") {{
+
+        document.getElementById("msg").innerHTML =
+        "❌ รหัสไม่ถูกต้อง";
+
+        return;
+    }}
+
+    await liff.init({{
 
         liffId: "2010145479-TA2Uw8Ik",
 
         withLoginOnExternalBrowser: true
 
-    });
+    }});
 
-    if (!liff.isLoggedIn()) {
+    if (!liff.isLoggedIn()) {{
 
         liff.login();
 
         return;
-    }
+    }}
 
     const profile = await liff.getProfile();
 
-    await fetch("/save_user", {
+    await fetch("/save_user", {{
 
         method: "POST",
 
-        headers: {
+        headers: {{
             "Content-Type": "application/json"
-        },
+        }},
 
-        body: JSON.stringify({
+        body: JSON.stringify({{
             user_id: profile.userId
-        })
+        }})
 
-    });
+    }});
 
     liff.closeWindow();
 
-}
-
-main();
+}}
 
 </script>
 
