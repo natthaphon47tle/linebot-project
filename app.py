@@ -192,39 +192,63 @@ def liff():
 
 async function main() {
 
-    await liff.init({
-        liffId: "2010145479-TA2Uw8Ik"
+    try {
 
-        withLoginOnExternalBrowser: true
+        document.body.innerHTML += "<p>เริ่ม LIFF...</p>";
 
-    });
+        await liff.init({
 
-    if (!liff.isLoggedIn()) {
-        liff.login();
-    }
+            liffId: "2010145479-TA2Uw8Ik",
 
-    const profile = await liff.getProfile();
+            withLoginOnExternalBrowser: true
 
-    fetch("/save_user", {
+        });
 
-        method: "POST",
+        document.body.innerHTML += "<p>LIFF INIT สำเร็จ</p>";
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+        if (!liff.isLoggedIn()) {
 
-        body: JSON.stringify({
-            user_id: profile.userId
-        })
+            document.body.innerHTML += "<p>กำลัง Login...</p>";
 
-    })
+            liff.login();
 
-    .then(() => {
+            return;
+        }
 
-        document.body.innerHTML =
+        document.body.innerHTML += "<p>Login แล้ว</p>";
+
+        const profile = await liff.getProfile();
+
+        document.body.innerHTML +=
+        "<p>ได้ USER PROFILE แล้ว</p>";
+
+        const response = await fetch("/save_user", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                user_id: profile.userId
+            })
+
+        });
+
+        document.body.innerHTML +=
+        "<p>SAVE USER สำเร็จ</p>";
+
+        document.body.innerHTML +=
         "<h2>✅ Login Success</h2>";
 
-    });
+    }
+
+    catch(err) {
+
+        document.body.innerHTML +=
+        "<h2>❌ ERROR</h2><pre>" + err + "</pre>";
+    }
 
 }
 
