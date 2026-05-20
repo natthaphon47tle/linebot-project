@@ -308,7 +308,7 @@ def handle_message(event):
     # NOT LOGIN
     # =========================
 
-        elif user_id not in logged_in_users:
+    elif user_id not in logged_in_users:
 
         profile = line_bot_api.get_profile(
             event.source.user_id
