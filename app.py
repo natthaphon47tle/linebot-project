@@ -218,8 +218,7 @@ async function main() {
 
     .then(() => {
 
-        document.body.innerHTML =
-        "<h2>✅ Login Success</h2><p>กลับไปใช้งาน LINE BOT ได้เลย</p>";
+        liff.closeWindow();
 
     });
 
