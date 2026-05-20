@@ -707,9 +707,9 @@ def handle_message(event):
 
                 reply = response.choices[0].message.content
 
-            except Exception as e:
+             except Exception as e:
 
-                                reply = (
+                reply = (
                     "⚠ AI quota หมด\n"
                     "กำลังใช้ระบบค้นหาปกติ\n\n"
                 )
