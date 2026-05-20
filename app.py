@@ -329,12 +329,6 @@ async function login() {
 
 </script>
 
-    liff.closeWindow();
-
-}
-
-</script>
-
 </body>
 
 </html>
