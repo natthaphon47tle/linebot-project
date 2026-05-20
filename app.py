@@ -162,89 +162,9 @@ def login():
 
                 session["user"] = username
 
-return """
-<!DOCTYPE html>
-
-<html>
-
-<head>
-
-<meta charset="UTF-8">
-
-return """
-<!DOCTYPE html>
-
-<html>
-
-<head>
-
-<meta charset="UTF-8">
-
-<style>
-
-body{
-
-    font-family:Arial;
-    background:#f4f4f4;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-
-.box{
-
-    background:white;
-    padding:40px;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
-    width:300px;
-}
-
-h2{
-
-    color:#06C755;
-}
-
-button{
-
-    margin-top:20px;
-    padding:12px 20px;
-    border:none;
-    border-radius:10px;
-    background:#06C755;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-    width:100%;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="box">
-
+                return """
 <h2>✅ Login Success</h2>
-
-<p>
-เข้าสู่ระบบสำเร็จแล้ว
-<br><br>
-สามารถปิดหน้านี้และกลับไปใช้งาน LINE BOT ได้เลย
-</p>
-
-<button onclick="window.close()">
-กลับไป LINE
-</button>
-
-</div>
-
-</body>
-
-</html>
+<p>กลับไปใช้งาน LINE BOT ได้เลย</p>
 """
 
         return """
