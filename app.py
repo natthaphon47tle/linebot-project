@@ -95,7 +95,8 @@ from linebot.models import (
     MessageEvent,
     TextMessage,
     TextSendMessage,
-    FlexSendMessage
+    FlexSendMessage,
+    FollowEvent
 )
 
 # =========================
@@ -191,6 +192,102 @@ def webhook():
     return "OK"
 
 # =========================
+# FOLLOW EVENT
+# =========================
+
+@handler.add(FollowEvent)
+def handle_follow(event):
+
+    profile = line_bot_api.get_profile(
+        event.source.user_id
+    )
+
+    display_name = profile.display_name
+
+    flex_message = FlexSendMessage(
+
+        alt_text="Login",
+
+        contents={
+
+            "type": "bubble",
+
+            "body": {
+
+                "type": "box",
+
+                "layout": "vertical",
+
+                "contents": [
+
+                    {
+
+                        "type": "text",
+
+                        "text": f"สวัสดีคุณ {display_name}",
+
+                        "weight": "bold",
+
+                        "size": "xl"
+
+                    },
+
+                    {
+
+                        "type": "text",
+
+                        "text": "กรุณากดปุ่ม Login ด้านล่างก่อนใช้งาน",
+
+                        "wrap": True,
+
+                        "margin": "md"
+
+                    }
+
+                ]
+
+            },
+
+            "footer": {
+
+                "type": "box",
+
+                "layout": "vertical",
+
+                "contents": [
+
+                    {
+
+                        "type": "button",
+
+                        "style": "primary",
+
+                        "action": {
+
+                            "type": "uri",
+
+                            "label": "Login",
+
+                            "uri": "https://linebot-project-0qio.onrender.com/login"
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        }
+
+    )
+
+    line_bot_api.reply_message(
+        event.reply_token,
+        flex_message
+    )
+
+# =========================
 # MESSAGE EVENT
 # =========================
 
@@ -235,7 +332,7 @@ def handle_message(event):
 
                     "type": "image",
 
-                    "url": "https://i.imgur.com/0T9m8Qp.png",
+                    "url": "https://drive.google.com/uc?export=view&id=1oZw_jQDf_pRRBaD-h04uEEOI1wXP0AF9",
 
                     "size": "sm",
 
