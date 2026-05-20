@@ -136,12 +136,6 @@ logged_in_users = []
 # HOME
 # =========================
 
-@app.route("/")
-def home():
-
-    return "LINE BOT RUNNING"
-
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -168,6 +162,91 @@ def login():
 """
 
     return render_template("login.html")
+
+
+# =========================
+# LIFF LOGIN
+# =========================
+
+@app.route("/liff")
+def liff():
+
+    return """
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+</head>
+
+<body>
+
+<h2>กำลัง Login...</h2>
+
+<script>
+
+async function main() {
+
+    await liff.init({
+        liffId: "2010145479-TA2Uw8Ik"
+    });
+
+    if (!liff.isLoggedIn()) {
+        liff.login();
+    }
+
+    const profile = await liff.getProfile();
+
+    fetch("/save_user", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            user_id: profile.userId
+        })
+
+    })
+
+    .then(() => {
+
+        document.body.innerHTML =
+        "<h2>✅ Login Success</h2><p>กลับไปใช้งาน LINE BOT ได้เลย</p>";
+
+    });
+
+}
+
+main();
+
+</script>
+
+</body>
+
+</html>
+"""
+
+
+@app.route("/save_user", methods=["POST"])
+def save_user():
+
+    data = request.json
+
+    user_id = data["user_id"]
+
+    if user_id not in logged_in_users:
+        logged_in_users.append(user_id)
+
+    return "OK"
+
 
 # =========================
 # WEBHOOK
@@ -264,7 +343,7 @@ def handle_follow(event):
 
                             "label": "Login",
 
-                            "uri": "https://linebot-project-0qio.onrender.com/login"
+                            "uri": "https://linebot-project-0qio.onrender.com/liff"
 
                         }
 
