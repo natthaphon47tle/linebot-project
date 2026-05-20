@@ -520,7 +520,6 @@ def handle_message(event):
     text = event.message.text.strip()
 
     print("CURRENT USER:", user_id)
-    print("LOGIN USERS:", logged_in_users)
 
     # =========================
     # LOGOUT
@@ -528,19 +527,117 @@ def handle_message(event):
 
     if text.lower() == "logout":
 
-        if user_id in logged_in_users:
-            cursor.execute(
-                "DELETE FROM sessions WHERE user_id=?",
-                (user_id,)
-            ) 
+        cursor.execute(
+            "DELETE FROM sessions WHERE user_id=?",
+            (user_id,)
+        )
 
-            conn.commit()
+        conn.commit()
+
         reply = "✅ Logout สำเร็จ"
 
         # =========================
     # CHECK SESSION
     # =========================
+    cursor.execute(
+        "SELECT * FROM sessions WHERE user_id=?",
+        (user_id,)
+    )
 
+    session_user = cursor.fetchone()
+
+    if not session_user:
+
+        profile = line_bot_api.get_profile(
+            event.source.user_id
+        )
+
+        display_name = profile.display_name
+
+        flex_message = FlexSendMessage(
+
+            alt_text="Login",
+
+            contents={
+
+                "type": "bubble",
+
+                "body": {
+
+                    "type": "box",
+
+                    "layout": "vertical",
+
+                    "contents": [
+
+                        {
+
+                            "type": "text",
+
+                            "text": f"สวัสดีคุณ {display_name}",
+
+                            "weight": "bold",
+
+                            "size": "lg"
+
+                        },
+
+                        {
+
+                            "type": "text",
+
+                            "text": "กรุณากดปุ่ม Login ด้านล่างก่อนใช้งาน",
+
+                            "wrap": True,
+
+                            "margin": "md"
+
+                        }
+
+                    ]
+
+                },
+
+                "footer": {
+
+                    "type": "box",
+
+                    "layout": "vertical",
+
+                    "contents": [
+
+                        {
+
+                            "type": "button",
+
+                            "style": "primary",
+
+                            "action": {
+
+                                "type": "uri",
+
+                                "label": "Login",
+
+                                "uri": "https://liff.line.me/2010145479-TA2Uw8Ik"
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            }
+
+        )
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            flex_message
+        )
+
+        return
     
 
     # =========================
