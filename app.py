@@ -544,7 +544,7 @@ def handle_message(event):
                 if not found:
                     reply = "❌ ไม่พบ Tracking นี้"
 
-        # =========================
+                # =========================
         # AI SEARCH
         # =========================
 
@@ -561,34 +561,14 @@ def handle_message(event):
                 cross_df = pd.read_excel("cross_border.xlsx")
                 courier_df = pd.read_excel("courier.xlsx")
 
-                # COMBINE DATA
-
-                all_data = f"""
-                TRUCKING:
-                {trucking_df.to_string()}
-
-                CUSTOMS:
-                {customs_df.to_string()}
-
-                INSURANCE:
-                {insurance_df.to_string()}
-
-                PACKING:
-                {packing_df.to_string()}
-
-                CROSS BORDER:
-                {cross_df.to_string()}
-
-                COURIER:
-                {courier_df.to_string()}
-                """
-
-                # AI
                 # SEARCH COMPANY
 
                 filtered_data = ""
 
-                company_name = text.replace("ข้อมูลบริษัท", "").strip()
+                company_name = text.replace(
+                    "ข้อมูลบริษัท",
+                    ""
+                ).strip()
 
                 # TRUCKING
 
@@ -674,7 +654,9 @@ def handle_message(event):
                         + courier_match.to_string()
                     )
 
-                                try:
+                # AI
+
+                try:
 
                     response = client.chat.completions.create(
 
@@ -716,8 +698,6 @@ def handle_message(event):
                         "กำลังใช้ระบบค้นหาปกติ\n\n"
                     )
 
-                    # NORMAL SEARCH
-
                     if filtered_data != "":
 
                         reply += filtered_data
@@ -725,6 +705,10 @@ def handle_message(event):
                     else:
 
                         reply += "ไม่พบข้อมูล"
+
+            except Exception as e:
+
+                reply = str(e)
        
     # =========================
     # REPLY
