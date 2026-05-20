@@ -377,13 +377,21 @@ def save_user():
 
     user_id = data.get("user_id")
 
-    print("SAVE USER:", user_id)
+    cursor.execute(
+        "SELECT * FROM sessions WHERE user_id=?",
+        (user_id,)
+    )
 
-    if user_id not in logged_in_users:
+    existing = cursor.fetchone()
 
-        logged_in_users.append(user_id)
+    if not existing:
 
-    print("ALL LOGIN USERS:", logged_in_users)
+        cursor.execute(
+            "INSERT INTO sessions VALUES (?)",
+            (user_id,)
+        )
+
+        conn.commit()
 
     return "OK"
 
