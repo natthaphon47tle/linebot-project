@@ -640,6 +640,10 @@ def handle_message(event):
 
     else:
 
+        if text.lower() == "menu":
+
+            reply = "MENU"
+
         # =========================
         # MENU
         # =========================
