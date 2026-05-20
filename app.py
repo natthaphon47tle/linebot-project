@@ -161,7 +161,6 @@ def login():
             ):
 
                 session["user"] = username
-logged_in_users.append(user_id)
 
                 return """
 <h2>✅ Login Success</h2>
