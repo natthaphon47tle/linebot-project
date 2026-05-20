@@ -340,30 +340,28 @@ async function login() {
 # CHECK LOGIN
 # =========================
 
-@app.route("/save_user", methods=["POST"])
-def save_user():
+@app.route("/check_login", methods=["POST"])
+def check_login():
 
     data = request.get_json()
 
-    user_id = data.get("user_id")
+    username = data.get("username")
+    password = data.get("password")
 
-    cursor.execute(
-        "SELECT * FROM sessions WHERE user_id=?",
-        (user_id,)
-    )
+    cursor.execute("SELECT * FROM users")
 
-    existing = cursor.fetchone()
+    records = cursor.fetchall()
 
-    if not existing:
+    for row in records:
 
-        cursor.execute(
-            "INSERT INTO sessions VALUES (?)",
-            (user_id,)
-        )
+        if (
+            row[0] == username and
+            check_password_hash(row[1], password)
+        ):
 
-        conn.commit()
+            return "SUCCESS"
 
-    return "OK"
+    return "FAIL"
 
 # =========================
 # SAVE USER
