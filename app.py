@@ -200,49 +200,12 @@ def handle_message(event):
     user_id = event.source.user_id
     text = event.message.text.strip()
 
-    # =========================
-    # LOGIN
-    # =========================
-
-    if text.startswith("login"):
-
-        try:
-
-            _, username, password = text.split()
-
-            cursor.execute("SELECT * FROM users")
-            records = cursor.fetchall()
-
-            found = False
-
-            for row in records:
-
-                if (
-                    row[0] == username and
-                    check_password_hash(row[1], password)
-                ):
-
-                    found = True
-                    break
-
-            if found:
-
-                if user_id not in logged_in_users:
-                    logged_in_users.append(user_id)
-
-                reply = "✅ Login สำเร็จ"
-
-            else:
-                reply = "❌ Username หรือ Password ไม่ถูกต้อง"
-
-        except:
-            reply = "ใช้รูปแบบ:\nlogin username password"
-
+   
     # =========================
     # LOGOUT
     # =========================
 
-    elif text.lower() == "logout":
+    if text.lower() == "logout":
 
         if user_id in logged_in_users:
             logged_in_users.remove(user_id)
