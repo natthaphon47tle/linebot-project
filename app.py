@@ -674,55 +674,57 @@ def handle_message(event):
                         + courier_match.to_string()
                     )
 
-                response = client.chat.completions.create(
+                                try:
 
-                    model="gpt-4.1-mini",
+                    response = client.chat.completions.create(
 
-                    messages=[
+                        model="gpt-4.1-mini",
 
-                        {
-                            "role": "system",
-                            "content": """
-                            คุณคือ AI Logistics Assistant
+                        messages=[
 
-                            ตอบเฉพาะข้อมูลที่มีใน Excel เท่านั้น
-                            ถ้าไม่มีข้อมูลให้ตอบว่า:
-                            'ไม่พบข้อมูล'
-                            """
-                        },
+                            {
+                                "role": "system",
+                                "content": """
+                                คุณคือ AI Logistics Assistant
 
-                        {
-                            "role": "user",
-                            "content": f"""
-                            ข้อมูลทั้งหมด:
+                                ตอบเฉพาะข้อมูลที่มีใน Excel เท่านั้น
+                                ถ้าไม่มีข้อมูลให้ตอบว่า:
+                                'ไม่พบข้อมูล'
+                                """
+                            },
 
-                            {filtered_data}
+                            {
+                                "role": "user",
+                                "content": f"""
+                                ข้อมูลทั้งหมด:
 
-                            คำถาม:
-                            {text}
-                            """
-                        }
-                    ]
-                )
+                                {filtered_data}
 
-                reply = response.choices[0].message.content
+                                คำถาม:
+                                {text}
+                                """
+                            }
+                        ]
+                    )
 
-             except Exception as e:
+                    reply = response.choices[0].message.content
 
-                reply = (
-                    "⚠ AI quota หมด\n"
-                    "กำลังใช้ระบบค้นหาปกติ\n\n"
-                )
+                except Exception as e:
 
-                # NORMAL SEARCH
+                    reply = (
+                        "⚠ AI quota หมด\n"
+                        "กำลังใช้ระบบค้นหาปกติ\n\n"
+                    )
 
-                if filtered_data != "":
+                    # NORMAL SEARCH
 
-                    reply += filtered_data
+                    if filtered_data != "":
 
-                else:
+                        reply += filtered_data
 
-                    reply += "ไม่พบข้อมูล"
+                    else:
+
+                        reply += "ไม่พบข้อมูล"
        
     # =========================
     # REPLY
