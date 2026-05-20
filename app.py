@@ -308,6 +308,9 @@ def handle_message(event):
     # NOT LOGIN
     # =========================
 
+    elif user_id not in logged_in_users:
+
+        reply = "🔒 กรุณา Login ก่อนใช้งาน"
 
     # =========================
     # LOGIN SUCCESS
