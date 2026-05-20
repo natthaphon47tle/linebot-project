@@ -543,9 +543,9 @@ def handle_message(event):
 
     if not session_user:
 
-    profile = line_bot_api.get_profile(
-        event.source.user_id
-    )
+        profile = line_bot_api.get_profile(
+            event.source.user_id
+        )
 
     display_name = profile.display_name
 
