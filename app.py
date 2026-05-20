@@ -76,15 +76,12 @@ if not cursor.fetchall():
     """)
 
 # FAQ
-cursor.execute("SELECT * FROM faq")
-
-if not cursor.fetchall():
-
-    cursor.execute("""
-    INSERT INTO faq VALUES
-    ('customs', 'บริการด้านพิธีการศุลกากร Import / Export'),
-    ('warehouse', 'บริการคลังสินค้าและกระจายสินค้า')
-    """)
+# SESSION TABLE
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS sessions (
+    user_id TEXT
+)
+""")
 
 conn.commit()
 
@@ -130,7 +127,6 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 # LOGIN SESSION
 # =========================
 
-logged_in_users = []
 COMPANY_PASSWORD = "BDVM2026"
 
 # =========================
@@ -345,28 +341,30 @@ async function login() {
 # CHECK LOGIN
 # =========================
 
-@app.route("/check_login", methods=["POST"])
-def check_login():
+@app.route("/save_user", methods=["POST"])
+def save_user():
 
-    data = request.json
+    data = request.get_json()
 
-    username = data["username"]
-    password = data["password"]
+    user_id = data.get("user_id")
 
-    cursor.execute("SELECT * FROM users")
-    records = cursor.fetchall()
+    cursor.execute(
+        "SELECT * FROM sessions WHERE user_id=?",
+        (user_id,)
+    )
 
-    for row in records:
+    existing = cursor.fetchone()
 
-        if (
-            row[0] == username and
-            check_password_hash(row[1], password)
-        ):
+    if not existing:
 
-            return "SUCCESS"
+        cursor.execute(
+            "INSERT INTO sessions VALUES (?)",
+            (user_id,)
+        )
 
-    return "FAIL"
+        conn.commit()
 
+    return "OK"
 
 # =========================
 # SAVE USER
@@ -524,120 +522,26 @@ def handle_message(event):
     if text.lower() == "logout":
 
         if user_id in logged_in_users:
-            logged_in_users.remove(user_id)
+            cursor.execute(
+                "DELETE FROM sessions WHERE user_id=?",
+                (user_id,)
+            ) 
 
+            conn.commit()
         reply = "✅ Logout สำเร็จ"
 
     # =========================
     # NOT LOGIN
     # =========================
 
-    elif user_id not in logged_in_users:
+    cursor.execute(
+    "SELECT * FROM sessions WHERE user_id=?",
+    (user_id,)
+    )
 
-        profile = line_bot_api.get_profile(
-            event.source.user_id
-        )
+    session_user = cursor.fetchone()
 
-        display_name = profile.display_name
-
-        flex_message = FlexSendMessage(
-
-            alt_text="Login",
-
-            contents={
-
-                "type": "bubble",
-
-                "hero": {
-
-                    "type": "image",
-
-                    "url": "https://drive.google.com/uc?export=view&id=1oZw_jQDf_pRRBaD-h04uEEOI1wXP0AF9",
-
-                    "size": "sm",
-
-                    "aspectRatio": "1:1",
-
-                    "aspectMode": "fit"
-
-                },
-
-                "body": {
-
-                    "type": "box",
-
-                    "layout": "vertical",
-
-                    "contents": [
-
-                        {
-
-                            "type": "text",
-
-                            "text": f"สวัสดีคุณ {display_name}",
-
-                            "weight": "bold",
-
-                            "size": "lg"
-
-                        },
-
-                        {
-
-                            "type": "text",
-
-                            "text": "กรุณากดปุ่ม Login ด้านล่างก่อนใช้งาน",
-
-                            "wrap": True,
-
-                            "margin": "md"
-
-                        }
-
-                    ]
-
-                },
-
-                "footer": {
-
-                    "type": "box",
-
-                    "layout": "vertical",
-
-                    "contents": [
-
-                        {
-
-                            "type": "button",
-
-                            "style": "primary",
-
-                            "action": {
-
-                                "type": "uri",
-
-                                "label": "Login",
-
-                                "uri": "https://liff.line.me/2010145479-TA2Uw8Ik"
-
-                            }
-
-                        }
-
-                    ]
-
-                }
-
-            }
-
-        )
-
-        line_bot_api.reply_message(
-            event.reply_token,
-            flex_message
-        )
-
-        return
+    if not session_user:
 
     # =========================
     # LOGIN SUCCESS
