@@ -304,8 +304,7 @@ async function login() {
 
     const profile = await liff.getProfile();
 
-    await fetch("https://linebot-project-0qio.onrender.com/save_user", {
-
+    await fetch("https://linebot-project-0qio.onrender.com/save_line_user", {
         method: "POST",
 
         headers: {
@@ -370,8 +369,8 @@ def save_user():
 # SAVE USER
 # =========================
 
-@app.route("/save_user", methods=["POST"])
-def save_user():
+@app.route("/save_line_user", methods=["POST"])
+def save_line_user():
 
     data = request.get_json()
 
