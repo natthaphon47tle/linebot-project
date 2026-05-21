@@ -409,17 +409,19 @@ def save_user():
 
         with open("sessions.txt", "r") as f:
 
-            users = f.read().splitlines()
+            users = [u.strip() for u in f.readlines()]
 
     if user_id not in users:
 
-        with open("sessions.txt", "a") as f:
+        with open("sessions.txt", "r") as f:
 
-            f.write(user_id + "\\n")
+    users = [u.strip() for u in f.readlines()]
 
-    print("SAVE USER:", user_id)
+    print("ALL USERS:", users)
 
-    return "OK"
+    if user_id in users:
+
+        logged_in = True
 
 # =========================
 # WEBHOOK
@@ -585,25 +587,9 @@ def handle_message(event):
     # LOGOUT
     # =========================
 
-    if text.lower() == "logout":
+    with open("sessions.txt", "r") as f:
 
-        users = []
-
-        if os.path.exists("sessions.txt"):
-
-            with open("sessions.txt", "r") as f:
-
-                users = f.read().splitlines()
-
-        users = [u for u in users if u != user_id]
-
-        with open("sessions.txt", "w") as f:
-
-            for u in users:
-
-                f.write(u + "\n")
-
-        reply = "✅ Logout สำเร็จ"
+    users = [u.strip() for u in f.readlines()]
 
     # =========================
     # MENU
