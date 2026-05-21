@@ -264,7 +264,7 @@ async function login() {
 
     await liff.init({
 
-        liffId: "2010145479-TA2Uw8Ik",
+        liffId: "2010152202-xzzmHkWl",
 
         withLoginOnExternalBrowser: true
 
@@ -505,7 +505,7 @@ def handle_follow(event):
 
                             "label": "Login",
 
-                            "uri": "https://liff.line.me/2010145479-TA2Uw8Ik"
+                            "uri": "https://liff.line.me/2010152202-xzzmHkWl"
 
                         }
 
@@ -621,7 +621,7 @@ def handle_message(event):
 
                                 "label": "Login",
 
-                                "uri": "https://liff.line.me/2010145479-TA2Uw8Ik"
+                                "uri": "https://liff.line.me/2010152202-xzzmHkWl"
 
                             }
 
