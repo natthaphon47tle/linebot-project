@@ -589,7 +589,7 @@ def handle_message(event):
 
     with open("sessions.txt", "r") as f:
 
-    users = [u.strip() for u in f.readlines()]
+        users = [u.strip() for u in f.readlines()]
 
     # =========================
     # MENU
