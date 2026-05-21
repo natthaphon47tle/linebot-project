@@ -266,13 +266,17 @@ async function login() {
 
         liffId: "2010152202-xzzmHkWl",
 
-        withLoginOnExternalBrowser: true
+        await liff.init({
+            liffId: "2010152202-xzzmHkWl"
+        });
 
     });
 
     if (!liff.isLoggedIn()) {
 
-        liff.login();
+        liff.login({
+            redirectUri: window.location.href
+        });
 
         return;
     }
