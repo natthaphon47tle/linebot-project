@@ -404,15 +404,24 @@ def save_line_user(user_id):
     print("ALL SESSIONS:", cursor.fetchall())
 
     return """
+
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
     <h2>✅ LOGIN SUCCESS</h2>
 
     <script>
 
-        setTimeout(() => {
+    async function closeLIFF() {
 
-            window.location.href = "https://line.me";
+        await liff.init({
+            liffId: "2010152202-xzzmHkWl"
+        });
 
-        }, 1000);
+        liff.closeWindow();
+
+    }
+
+    closeLIFF();
 
     </script>
     """
