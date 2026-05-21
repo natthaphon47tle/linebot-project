@@ -346,7 +346,8 @@ async function login() {
 
         setTimeout(() => {
 
-        liff.closeWindow();
+        window.location.href = 
+        "https://line.me/R/nv/chat";
 
 }, 1000);
 
