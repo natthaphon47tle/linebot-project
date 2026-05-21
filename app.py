@@ -541,102 +541,31 @@ def handle_message(event):
     print("LOGIN STATUS:", logged_in)
  
     # =========================
-    # CHECK LOGIN
-    # =========================
+# CHECK LOGIN
+# =========================
 
+@app.route("/check_login", methods=["POST"])
+def check_login():
 
-    if not logged_in:
+    data = request.get_json()
 
-        profile = line_bot_api.get_profile(
-            event.source.user_id
-        )
+    username = data.get("username")
+    password = data.get("password")
 
-        display_name = profile.display_name
+    cursor.execute("SELECT * FROM users")
 
-        flex_message = FlexSendMessage(
+    records = cursor.fetchall()
 
-            alt_text="Login",
+    for row in records:
 
-            contents={
+        if (
+            row[0] == username and
+            check_password_hash(row[1], password)
+        ):
 
-                "type": "bubble",
+            return "SUCCESS"
 
-                "body": {
-
-                    "type": "box",
-
-                    "layout": "vertical",
-
-                    "contents": [
-
-                        {
-
-                            "type": "text",
-
-                            "text": f"สวัสดีคุณ {display_name}",
-
-                            "weight": "bold",
-
-                            "size": "lg"
-
-                        },
-
-                        {
-
-                            "type": "text",
-
-                            "text": "กรุณากดปุ่ม Login ด้านล่างก่อนใช้งาน",
-
-                            "wrap": True,
-
-                            "margin": "md"
-
-                        }
-
-                    ]
-
-                },
-
-                "footer": {
-
-                    "type": "box",
-
-                    "layout": "vertical",
-
-                    "contents": [
-
-                        {
-
-                            "type": "button",
-
-                            "style": "primary",
-
-                            "action": {
-
-                                "type": "uri",
-
-                                "label": "Login",
-
-                                "uri": "https://liff.line.me/2010152202-xzzmHkWl"
-
-                            }
-
-                        }
-
-                    ]
-
-                }
-
-            }
-
-        )
-
-        line_bot_api.reply_message(
-            event.reply_token,
-            flex_message
-        )
-
-        return
+    return "FAIL"
 
            # =========================
     # LOGOUT
