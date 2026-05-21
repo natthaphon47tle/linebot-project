@@ -567,7 +567,7 @@ def handle_message(event):
                 logged_in = True
 
     print("LOGIN STATUS:", logged_in)
-    if not logged_in:
+        if not logged_in:
 
         reply = (
             "🔐 กรุณา Login ก่อนใช้งาน\n\n"
@@ -581,7 +581,62 @@ def handle_message(event):
 
         return
 
-    
+    # =========================
+    # LOGOUT
+    # =========================
+
+    if text.lower() == "logout":
+
+        users = []
+
+        if os.path.exists("sessions.txt"):
+
+            with open("sessions.txt", "r") as f:
+
+                users = [u.strip() for u in f.readlines()]
+
+        users = [u for u in users if u != user_id]
+
+        with open("sessions.txt", "w") as f:
+
+            for u in users:
+
+                f.write(u + "\\n")
+
+        reply = "✅ Logout สำเร็จ"
+
+    # =========================
+    # MENU
+    # =========================
+
+    elif text.lower() == "menu":
+
+        reply = (
+            "📋 MENU\\n\\n"
+            "1. trucking\\n"
+            "2. customs\\n"
+            "3. insurance\\n"
+            "4. packing\\n"
+            "5. cross border\\n"
+            "6. courier"
+        )
+
+    # =========================
+    # DEFAULT
+    # =========================
+
+    else:
+
+        reply = "พิมพ์ menu เพื่อดูเมนู"
+
+    # =========================
+    # REPLY
+    # =========================
+
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=reply)
+    )
 
            # =========================
     # LOGOUT
