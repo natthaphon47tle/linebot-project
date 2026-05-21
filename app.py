@@ -638,11 +638,11 @@ def handle_message(event):
 
         return
 
-        # =========================
+           # =========================
     # LOGOUT
     # =========================
 
-        if text.lower() == "logout":
+    if text.lower() == "logout":
 
         users = []
 
