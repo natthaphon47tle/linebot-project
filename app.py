@@ -272,9 +272,10 @@ async function login() {
     try {
 
         await liff.init({
-        alert("LIFF INIT SUCCESS");
             liffId: "2010152202-xzzmHkWl"
         });
+
+        alert("LIFF INIT SUCCESS");
 
         if (!liff.isLoggedIn()) {
 
