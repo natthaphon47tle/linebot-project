@@ -530,18 +530,25 @@ def handle_message(event):
 
     print("CURRENT USER:", user_id)
     cursor.execute("SELECT * FROM sessions")
-    print("DB SESSIONS:", cursor.fetchall())
+all_sessions = cursor.fetchall()
+
+print("DB SESSIONS:", all_sessions)
+
+session_user = None
+
+for row in all_sessions:
+
+    if row[0] == user_id:
+
+        session_user = row
+
+print("SESSION USER:", session_user)
 
     # =========================
     # CHECK LOGIN
     # =========================
 
-    cursor.execute(
-        "SELECT * FROM sessions WHERE user_id=?",
-        (user_id,)
-    )
-
-    session_user = cursor.fetchone()
+    
     print("SESSION USER:", session_user)
 
     if not session_user:
