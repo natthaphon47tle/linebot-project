@@ -617,23 +617,25 @@ def handle_message(event):
 
     if text.lower() == "logout":
 
-          users = []
+        session.clear()
 
-    if os.path.exists("sessions.txt"):
+        reply = "✅ Logout สำเร็จ"
 
-        with open("sessions.txt", "r") as f:
+    elif text.lower() == "menu":
 
-            users = f.read().splitlines()
+        reply = (
+            "📋 MENU\n\n"
+            "1. trucking\n"
+            "2. customs\n"
+            "3. insurance\n"
+            "4. packing\n"
+            "5. cross border\n"
+            "6. courier"
+        )
 
-    users = [u for u in users if u != user_id]
+    else:
 
-    with open("sessions.txt", "w") as f:
-
-        for u in users:
-
-            f.write(u + "\n")
-
-    reply = "✅ Logout สำเร็จ"
+        reply = "พิมพ์ menu เพื่อดูเมนู"
 
     # =========================
     # MENU
