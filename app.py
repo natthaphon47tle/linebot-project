@@ -264,69 +264,69 @@ Login
 <script>
 
 async function login() {
-alert("LOGIN BUTTON CLICKED");
 
-    await liff.init({
+    alert("LOGIN BUTTON CLICKED");
 
-        liffId: "2010152202-xzzmHkWl",
+    try {
 
         await liff.init({
+            liffId: "2010152202-xzzmHkWl"
+        });
 
-            liffId: "2010152202-xzzmHkWl",
+        if (!liff.isLoggedIn()) {
 
-            withLoginOnExternalBrowser: true
+            liff.login();
+
+            return;
+        }
+
+        const username =
+        document.getElementById("username").value;
+
+        const password =
+        document.getElementById("password").value;
+
+        const response = await fetch("/check_login", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
 
         });
 
-    });
+        const result = await response.text();
 
-    if (!liff.isLoggedIn()) {
+        alert(result);
 
-        liff.login();
+        if (result !== "SUCCESS") {
 
-        return;
+            document.getElementById("msg").innerHTML =
+            "❌ Username หรือ Password ไม่ถูกต้อง";
+
+            return;
+        }
+
+        const profile = await liff.getProfile();
+
+        alert(profile.userId);
+
+        window.location.href =
+        "/save_line_user/" + profile.userId;
+
     }
 
-    const username =
-    document.getElementById("username").value;
+    catch(err) {
 
-    const password =
-    document.getElementById("password").value;
+        alert(err);
 
-    const response = await fetch("/check_login", {
-
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
-
-    });
-
-    const result = await response.text();
-
-    if (result !== "SUCCESS") {
-
-        document.getElementById("msg").innerHTML =
-        "❌ Username หรือ Password ไม่ถูกต้อง";
-
-        return;
     }
-
-    const profile = await liff.getProfile();
-    alert("GET PROFILE SUCCESS");
-
-    alert("START SAVE USER");
-    const profile = await liff.getProfile();
-
-window.location.href =
-"/save_line_user/" + profile.userId;
-    }, 1000);
 
 }
 
