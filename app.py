@@ -612,54 +612,38 @@ def handle_message(event):
         return
 
     # =========================
-    # LOGOUT
-    # =========================
+# LOGOUT
+# =========================
 
-    if text.lower() == "logout":
+if text.lower() == "logout":
 
-        session.clear()
+    session.clear()
 
-        reply = "✅ Logout สำเร็จ"
+    reply = "✅ Logout สำเร็จ"
 
-    elif text.lower() == "menu":
+# =========================
+# MENU
+# =========================
 
-        reply = (
-            "📋 MENU\n\n"
-            "1. trucking\n"
-            "2. customs\n"
-            "3. insurance\n"
-            "4. packing\n"
-            "5. cross border\n"
-            "6. courier"
-        )
+elif text.lower() == "menu":
 
-    else:
+    reply = (
+        "📋 MENU\n\n"
+        "1. trucking\n"
+        "2. customs\n"
+        "3. insurance\n"
+        "4. packing\n"
+        "5. cross border\n"
+        "6. courier"
+    )
 
-        reply = "พิมพ์ menu เพื่อดูเมนู"
+# =========================
+# DEFAULT
+# =========================
 
-    # =========================
-    # MENU
-    # =========================
+else:
 
-    elif text.lower() == "menu":
-
-        reply = (
-            "📋 MENU\n\n"
-            "1. trucking\n"
-            "2. customs\n"
-            "3. insurance\n"
-            "4. packing\n"
-            "5. cross border\n"
-            "6. courier"
-        )
-
-    # =========================
-    # DEFAULT
-    # =========================
-
-    else:
-
-        reply = "พิมพ์ menu เพื่อดูเมนู"
+    reply = "พิมพ์ menu เพื่อดูเมนู"
 
     # =========================
     # REPLY
