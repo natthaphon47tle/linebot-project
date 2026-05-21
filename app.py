@@ -11,7 +11,13 @@ from openai import OpenAI
 # DATABASE
 # =========================
 
-conn = sqlite3.connect("database.db", check_same_thread=False)
+conn = sqlite3.connect(
+    "database.db",
+    check_same_thread=False
+)
+
+conn.execute("PRAGMA journal_mode=WAL")
+
 cursor = conn.cursor()
 
 # USERS TABLE
@@ -399,6 +405,8 @@ def save_line_user():
         conn.commit()
 
         print("INSERT SUCCESS")
+        cursor.execute("SELECT * FROM sessions")
+	print("ALL SESSIONS:", cursor.fetchall())
 
     return "LOGIN SUCCESS"
 
@@ -540,6 +548,7 @@ def handle_message(event):
     )
 
     session_user = cursor.fetchone()
+    print("SESSION USER:", session_user)
 
     if not session_user:
 
