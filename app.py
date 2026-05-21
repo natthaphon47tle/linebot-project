@@ -520,29 +520,19 @@ def handle_message(event):
     print("CURRENT USER:", user_id)
 
     # =========================
-    # LOGOUT
-    # =========================
-
-    if text.lower() == "logout":
-
-        cursor.execute(
-            "DELETE FROM sessions WHERE user_id=?",
-            (user_id,)
-        )
-
-        conn.commit()
-
-        reply = "✅ Logout สำเร็จ"
-
-        # =========================
     # CHECK SESSION
     # =========================
+
     cursor.execute(
         "SELECT * FROM sessions WHERE user_id=?",
         (user_id,)
     )
 
     session_user = cursor.fetchone()
+
+    # =========================
+    # NOT LOGIN
+    # =========================
 
     if not session_user:
 
@@ -636,11 +626,21 @@ def handle_message(event):
         )
 
         return
-    
 
     # =========================
-    # LOGIN SUCCESS
+    # LOGOUT
     # =========================
+
+    if text.lower() == "logout":
+
+        cursor.execute(
+            "DELETE FROM sessions WHERE user_id=?",
+            (user_id,)
+        )
+
+        conn.commit()
+
+        reply = "✅ Logout สำเร็จ"
 
     else:
 
