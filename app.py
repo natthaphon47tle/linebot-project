@@ -82,11 +82,11 @@ if not cursor.fetchall():
     ('XYZ999', 'Delivered', 'Laem Chabang')
     """)
 
-# FAQ
-# SESSION TABLE
+# FAQ TABLE
 cursor.execute("""
-(
-    user_id TEXT
+CREATE TABLE IF NOT EXISTS faq (
+    keyword TEXT,
+    answer TEXT
 )
 """)
 
