@@ -634,7 +634,7 @@ def handle_message(event):
 # CHECK LOGIN
 # =========================
 
-if user_id not in logged_in_users:
+    if user_id not in logged_in_users:
 
     profile = line_bot_api.get_profile(
         event.source.user_id
