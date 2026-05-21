@@ -624,19 +624,25 @@ def handle_message(event):
 # LOGOUT
 # =========================
 
-if text.lower() == "logout":
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
 
-    if user_id in logged_in_users:
+    user_id = event.source.user_id
+    text = event.message.text.strip()
 
-        logged_in_users.remove(user_id)
+    if text.lower() == "logout":
 
-    reply = "✅ Logout สำเร็จ"
+        if user_id in logged_in_users:
 
-else:
+            logged_in_users.remove(user_id)
 
-    if text.lower() == "menu":
+        reply = "✅ Logout สำเร็จ"
 
-        reply = "MENU"
+    else:
+
+        if text.lower() == "menu":
+
+            reply = "MENU"
 
         # =========================
         # MENU
