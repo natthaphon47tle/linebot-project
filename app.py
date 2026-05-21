@@ -126,6 +126,7 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 # =========================
 # LOGIN SESSION
 # =========================
+logged_in_users = []
 
 COMPANY_PASSWORD = "BDVM2026"
 
@@ -378,31 +379,15 @@ def save_line_user():
 
     data = request.get_json()
 
-    print("SAVE DATA:", data)
-
     user_id = data.get("user_id")
 
-    print("USER ID:", user_id)
+    print("SAVE USER:", user_id)
 
-    cursor.execute(
-        "SELECT * FROM sessions WHERE user_id=?",
-        (user_id,)
-    )
+    if user_id not in logged_in_users:
 
-    existing = cursor.fetchone()
+        logged_in_users.append(user_id)
 
-    print("EXISTING:", existing)
-
-    if not existing:
-
-        cursor.execute(
-            "INSERT INTO sessions VALUES (?)",
-            (user_id,)
-        )
-
-        conn.commit()
-
-        print("INSERT SUCCESS")
+    print("ALL USERS:", logged_in_users)
 
     return "LOGIN SUCCESS"
 
@@ -537,18 +522,12 @@ def handle_message(event):
     # CHECK SESSION
     # =========================
 
-    cursor.execute(
-        "SELECT * FROM sessions WHERE user_id=?",
-        (user_id,)
-    )
-
-    session_user = cursor.fetchone()
-
+   
     # =========================
     # NOT LOGIN
     # =========================
 
-    if not session_user:
+    if user_id not in logged_in_users:
 
         profile = line_bot_api.get_profile(
             event.source.user_id
@@ -642,26 +621,22 @@ def handle_message(event):
         return
 
     # =========================
-    # LOGOUT
-    # =========================
+# LOGOUT
+# =========================
 
-    if text.lower() == "logout":
+if text.lower() == "logout":
 
-        cursor.execute(
-            "DELETE FROM sessions WHERE user_id=?",
-            (user_id,)
-        )
+    if user_id in logged_in_users:
 
-        conn.commit()
+        logged_in_users.remove(user_id)
 
-        reply = "✅ Logout สำเร็จ"
+    reply = "✅ Logout สำเร็จ"
 
-    else:
+else:
 
-  
-        if text.lower() == "menu":
+    if text.lower() == "menu":
 
-            reply = "MENU"
+        reply = "MENU"
 
         # =========================
         # MENU
