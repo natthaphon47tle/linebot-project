@@ -256,6 +256,21 @@ Login
 
 async function login() {
 
+    await liff.init({
+
+        liffId: "2010145479-TA2Uw8Ik",
+
+        withLoginOnExternalBrowser: true
+
+    });
+
+    if (!liff.isLoggedIn()) {
+
+        liff.login();
+
+        return;
+    }
+
     const username =
     document.getElementById("username").value;
 
@@ -283,21 +298,6 @@ async function login() {
 
         document.getElementById("msg").innerHTML =
         "❌ Username หรือ Password ไม่ถูกต้อง";
-
-        return;
-    }
-
-    await liff.init({
-
-        liffId: "2010145479-TA2Uw8Ik",
-
-        withLoginOnExternalBrowser: true
-
-    });
-
-    if (!liff.isLoggedIn()) {
-
-        liff.login();
 
         return;
     }
