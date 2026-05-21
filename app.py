@@ -321,8 +321,16 @@ async function login() {
 
         document.getElementById("msg").innerHTML =
         "✅ LOGIN SUCCESS";
-        const profile = await liff.getProfile();
+        
+        await liff.init({
+            liffId: "2010152202-xzzmHkWl"
+        });
 
+        const urlParams =
+        new URLSearchParams(window.location.search);
+
+        const lineUserId =
+        urlParams.get("user_id");
         await fetch("/save_user", {
 
             method: "POST",
@@ -332,9 +340,8 @@ async function login() {
             },
 
             body: JSON.stringify({
-                user_id: profile.userId
+                user_id: lineUserId
             })
-
     });
 
         setTimeout(() => {
@@ -365,34 +372,28 @@ async function login() {
 # CHECK LOGIN
 # =========================
 
-@app.route("/save_user", methods=["POST"])
-def save_user():
+@app.route("/check_login", methods=["POST"])
+def check_login():
 
     data = request.get_json()
 
-    user_id = data.get("user_id")
+    username = data.get("username")
+    password = data.get("password")
 
-    users = []
+    cursor.execute("SELECT * FROM users")
 
-    if os.path.exists("sessions.txt"):
+    records = cursor.fetchall()
 
-        with open("sessions.txt", "r") as f:
+    for row in records:
 
-            users = f.read().splitlines()
+        if (
+            row[0] == username and
+            check_password_hash(row[1], password)
+        ):
 
-    if user_id not in users:
+            return "SUCCESS"
 
-        with open("sessions.txt", "a") as f:
-
-            f.write(user_id + "\n")
-
-    print("SAVE USER:", user_id)
-
-    return "OK"
-
-# =========================
-# SAVE USER
-# =========================
+    return "FAIL"
 
 
 # =========================
@@ -539,7 +540,20 @@ def handle_message(event):
                 logged_in = True
 
     print("LOGIN STATUS:", logged_in)
- 
+     if not logged_in:
+
+        reply = (
+            "🔐 กรุณา Login ก่อนใช้งาน\n\n"
+            f"https://linebot-project-0qio.onrender.com/liff?user_id={user_id}"
+        )
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply)
+        )
+
+        return
+
     # =========================
 # CHECK LOGIN
 # =========================
