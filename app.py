@@ -756,14 +756,14 @@ def handle_message(event):
 
         if user_id in logged_in_users:
 
-        cursor.execute(
-	    "DELETE FROM sessions WHERE user_id=?",
-            (user_id,)
-	)
+	    cursor.execute(
+		"DELETE FROM sessions WHERE user_id=?",
+		(user_id,)
+	    )
 
-	conn.commit()
+	    conn.commit()
 
-	reply = "✅ Logout สำเร็จ"
+	    reply = "✅ Logout สำเร็จ"
 
     # =========================
     # MENU
