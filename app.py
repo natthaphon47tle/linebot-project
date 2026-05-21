@@ -649,13 +649,19 @@ def handle_message(event):
     text = event.message.text.strip()
 
     print("CURRENT USER:", user_id)
-    print("LOGIN USERS:", logged_in_users)
 
     # =========================
     # CHECK LOGIN
     # =========================
 
-    if user_id not in logged_in_users:
+    cursor.execute(
+        "SELECT * FROM sessions WHERE user_id=?",
+        (user_id,)
+    )
+
+    session_user = cursor.fetchone()
+
+    if not session_user:
 
         profile = line_bot_api.get_profile(
             event.source.user_id
