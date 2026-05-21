@@ -332,6 +332,8 @@ async function login() {
 
     }, 1000);
 
+}
+
 </script>
 
 </body>
