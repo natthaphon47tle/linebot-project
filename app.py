@@ -524,21 +524,19 @@ def handle_message(event):
 
     print("CURRENT USER:", user_id)
 
-    logged_in = False
+        logged_in = False
 
     if os.path.exists("sessions.txt"):
 
-    with open("sessions.txt", "r") as f:
+        with open("sessions.txt", "r") as f:
 
-        users = f.read().splitlines()
+            users = f.read().splitlines()
 
-        print("ALL USERS:", users)
+            print("ALL USERS:", users)
 
-        if user_id in users:
+            if user_id in users:
 
-            logged_in = True
-
-    print("LOGIN STATUS:", logged_in)
+                logged_in = True
 
     print("LOGIN STATUS:", logged_in)
  
@@ -644,25 +642,25 @@ def handle_message(event):
     # LOGOUT
     # =========================
 
-    if text.lower() == "logout":
+        if text.lower() == "logout":
 
-    users = []
+        users = []
 
-    if os.path.exists("sessions.txt"):
+        if os.path.exists("sessions.txt"):
 
-        with open("sessions.txt", "r") as f:
+            with open("sessions.txt", "r") as f:
 
-            users = f.read().splitlines()
+                users = f.read().splitlines()
 
-    users = [u for u in users if u != user_id]
+        users = [u for u in users if u != user_id]
 
-    with open("sessions.txt", "w") as f:
+        with open("sessions.txt", "w") as f:
 
-        for u in users:
+            for u in users:
 
-            f.write(u + "\n")
+                f.write(u + "\n")
 
-    reply = "✅ Logout สำเร็จ"
+        reply = "✅ Logout สำเร็จ"
 
     # =========================
     # MENU
