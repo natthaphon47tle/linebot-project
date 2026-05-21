@@ -250,7 +250,10 @@ button{
     placeholder="Password"
 >
 
-<button onclick="login()">
+<button
+    type="button"
+    onclick="login()"
+>
 Login
 </button>
 
@@ -261,6 +264,7 @@ Login
 <script>
 
 async function login() {
+alert("LOGIN BUTTON CLICKED");
 
     await liff.init({
 
