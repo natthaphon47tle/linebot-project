@@ -620,8 +620,8 @@ def handle_message(event):
 
         return
 
-    # =========================
-# LOGOUT
+# =========================
+# MESSAGE EVENT
 # =========================
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -630,14 +630,17 @@ def handle_message(event):
     user_id = event.source.user_id
     text = event.message.text.strip()
 
-# =========================
-# CHECK LOGIN
-# =========================
+    print("CURRENT USER:", user_id)
+    print("LOGIN USERS:", logged_in_users)
+
+    # =========================
+    # CHECK LOGIN
+    # =========================
 
     if user_id not in logged_in_users:
 
         profile = line_bot_api.get_profile(
-        event.source.user_id
+            event.source.user_id
         )
 
         display_name = profile.display_name
@@ -650,82 +653,86 @@ def handle_message(event):
 
                 "type": "bubble",
 
-            "body": {
+                "body": {
 
-                "type": "box",
+                    "type": "box",
 
-                "layout": "vertical",
+                    "layout": "vertical",
 
-                "contents": [
+                    "contents": [
 
-                    {
+                        {
 
-                        "type": "text",
+                            "type": "text",
 
-                        "text": f"สวัสดีคุณ {display_name}",
+                            "text": f"สวัสดีคุณ {display_name}",
 
-                        "weight": "bold",
+                            "weight": "bold",
 
-                        "size": "lg"
+                            "size": "lg"
 
-                    },
+                        },
 
-                    {
+                        {
 
-                        "type": "text",
+                            "type": "text",
 
-                        "text": "กรุณากดปุ่ม Login ด้านล่างก่อนใช้งาน",
+                            "text": "กรุณากดปุ่ม Login ด้านล่างก่อนใช้งาน",
 
-                        "wrap": True,
+                            "wrap": True,
 
-                        "margin": "md"
-
-                    }
-
-                ]
-
-            },
-
-            "footer": {
-
-                "type": "box",
-
-                "layout": "vertical",
-
-                "contents": [
-
-                    {
-
-                        "type": "button",
-
-                        "style": "primary",
-
-                        "action": {
-
-                            "type": "uri",
-
-                            "label": "Login",
-
-                            "uri": "https://liff.line.me/2010145479-TA2Uw8Ik"
+                            "margin": "md"
 
                         }
 
-                    }
+                    ]
 
-                ]
+                },
+
+                "footer": {
+
+                    "type": "box",
+
+                    "layout": "vertical",
+
+                    "contents": [
+
+                        {
+
+                            "type": "button",
+
+                            "style": "primary",
+
+                            "action": {
+
+                                "type": "uri",
+
+                                "label": "Login",
+
+                                "uri": "https://liff.line.me/2010145479-TA2Uw8Ik"
+
+                            }
+
+                        }
+
+                    ]
+
+                }
 
             }
 
-        }
+        )
 
-    )
+        line_bot_api.reply_message(
+            event.reply_token,
+            flex_message
+        )
 
-    line_bot_api.reply_message(
-        event.reply_token,
-        flex_message
-    )
+        return
 
-    return
+    # =========================
+    # LOGOUT
+    # =========================
 
     if text.lower() == "logout":
 
@@ -735,214 +742,29 @@ def handle_message(event):
 
         reply = "✅ Logout สำเร็จ"
 
+    # =========================
+    # MENU
+    # =========================
+
+    elif text.lower() == "menu":
+
+        reply = (
+            "📋 MENU\n\n"
+            "1. trucking\n"
+            "2. customs\n"
+            "3. insurance\n"
+            "4. packing\n"
+            "5. cross border\n"
+            "6. courier"
+        )
+
+    # =========================
+    # DEFAULT
+    # =========================
+
     else:
 
-        if text.lower() == "menu":
-
-            reply = "MENU"
-
-        # =========================
-        # MENU
-        # =========================
-
-        if text.lower() == "menu":
-
-            reply = (
-                "📋 MENU\n\n"
-                "1. trucking\n"
-                "2. customs\n"
-                "3. insurance\n"
-                "4. packing\n"
-                "5. cross border\n"
-                "6. courier"
-            )
-
-        # =========================
-        # TRUCKING
-        # =========================
-
-        elif "trucking" in text.lower():
-
-            try:
-
-                df = pd.read_excel(
-                    "tracking_reefer.xlsx"
-                )
-
-                result = ""
-
-                for index, row in df.iterrows():
-
-                    result += (
-                        f"🚛 บริษัท: {row['company']}\n"
-                        f"👤 ชื่อ: {row['contact']}\n"
-                        f"📧 Email: {row['email']}\n"
-                        f"📞 Tel: {row['tel']}\n"
-                        f"📍 Base: {row['Base']}\n\n"
-                    )
-
-                reply = result
-
-            except Exception as e:
-
-                reply = f"❌ Trucking Error\n\n{str(e)}"
-
-        # =========================
-        # CUSTOMS
-        # =========================
-
-        elif "customs" in text.lower():
-
-            try:
-
-                df = pd.read_excel(
-                    "customs_clearance.xlsx"
-                )
-
-                result = ""
-
-                for index, row in df.iterrows():
-
-                    result += (
-                        f"📄 บริษัท: {row['company']}\n"
-                        f"👤 ชื่อ: {row['contact']}\n"
-                        f"📧 Email: {row['email']}\n"
-                        f"📞 Tel: {row['tel']}\n"
-                        f"📍 Base: {row['base']}\n\n"
-                    )
-
-                reply = result
-
-            except Exception as e:
-
-                reply = f"❌ Customs Error\n\n{str(e)}"
-
-        # =========================
-        # INSURANCE
-        # =========================
-
-        elif "insurance" in text.lower():
-
-            try:
-
-                df = pd.read_excel(
-                    "cargo_insurance.xlsx"
-                )
-
-                result = ""
-
-                for index, row in df.iterrows():
-
-                    result += (
-                        f"🛡 บริษัท: {row['company']}\n"
-                        f"👤 ชื่อ: {row['contact']}\n"
-                        f"📧 Email: {row['email']}\n"
-                        f"📞 Tel: {row['tel']}\n\n"
-                    )
-
-                reply = result
-
-            except Exception as e:
-
-                reply = f"❌ Insurance Error\n\n{str(e)}"
-
-        # =========================
-        # PACKING
-        # =========================
-
-        elif "packing" in text.lower():
-
-            try:
-
-                df = pd.read_excel(
-                    "packing.xlsx"
-                )
-
-                result = ""
-
-                for index, row in df.iterrows():
-
-                    result += (
-                        f"📦 บริษัท: {row['company']}\n"
-                        f"👤 ชื่อ: {row['contact']}\n"
-                        f"📧 Email: {row['email']}\n"
-                        f"📞 Tel: {row['tel']}\n"
-                        f"🛠 Service: {row['Service']}\n"
-                        f"📍 Base: {row['Base']}\n\n"
-                    )
-
-                reply = result
-
-            except Exception as e:
-
-                reply = f"❌ Packing Error\n\n{str(e)}"
-
-        # =========================
-        # CROSS BORDER
-        # =========================
-
-        elif "cross" in text.lower():
-
-            try:
-
-                df = pd.read_excel(
-                    "cross_border.xlsx"
-                )
-
-                result = ""
-
-                for index, row in df.iterrows():
-
-                    result += (
-                        f"🌏 บริษัท: {row['company']}\n"
-                        f"👤 ชื่อ: {row['contact']}\n"
-                        f"📧 Email: {row['email']}\n"
-                        f"📞 Tel: {row['tel']}\n"
-                        f"🛣 Route: {row['Route']}\n\n"
-                    )
-
-                reply = result
-
-            except Exception as e:
-
-                reply = f"❌ Cross Border Error\n\n{str(e)}"
-
-        # =========================
-        # COURIER
-        # =========================
-
-        elif "courier" in text.lower():
-
-            try:
-
-                df = pd.read_excel(
-                    "courier.xlsx"
-                )
-
-                result = ""
-
-                for index, row in df.iterrows():
-
-                    result += (
-                        f"📮 บริษัท: {row['company']}\n"
-                        f"👤 ชื่อ: {row['contact']}\n"
-                        f"📧 Email: {row['email']}\n"
-                        f"📞 Tel: {row['tel']}\n\n"
-                    )
-
-                reply = result
-
-            except Exception as e:
-
-                reply = f"❌ Courier Error\n\n{str(e)}"
-
-        # =========================
-        # DEFAULT
-        # =========================
-
-        else:
-
-            reply = "พิมพ์ menu เพื่อดูเมนู"
+        reply = "พิมพ์ menu เพื่อดูเมนู"
 
     # =========================
     # REPLY
