@@ -315,9 +315,11 @@ async function login() {
     }
 
     const profile = await liff.getProfile();
+    alert("GET PROFILE SUCCESS");
 
+    alert("START SAVE USER");
     const response2 = await fetch(
-        "https://linebot-project-0qio.onrender.com/save_line_user",
+    "/save_line_user",
         {
 
             method: "POST",
@@ -334,6 +336,7 @@ async function login() {
     );
 
     const result2 = await response2.text();
+    alert(result2);
 
     document.getElementById("msg").innerHTML =
     "✅ " + result2;
