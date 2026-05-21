@@ -576,37 +576,6 @@ def handle_message(event):
             f"https://linebot-project-0qio.onrender.com/liff?user_id={user_id}"
         )
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=reply)
-        )
-
-        return
-
-    # =========================
-    # LOGOUT
-    # =========================
-
-    if text.lower() == "logout":
-
-        users = []
-
-        if os.path.exists("sessions.txt"):
-
-            with open("sessions.txt", "r") as f:
-
-                users = [u.strip() for u in f.readlines()]
-
-        users = [u for u in users if u != user_id]
-
-        with open("sessions.txt", "w") as f:
-
-            for u in users:
-
-                f.write(u + "\\n")
-
-        reply = "✅ Logout สำเร็จ"
-
     # =========================
     # MENU
     # =========================
@@ -622,6 +591,22 @@ def handle_message(event):
             "5. cross border\n"
             "6. courier"
         )
+
+    # =========================
+    # LOGOUT
+    # =========================
+
+    elif text.lower() == "logout":
+
+        users = [u for u in users if u != user_id]
+
+        with open("sessions.txt", "w") as f:
+
+            for u in users:
+
+                f.write(u + "\n")
+
+        reply = "✅ Logout สำเร็จ"
 
     # =========================
     # DEFAULT
