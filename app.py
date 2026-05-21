@@ -524,7 +524,7 @@ def handle_message(event):
 
     print("CURRENT USER:", user_id)
 
-        logged_in = False
+    logged_in = False
 
     if os.path.exists("sessions.txt"):
 
