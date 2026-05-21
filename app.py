@@ -321,6 +321,21 @@ async function login() {
 
         document.getElementById("msg").innerHTML =
         "✅ LOGIN SUCCESS";
+        const profile = await liff.getProfile();
+
+        await fetch("/save_user", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                user_id: profile.userId
+            })
+
+    });
 
         setTimeout(() => {
 
@@ -350,30 +365,30 @@ async function login() {
 # CHECK LOGIN
 # =========================
 
-@app.route("/check_login", methods=["POST"])
-def check_login():
+@app.route("/save_user", methods=["POST"])
+def save_user():
 
     data = request.get_json()
 
-    username = data.get("username")
-    password = data.get("password")
+    user_id = data.get("user_id")
 
-    cursor.execute("SELECT * FROM users")
+    users = []
 
-    records = cursor.fetchall()
+    if os.path.exists("sessions.txt"):
 
-    for row in records:
+        with open("sessions.txt", "r") as f:
 
-        if (
-            row[0] == username and
-            check_password_hash(row[1], password)
-        ):
+            users = f.read().splitlines()
 
-            session["logged_in"] = True
+    if user_id not in users:
 
-            return "SUCCESS"
+        with open("sessions.txt", "a") as f:
 
-    return "FAIL"
+            f.write(user_id + "\n")
+
+    print("SAVE USER:", user_id)
+
+    return "OK"
 
 # =========================
 # SAVE USER
@@ -509,7 +524,21 @@ def handle_message(event):
 
     print("CURRENT USER:", user_id)
 
-    logged_in = session.get("logged_in", False)
+    logged_in = False
+
+    if os.path.exists("sessions.txt"):
+
+    with open("sessions.txt", "r") as f:
+
+        users = f.read().splitlines()
+
+        print("ALL USERS:", users)
+
+        if user_id in users:
+
+            logged_in = True
+
+    print("LOGIN STATUS:", logged_in)
 
     print("LOGIN STATUS:", logged_in)
  
@@ -617,9 +646,23 @@ def handle_message(event):
 
     if text.lower() == "logout":
 
-        session.clear()
+    users = []
 
-        reply = "✅ Logout สำเร็จ"
+    if os.path.exists("sessions.txt"):
+
+        with open("sessions.txt", "r") as f:
+
+            users = f.read().splitlines()
+
+    users = [u for u in users if u != user_id]
+
+    with open("sessions.txt", "w") as f:
+
+        for u in users:
+
+            f.write(u + "\n")
+
+    reply = "✅ Logout สำเร็จ"
 
     # =========================
     # MENU
