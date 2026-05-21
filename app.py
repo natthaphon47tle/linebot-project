@@ -409,19 +409,18 @@ def save_user():
 
         with open("sessions.txt", "r") as f:
 
+
             users = [u.strip() for u in f.readlines()]
 
     if user_id not in users:
 
-        with open("sessions.txt", "r") as f:
+        with open("sessions.txt", "a") as f:
 
-            users = [u.strip() for u in f.readlines()]
+            f.write(user_id + "\n")
 
-    print("ALL USERS:", users)
+    print("SAVE USER:", user_id)
 
-    if user_id in users:
-
-        logged_in = True
+    return "OK"
 
 # =========================
 # WEBHOOK
