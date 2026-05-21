@@ -318,33 +318,10 @@ async function login() {
     alert("GET PROFILE SUCCESS");
 
     alert("START SAVE USER");
-    const response2 = await fetch(
-    "/save_line_user",
-        {
+    const profile = await liff.getProfile();
 
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                user_id: profile.userId
-            })
-
-        }
-    );
-
-    const result2 = await response2.text();
-    alert(result2);
-
-    document.getElementById("msg").innerHTML =
-    "✅ " + result2;
-
-    setTimeout(() => {
-
-        liff.closeWindow();
-
+window.location.href =
+"/save_line_user/" + profile.userId;
     }, 1000);
 
 }
@@ -388,21 +365,15 @@ def check_login():
 # SAVE USER
 # =========================
 
-@app.route("/save_line_user", methods=["POST"])
-def save_line_user():
-
-    data = request.get_json()
-
-    user_id = data.get("user_id")
+@app.route("/save_line_user/<user_id>")
+def save_line_user(user_id):
 
     print("SAVE USER:", user_id)
 
-    # ล้าง session เก่าทั้งหมด
     cursor.execute("DELETE FROM sessions")
 
     conn.commit()
 
-    # บันทึก user ใหม่
     cursor.execute(
         "INSERT INTO sessions VALUES (?)",
         (user_id,)
@@ -410,13 +381,16 @@ def save_line_user():
 
     conn.commit()
 
-    print("INSERT SUCCESS")
-
     cursor.execute("SELECT * FROM sessions")
 
     print("ALL SESSIONS:", cursor.fetchall())
 
-    return "LOGIN SUCCESS"
+    return """
+    <h2>✅ LOGIN SUCCESS</h2>
+    <script>
+        window.close();
+    </script>
+    """
 
 # =========================
 # WEBHOOK
