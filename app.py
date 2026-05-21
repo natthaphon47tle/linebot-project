@@ -529,20 +529,22 @@ def handle_message(event):
     text = event.message.text.strip()
 
     print("CURRENT USER:", user_id)
+
     cursor.execute("SELECT * FROM sessions")
-all_sessions = cursor.fetchall()
 
-print("DB SESSIONS:", all_sessions)
+    all_sessions = cursor.fetchall()
 
-session_user = None
+    print("DB SESSIONS:", all_sessions)
 
-for row in all_sessions:
+    session_user = None
 
-    if row[0] == user_id:
+    for row in all_sessions:
 
-        session_user = row
+        if row[0] == user_id:
 
-print("SESSION USER:", session_user)
+            session_user = row
+
+    print("SESSION USER:", session_user)
 
     # =========================
     # CHECK LOGIN
