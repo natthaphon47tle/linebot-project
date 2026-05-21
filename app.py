@@ -344,12 +344,8 @@ async function login() {
             })
     });
 
-        setTimeout(() => {
-
-        window.location.href = 
-        "https://line.me/R/nv/chat";
-
-}, 1000);
+        document.getElementById("msg").innerHTML =
+        "✅ LOGIN SUCCESS<br><br>กรุณากด X มุมขวาบนเพื่อกลับไปหน้าแชท";
 
     }
 
