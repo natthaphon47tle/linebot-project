@@ -126,7 +126,6 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 # =========================
 # LOGIN SESSION
 # =========================
-logged_in_users = []
 
 COMPANY_PASSWORD = "BDVM2026"
 
@@ -383,11 +382,23 @@ def save_line_user():
 
     print("SAVE USER:", user_id)
 
-    if user_id not in logged_in_users:
+    cursor.execute(
+        "SELECT * FROM sessions WHERE user_id=?",
+        (user_id,)
+    )
 
-        logged_in_users.append(user_id)
+    existing = cursor.fetchone()
 
-    print("ALL USERS:", logged_in_users)
+    if not existing:
+
+        cursor.execute(
+            "INSERT INTO sessions VALUES (?)",
+            (user_id,)
+        )
+
+        conn.commit()
+
+        print("INSERT SUCCESS")
 
     return "LOGIN SUCCESS"
 
@@ -527,7 +538,14 @@ def handle_message(event):
     # NOT LOGIN
     # =========================
 
-    if user_id not in logged_in_users:
+        cursor.execute(
+        "SELECT * FROM sessions WHERE user_id=?",
+        (user_id,)
+    )
+
+    session_user = cursor.fetchone()
+
+    if not session_user:
 
         profile = line_bot_api.get_profile(
             event.source.user_id
@@ -738,9 +756,14 @@ def handle_message(event):
 
         if user_id in logged_in_users:
 
-            logged_in_users.remove(user_id)
+        cursor.execute(
+	    "DELETE FROM sessions WHERE user_id=?",
+            (user_id,)
+	)
 
-        reply = "✅ Logout สำเร็จ"
+	conn.commit()
+
+	reply = "✅ Logout สำเร็จ"
 
     # =========================
     # MENU
