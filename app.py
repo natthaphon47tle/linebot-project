@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, render_template, redirect, session
 import os
 
@@ -381,50 +382,42 @@ def save_line_user(user_id):
 
     print("SAVE USER:", user_id)
 
-    # เช็คก่อนว่ามี user นี้ไหม
-    cursor.execute(
-        "SELECT * FROM sessions WHERE user_id=?",
-        (user_id,)
-    )
+    users = []
 
-    existing = cursor.fetchone()
+    if os.path.exists("sessions.txt"):
 
-    # ถ้ายังไม่มี ค่อย insert
-    if not existing:
+        with open("sessions.txt", "r") as f:
 
-        cursor.execute(
-            "INSERT INTO sessions VALUES (?)",
-            (user_id,)
-        )
+            users = f.read().splitlines()
 
-        conn.commit()
+    if user_id not in users:
 
-    cursor.execute("SELECT * FROM sessions")
+        with open("sessions.txt", "a") as f:
 
-    print("ALL SESSIONS:", cursor.fetchall())
+            f.write(user_id + "\n")
+
+    print("ALL USERS:", users)
 
     return """
 
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-    <h2>✅ LOGIN SUCCESS</h2>
+<script>
 
-    <script>
+async function closeLIFF() {
 
-    async function closeLIFF() {
+    await liff.init({
+        liffId: "2010152202-xzzmHkWl"
+    });
 
-        await liff.init({
-            liffId: "2010152202-xzzmHkWl"
-        });
+    liff.closeWindow();
 
-        liff.closeWindow();
+}
 
-    }
+closeLIFF();
 
-    closeLIFF();
-
-    </script>
-    """
+</script>
+"""
 
 # =========================
 # WEBHOOK
@@ -553,15 +546,24 @@ def handle_message(event):
 
     print("CURRENT USER:", user_id)
 
-    cursor.execute(
-        "SELECT * FROM sessions WHERE user_id=?",
-        (user_id,)
-    )
+    print("CURRENT USER:", user_id)
 
-    session_user = cursor.fetchone()
+    session_user = False
+
+    if os.path.exists("sessions.txt"):
+ 
+        with open("sessions.txt", "r") as f:
+
+            users = f.read().splitlines()
+
+            print("ALL USERS:", users)
+
+            if user_id in users:
+
+                session_user = True
 
     print("SESSION USER:", session_user)
-
+ 
     # =========================
     # CHECK LOGIN
     # =========================
