@@ -630,6 +630,103 @@ def handle_message(event):
     user_id = event.source.user_id
     text = event.message.text.strip()
 
+# =========================
+# CHECK LOGIN
+# =========================
+
+if user_id not in logged_in_users:
+
+    profile = line_bot_api.get_profile(
+        event.source.user_id
+    )
+
+    display_name = profile.display_name
+
+    flex_message = FlexSendMessage(
+
+        alt_text="Login",
+
+        contents={
+
+            "type": "bubble",
+
+            "body": {
+
+                "type": "box",
+
+                "layout": "vertical",
+
+                "contents": [
+
+                    {
+
+                        "type": "text",
+
+                        "text": f"สวัสดีคุณ {display_name}",
+
+                        "weight": "bold",
+
+                        "size": "lg"
+
+                    },
+
+                    {
+
+                        "type": "text",
+
+                        "text": "กรุณากดปุ่ม Login ด้านล่างก่อนใช้งาน",
+
+                        "wrap": True,
+
+                        "margin": "md"
+
+                    }
+
+                ]
+
+            },
+
+            "footer": {
+
+                "type": "box",
+
+                "layout": "vertical",
+
+                "contents": [
+
+                    {
+
+                        "type": "button",
+
+                        "style": "primary",
+
+                        "action": {
+
+                            "type": "uri",
+
+                            "label": "Login",
+
+                            "uri": "https://liff.line.me/2010145479-TA2Uw8Ik"
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        }
+
+    )
+
+    line_bot_api.reply_message(
+        event.reply_token,
+        flex_message
+    )
+
+    return
+
     if text.lower() == "logout":
 
         if user_id in logged_in_users:
