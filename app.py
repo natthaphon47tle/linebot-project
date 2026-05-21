@@ -381,16 +381,23 @@ def save_line_user(user_id):
 
     print("SAVE USER:", user_id)
 
-    cursor.execute("DELETE FROM sessions")
-
-    conn.commit()
-
+    # เช็คก่อนว่ามี user นี้ไหม
     cursor.execute(
-        "INSERT INTO sessions VALUES (?)",
+        "SELECT * FROM sessions WHERE user_id=?",
         (user_id,)
     )
 
-    conn.commit()
+    existing = cursor.fetchone()
+
+    # ถ้ายังไม่มี ค่อย insert
+    if not existing:
+
+        cursor.execute(
+            "INSERT INTO sessions VALUES (?)",
+            (user_id,)
+        )
+
+        conn.commit()
 
     cursor.execute("SELECT * FROM sessions")
 
@@ -398,8 +405,15 @@ def save_line_user(user_id):
 
     return """
     <h2>✅ LOGIN SUCCESS</h2>
+
     <script>
-        window.close();
+
+        setTimeout(() => {
+
+            window.location.href = "https://line.me";
+
+        }, 1000);
+
     </script>
     """
 
@@ -530,19 +544,12 @@ def handle_message(event):
 
     print("CURRENT USER:", user_id)
 
-    cursor.execute("SELECT * FROM sessions")
+    cursor.execute(
+        "SELECT * FROM sessions WHERE user_id=?",
+        (user_id,)
+    )
 
-    all_sessions = cursor.fetchall()
-
-    print("DB SESSIONS:", all_sessions)
-
-    session_user = None
-
-    for row in all_sessions:
-
-        if row[0] == user_id:
-
-            session_user = row
+    session_user = cursor.fetchone()
 
     print("SESSION USER:", session_user)
 
