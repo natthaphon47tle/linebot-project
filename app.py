@@ -406,8 +406,7 @@ def save_line_user():
 
         print("INSERT SUCCESS")
         cursor.execute("SELECT * FROM sessions")
-	print("ALL SESSIONS:", cursor.fetchall())
-
+        print("ALL SESSIONS:", cursor.fetchall())
     return "LOGIN SUCCESS"
 
 
