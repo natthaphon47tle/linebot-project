@@ -304,29 +304,33 @@ async function login() {
 
     const profile = await liff.getProfile();
 
-    await fetch("https://linebot-project-0qio.onrender.com/save_line_user", {
-        method: "POST",
+    const response2 = await fetch(
+        "https://linebot-project-0qio.onrender.com/save_line_user",
+        {
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+            method: "POST",
 
-        body: JSON.stringify({
-            user_id: profile.userId
-        })
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-    });
+            body: JSON.stringify({
+                user_id: profile.userId
+            })
+
+        }
+    );
+
+    const result2 = await response2.text();
 
     document.getElementById("msg").innerHTML =
-    "✅ Login Success";
+    "✅ " + result2;
 
     setTimeout(() => {
 
-    liff.closeWindow();
+        liff.closeWindow();
 
     }, 1000);
-
-}
 
 </script>
 
@@ -372,7 +376,11 @@ def save_line_user():
 
     data = request.get_json()
 
+    print("SAVE DATA:", data)
+
     user_id = data.get("user_id")
+
+    print("USER ID:", user_id)
 
     cursor.execute(
         "SELECT * FROM sessions WHERE user_id=?",
@@ -380,6 +388,8 @@ def save_line_user():
     )
 
     existing = cursor.fetchone()
+
+    print("EXISTING:", existing)
 
     if not existing:
 
@@ -390,7 +400,9 @@ def save_line_user():
 
         conn.commit()
 
-    return "OK"
+        print("INSERT SUCCESS")
+
+    return "LOGIN SUCCESS"
 
 
 # =========================
