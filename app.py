@@ -85,7 +85,7 @@ if not cursor.fetchall():
 # FAQ
 # SESSION TABLE
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS sessions (
+(
     user_id TEXT
 )
 """)
@@ -319,14 +319,14 @@ async function login() {
             return;
         }
 
-        alert("GET PROFILE");
-        const profile = await liff.getProfile();
+        document.getElementById("msg").innerHTML =
+        "✅ LOGIN SUCCESS";
 
-        alert(profile.userId);
+        setTimeout(() => {
 
-        alert(profile.userId);
-        window.location.href =
-        "/save_line_user/" + profile.userId;
+        liff.closeWindow();
+
+}, 1000);
 
     }
 
@@ -369,6 +369,8 @@ def check_login():
             check_password_hash(row[1], password)
         ):
 
+            session["logged_in"] = True
+
             return "SUCCESS"
 
     return "FAIL"
@@ -377,47 +379,6 @@ def check_login():
 # SAVE USER
 # =========================
 
-@app.route("/save_line_user/<user_id>")
-def save_line_user(user_id):
-
-    print("SAVE USER:", user_id)
-
-    users = []
-
-    if os.path.exists("sessions.txt"):
-
-        with open("sessions.txt", "r") as f:
-
-            users = f.read().splitlines()
-
-    if user_id not in users:
-
-        with open("sessions.txt", "a") as f:
-
-            f.write(user_id + "\n")
-
-    print("ALL USERS:", users)
-
-    return """
-
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-
-<script>
-
-async function closeLIFF() {
-
-    await liff.init({
-        liffId: "2010152202-xzzmHkWl"
-    });
-
-    liff.closeWindow();
-
-}
-
-closeLIFF();
-
-</script>
-"""
 
 # =========================
 # WEBHOOK
@@ -548,30 +509,16 @@ def handle_message(event):
 
     print("CURRENT USER:", user_id)
 
-    session_user = False
+    logged_in = session.get("logged_in", False)
 
-    if os.path.exists("sessions.txt"):
- 
-        with open("sessions.txt", "r") as f:
-
-            users = f.read().splitlines()
-
-            print("ALL USERS:", users)
-
-            if user_id in users:
-
-                session_user = True
-
-    print("SESSION USER:", session_user)
+    print("LOGIN STATUS:", logged_in)
  
     # =========================
     # CHECK LOGIN
     # =========================
 
-    
-    print("SESSION USER:", session_user)
 
-    if not session_user:
+    if not logged_in:
 
         profile = line_bot_api.get_profile(
             event.source.user_id
@@ -670,14 +617,23 @@ def handle_message(event):
 
     if text.lower() == "logout":
 
-        cursor.execute(
-            "DELETE FROM sessions WHERE user_id=?",
-            (user_id,)
-        )
+          users = []
 
-        conn.commit()
+    if os.path.exists("sessions.txt"):
 
-        reply = "✅ Logout สำเร็จ"
+        with open("sessions.txt", "r") as f:
+
+            users = f.read().splitlines()
+
+    users = [u for u in users if u != user_id]
+
+    with open("sessions.txt", "w") as f:
+
+        for u in users:
+
+            f.write(u + "\n")
+
+    reply = "✅ Logout สำเร็จ"
 
     # =========================
     # MENU
