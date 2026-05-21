@@ -270,6 +270,7 @@ async function login() {
     try {
 
         await liff.init({
+        alert("LIFF INIT SUCCESS");
             liffId: "2010152202-xzzmHkWl"
         });
 
@@ -286,6 +287,7 @@ async function login() {
         const password =
         document.getElementById("password").value;
 
+        alert("START CHECK LOGIN");
         const response = await fetch("/check_login", {
 
             method: "POST",
@@ -313,10 +315,12 @@ async function login() {
             return;
         }
 
+        alert("GET PROFILE");
         const profile = await liff.getProfile();
 
         alert(profile.userId);
 
+        alert(profile.userId);
         window.location.href =
         "/save_line_user/" + profile.userId;
 
