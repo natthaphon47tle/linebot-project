@@ -636,19 +636,19 @@ def handle_message(event):
 
     if user_id not in logged_in_users:
 
-    profile = line_bot_api.get_profile(
+        profile = line_bot_api.get_profile(
         event.source.user_id
-    )
+        )
 
-    display_name = profile.display_name
+        display_name = profile.display_name
 
-    flex_message = FlexSendMessage(
+        flex_message = FlexSendMessage(
 
-        alt_text="Login",
+            alt_text="Login",
 
-        contents={
+            contents={
 
-            "type": "bubble",
+                "type": "bubble",
 
             "body": {
 
