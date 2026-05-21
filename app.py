@@ -388,27 +388,26 @@ def save_line_user():
 
     print("SAVE USER:", user_id)
 
+    # ล้าง session เก่าทั้งหมด
+    cursor.execute("DELETE FROM sessions")
+
+    conn.commit()
+
+    # บันทึก user ใหม่
     cursor.execute(
-        "SELECT * FROM sessions WHERE user_id=?",
+        "INSERT INTO sessions VALUES (?)",
         (user_id,)
     )
 
-    existing = cursor.fetchone()
+    conn.commit()
 
-    if not existing:
+    print("INSERT SUCCESS")
 
-        cursor.execute(
-            "INSERT INTO sessions VALUES (?)",
-            (user_id,)
-        )
+    cursor.execute("SELECT * FROM sessions")
 
-        conn.commit()
+    print("ALL SESSIONS:", cursor.fetchall())
 
-        print("INSERT SUCCESS")
-        cursor.execute("SELECT * FROM sessions")
-        print("ALL SESSIONS:", cursor.fetchall())
     return "LOGIN SUCCESS"
-
 
 # =========================
 # WEBHOOK
@@ -536,6 +535,8 @@ def handle_message(event):
     text = event.message.text.strip()
 
     print("CURRENT USER:", user_id)
+    cursor.execute("SELECT * FROM sessions")
+    print("DB SESSIONS:", cursor.fetchall())
 
     # =========================
     # CHECK LOGIN
