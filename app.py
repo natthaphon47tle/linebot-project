@@ -415,7 +415,7 @@ def save_user():
 
         with open("sessions.txt", "r") as f:
 
-    users = [u.strip() for u in f.readlines()]
+            users = [u.strip() for u in f.readlines()]
 
     print("ALL USERS:", users)
 
