@@ -395,6 +395,34 @@ def check_login():
 
     return "FAIL"
 
+# =========================
+# SAVE USER
+# =========================
+
+@app.route("/save_user", methods=["POST"])
+def save_user():
+
+    data = request.get_json()
+
+    user_id = data.get("user_id")
+
+    users = []
+
+    if os.path.exists("sessions.txt"):
+
+        with open("sessions.txt", "r") as f:
+
+            users = f.read().splitlines()
+
+    if user_id not in users:
+
+        with open("sessions.txt", "a") as f:
+
+            f.write(user_id + "\\n")
+
+    print("SAVE USER:", user_id)
+
+    return "OK"
 
 # =========================
 # WEBHOOK
@@ -491,7 +519,7 @@ def handle_follow(event):
 
                             "label": "Login",
 
-                            "uri": "https://liff.line.me/2010152202-xzzmHkWl"
+                            "uri": f"https://liff.line.me/2010152202-xzzmHkWl?user_id={event.source.user_id}"
 
                         }
 
@@ -540,7 +568,7 @@ def handle_message(event):
                 logged_in = True
 
     print("LOGIN STATUS:", logged_in)
-     if not logged_in:
+    if not logged_in:
 
         reply = (
             "🔐 กรุณา Login ก่อนใช้งาน\n\n"
@@ -554,32 +582,7 @@ def handle_message(event):
 
         return
 
-    # =========================
-# CHECK LOGIN
-# =========================
-
-@app.route("/check_login", methods=["POST"])
-def check_login():
-
-    data = request.get_json()
-
-    username = data.get("username")
-    password = data.get("password")
-
-    cursor.execute("SELECT * FROM users")
-
-    records = cursor.fetchall()
-
-    for row in records:
-
-        if (
-            row[0] == username and
-            check_password_hash(row[1], password)
-        ):
-
-            return "SUCCESS"
-
-    return "FAIL"
+    
 
            # =========================
     # LOGOUT
