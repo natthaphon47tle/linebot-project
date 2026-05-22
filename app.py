@@ -572,7 +572,7 @@ def handle_message(event):
 
     if not logged_in:
 
-    flex_message = FlexSendMessage(
+        flex_message = FlexSendMessage(
 
         alt_text="Login",
 
