@@ -587,17 +587,17 @@ def handle_message(event):
     # MENU
     # =========================
 
-    elif text.lower() == "logout":
+    elif "menu" in text.lower():
 
-        users = [u for u in users if u != user_id]
-
-        with open("sessions.txt", "w") as f:
-
-            for u in users:
-
-                f.write(u + "\n")
-
-        reply = "✅ Logout สำเร็จ"
+        reply = (
+            "📋 MENU\n\n"
+            "1. trucking\n"
+            "2. customs\n"
+            "3. insurance\n"
+            "4. packing\n"
+            "5. cross border\n"
+            "6. courier"
+        )
 
         line_bot_api.reply_message(
             event.reply_token,
