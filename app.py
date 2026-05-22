@@ -681,7 +681,9 @@ def handle_message(event):
 
             for col in customs_df.columns:
 
-                text_data += f"{col}: {row[col]}\n"
+                if "Unnamed" not in str(col) and pd.notna(row[col]):
+
+                    text_data += f"{col}: {row[col]}\n"
 
             replies.append(text_data)
 
@@ -709,7 +711,9 @@ def handle_message(event):
 
             for col in courier_df.columns:
 
-                text_data += f"{col}: {row[col]}\n"
+                if "Unnamed" not in str(col) and pd.notna(row[col]):
+
+                    text_data += f"{col}: {row[col]}\n"
 
             replies.append(text_data)
 
@@ -737,7 +741,9 @@ def handle_message(event):
 
             for col in cross_df.columns:
 
-                text_data += f"{col}: {row[col]}\n"
+                if "Unnamed" not in str(col) and pd.notna(row[col]):
+
+                    text_data += f"{col}: {row[col]}\n"
 
             replies.append(text_data)
 
@@ -765,7 +771,9 @@ def handle_message(event):
 
             for col in packing_df.columns:
 
-                text_data += f"{col}: {row[col]}\n"
+                if "Unnamed" not in str(col) and pd.notna(row[col]):
+
+                    text_data += f"{col}: {row[col]}\n"
 
             replies.append(text_data)
 
@@ -793,7 +801,9 @@ def handle_message(event):
 
             for col in insurance_df.columns:
 
-                text_data += f"{col}: {row[col]}\n"
+                if "Unnamed" not in str(col) and pd.notna(row[col]):
+
+                    text_data += f"{col}: {row[col]}\n"
 
             replies.append(text_data)
 
@@ -821,7 +831,9 @@ def handle_message(event):
 
             for col in reefer_df.columns:
 
-                text_data += f"{col}: {row[col]}\n"
+                if "Unnamed" not in str(col) and pd.notna(row[col]):
+
+                    text_data += f"{col}: {row[col]}\n"
 
             replies.append(text_data)
 
