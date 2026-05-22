@@ -677,9 +677,15 @@ def handle_message(event):
 
         for index, row in customs_df.iterrows():
 
-            replies.append(str(row.iloc[0]))
+            text_data = ""
 
-        reply = "\n".join(replies)
+            for col in customs_df.columns:
+
+                text_data += f"{col}: {row[col]}\n"
+
+            replies.append(text_data)
+
+        reply = "\n-----------------\n".join(replies)
 
         line_bot_api.reply_message(
             event.reply_token,
@@ -699,9 +705,15 @@ def handle_message(event):
 
         for index, row in courier_df.iterrows():
 
-            replies.append(str(row.iloc[0]))
+            text_data = ""
 
-        reply = "\n".join(replies)
+            for col in courier_df.columns:
+
+                text_data += f"{col}: {row[col]}\n"
+
+            replies.append(text_data)
+
+        reply = "\n-----------------\n".join(replies)
 
         line_bot_api.reply_message(
             event.reply_token,
@@ -721,9 +733,15 @@ def handle_message(event):
 
         for index, row in cross_df.iterrows():
 
-            replies.append(str(row.iloc[0]))
+            text_data = ""
 
-        reply = "\n".join(replies)
+            for col in cross_df.columns:
+
+                text_data += f"{col}: {row[col]}\n"
+
+            replies.append(text_data)
+
+        reply = "\n-----------------\n".join(replies)
 
         line_bot_api.reply_message(
             event.reply_token,
@@ -743,9 +761,15 @@ def handle_message(event):
 
         for index, row in packing_df.iterrows():
 
-            replies.append(str(row.iloc[0]))
+            text_data = ""
 
-        reply = "\n".join(replies)
+            for col in packing_df.columns:
+
+                text_data += f"{col}: {row[col]}\n"
+
+            replies.append(text_data)
+
+        reply = "\n-----------------\n".join(replies)
 
         line_bot_api.reply_message(
             event.reply_token,
@@ -765,9 +789,15 @@ def handle_message(event):
 
         for index, row in insurance_df.iterrows():
 
-            replies.append(str(row.iloc[0]))
+            text_data = ""
 
-        reply = "\n".join(replies)
+            for col in insurance_df.columns:
+
+                text_data += f"{col}: {row[col]}\n"
+
+            replies.append(text_data)
+
+        reply = "\n-----------------\n".join(replies)
 
         line_bot_api.reply_message(
             event.reply_token,
@@ -787,9 +817,15 @@ def handle_message(event):
 
         for index, row in reefer_df.iterrows():
 
-            replies.append(str(row.iloc[0]))
+            text_data = ""
 
-        reply = "\n".join(replies)
+            for col in reefer_df.columns:
+
+                text_data += f"{col}: {row[col]}\n"
+
+            replies.append(text_data)
+
+        reply = "\n-----------------\n".join(replies)
 
         line_bot_api.reply_message(
             event.reply_token,
