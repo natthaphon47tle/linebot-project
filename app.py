@@ -576,21 +576,35 @@ def handle_message(event):
             f"https://linebot-project-0qio.onrender.com/liff?user_id={user_id}"
         )
 
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply)
+        )
+
+        return
+
     # =========================
     # MENU
     # =========================
 
-    elif text.lower() == "menu":
+    elif text.lower() == "logout":
 
-        reply = (
-            "📋 MENU\n\n"
-            "1. trucking\n"
-            "2. customs\n"
-            "3. insurance\n"
-            "4. packing\n"
-            "5. cross border\n"
-            "6. courier"
+        users = [u for u in users if u != user_id]
+
+        with open("sessions.txt", "w") as f:
+
+            for u in users:
+
+                f.write(u + "\n")
+
+        reply = "✅ Logout สำเร็จ"
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply)
         )
+
+        return
 
     # =========================
     # LOGOUT
@@ -616,14 +630,13 @@ def handle_message(event):
 
         reply = "พิมพ์ menu เพื่อดูเมนู"
 
-    # =========================
-    # REPLY
-    # =========================
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply)
+        )
 
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply)
-    )
+        return
+
 
 # =========================
 # RUN
