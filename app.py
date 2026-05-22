@@ -325,18 +325,16 @@ async function login() {
             return;
         }
 
-        document.getElementById("msg").innerHTML =
-        "✅ LOGIN SUCCESS";
         
-        await liff.init({
-            liffId: "2010152202-xzzmHkWl"
-        });
 
-        const urlParams =
-        new URLSearchParams(window.location.search);
+    document.getElementById("msg").innerHTML =
+    "✅ LOGIN SUCCESS<br><br>กรุณากด X มุมขวาบนเพื่อกลับไปหน้าแชท";
 
-        const lineUserId =
-        urlParams.get("user_id");
+            const urlParams =
+            new URLSearchParams(window.location.search);
+
+            const lineUserId =
+            urlParams.get("user_id");
         await fetch("/save_user", {
 
             method: "POST",
