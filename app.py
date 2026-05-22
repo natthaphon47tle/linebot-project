@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import pandas as pd
-faq_df = pd.read_excel("faq.xlsx")
 courier_df = pd.read_excel("courier.xlsx")
 cross_df = pd.read_excel("cross_border.xlsx")
 packing_df = pd.read_excel("packing.xlsx")
@@ -670,135 +669,136 @@ def handle_message(event):
 
         return
     # =========================
-# CUSTOMS
-# =========================
+    # CUSTOMS
+    # =========================
 
-if "customs" in text.lower():
+    if "customs" in text.lower():
 
-    replies = []
+        replies = []
 
-    for index, row in customs_df.iterrows():
+        for index, row in customs_df.iterrows():
 
-        replies.append(str(row.iloc[0]))
+            replies.append(str(row.iloc[0]))
 
-    reply = "\n".join(replies)
+        reply = "\n".join(replies)
 
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply[:5000])
-    )
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply[:5000])
+        )
 
-    return
-
-
-# =========================
-# COURIER
-# =========================
-
-if "courier" in text.lower():
-
-    replies = []
-
-    for index, row in courier_df.iterrows():
-
-        replies.append(str(row.iloc[0]))
-
-    reply = "\n".join(replies)
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply[:5000])
-    )
-
-    return
+        return
 
 
-# =========================
-# CROSS BORDER
-# =========================
+    # =========================
+    # COURIER
+    # =========================
 
-if "cross border" in text.lower():
+    if "courier" in text.lower():
 
-    replies = []
+        replies = []
 
-    for index, row in cross_df.iterrows():
+        for index, row in courier_df.iterrows():
 
-        replies.append(str(row.iloc[0]))
+            replies.append(str(row.iloc[0]))
 
-    reply = "\n".join(replies)
+        reply = "\n".join(replies)
 
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply[:5000])
-    )
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply[:5000])
+        )
 
-    return
-
-
-# =========================
-# PACKING
-# =========================
-
-if "packing" in text.lower():
-
-    replies = []
-
-    for index, row in packing_df.iterrows():
-
-        replies.append(str(row.iloc[0]))
-
-    reply = "\n".join(replies)
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply[:5000])
-    )
-
-    return
+        return
 
 
-# =========================
-# INSURANCE
-# =========================
+    # =========================
+    # CROSS BORDER
+    # =========================
 
-if "insurance" in text.lower():
+    if "cross border" in text.lower():
 
-    replies = []
+        replies = []
 
-    for index, row in insurance_df.iterrows():
+        for index, row in cross_df.iterrows():
 
-        replies.append(str(row.iloc[0]))
+            replies.append(str(row.iloc[0]))
 
-    reply = "\n".join(replies)
+        reply = "\n".join(replies)
 
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply[:5000])
-    )
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply[:5000])
+        )
 
-    return
+        return
 
 
-# =========================
-# REEFER
-# =========================
+    # =========================
+    # PACKING
+    # =========================
 
-if "reefer" in text.lower():
+    if "packing" in text.lower():
 
-    replies = []
+        replies = []
 
-    for index, row in reefer_df.iterrows():
+        for index, row in packing_df.iterrows():
 
-        replies.append(str(row.iloc[0]))
+            replies.append(str(row.iloc[0]))
 
-    reply = "\n".join(replies)
+        reply = "\n".join(replies)
 
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply[:5000])
-    )
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply[:5000])
+        )
 
-    return
+        return
+
+
+    # =========================
+    # INSURANCE
+    # =========================
+
+    if "insurance" in text.lower():
+
+        replies = []
+
+        for index, row in insurance_df.iterrows():
+
+            replies.append(str(row.iloc[0]))
+
+        reply = "\n".join(replies)
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply[:5000])
+        )
+
+        return
+
+
+    # =========================
+    # TRUCKING
+    # =========================
+
+    if "trucking" in text.lower():
+
+        replies = []
+
+        for index, row in reefer_df.iterrows():
+
+            replies.append(str(row.iloc[0]))
+
+        reply = "\n".join(replies)
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply[:5000])
+        )
+
+        return
+
     # =========================
     # LOGOUT
     # =========================
