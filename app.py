@@ -645,7 +645,7 @@ def handle_message(event):
     # MENU
     # =========================
 
-    elif "menu" in text.lower():
+    if "menu" in text.lower():
 
         reply = (
             "📋 MENU\n\n"
@@ -703,7 +703,7 @@ def handle_message(event):
     # LOGOUT
     # =========================
 
-    elif text.lower() == "logout":
+    if "logout" in text.lower():
 
         users = [u for u in users if u != user_id]
 
