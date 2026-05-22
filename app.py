@@ -571,7 +571,7 @@ def handle_message(event):
 
     print("LOGIN STATUS:", logged_in)
 
-    # =========================
+        # =========================
     # CHECK LOGIN
     # =========================
 
@@ -579,72 +579,72 @@ def handle_message(event):
 
         flex_message = FlexSendMessage(
 
-        alt_text="Login",
+            alt_text="Login",
 
-        contents={
+            contents={
 
-            "type": "bubble",
+                "type": "bubble",
 
-            "body": {
+                "body": {
 
-                "type": "box",
+                    "type": "box",
 
-                "layout": "vertical",
+                    "layout": "vertical",
 
-                "contents": [
+                    "contents": [
 
-                    {
-                        "type": "text",
-                        "text": "🔐 กรุณา Login ก่อนใช้งาน",
-                        "weight": "bold",
-                        "size": "lg",
-                        "wrap": True
-                    }
+                        {
+                            "type": "text",
+                            "text": "🔐 กรุณา Login ก่อนใช้งาน",
+                            "weight": "bold",
+                            "size": "lg",
+                            "wrap": True
+                        }
 
-                ]
+                    ]
 
-            },
+                },
 
-            "footer": {
+                "footer": {
 
-                "type": "box",
+                    "type": "box",
 
-                "layout": "vertical",
+                    "layout": "vertical",
 
-                "contents": [
+                    "contents": [
 
-                    {
+                        {
 
-                        "type": "button",
+                            "type": "button",
 
-                        "style": "primary",
+                            "style": "primary",
 
-                        "action": {
+                            "action": {
 
-                            "type": "uri",
+                                "type": "uri",
 
-                            "label": "Login",
+                                "label": "Login",
 
-                            "uri": f"https://liff.line.me/2010152202-xzzmHkWl?user_id={user_id}"
+                                "uri": f"https://liff.line.me/2010152202-xzzmHkWl?user_id={user_id}"
+
+                            }
 
                         }
 
-                    }
+                    ]
 
-                ]
+                }
 
             }
 
-        }
+        )
 
-    )
+        line_bot_api.reply_message(
+            event.reply_token,
+            flex_message
+        )
 
-    line_bot_api.reply_message(
-        event.reply_token,
-        flex_message
-    )
-
-    return
+        return
 
     # =========================
     # MENU
