@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import pandas as pd
+faq_df = pd.read_excel("faq.xlsx")
 from openai import OpenAI
 
 # =========================
@@ -571,17 +572,74 @@ def handle_message(event):
 
     if not logged_in:
 
-        reply = (
-            "🔐 กรุณา Login ก่อนใช้งาน\n\n"
-            f"https://linebot-project-0qio.onrender.com/liff?user_id={user_id}"
-        )
+    flex_message = FlexSendMessage(
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=reply)
-        )
+        alt_text="Login",
 
-        return
+        contents={
+
+            "type": "bubble",
+
+            "body": {
+
+                "type": "box",
+
+                "layout": "vertical",
+
+                "contents": [
+
+                    {
+                        "type": "text",
+                        "text": "🔐 กรุณา Login ก่อนใช้งาน",
+                        "weight": "bold",
+                        "size": "lg",
+                        "wrap": True
+                    }
+
+                ]
+
+            },
+
+            "footer": {
+
+                "type": "box",
+
+                "layout": "vertical",
+
+                "contents": [
+
+                    {
+
+                        "type": "button",
+
+                        "style": "primary",
+
+                        "action": {
+
+                            "type": "uri",
+
+                            "label": "Login",
+
+                            "uri": f"https://liff.line.me/2010152202-xzzmHkWl?user_id={user_id}"
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        }
+
+    )
+
+    line_bot_api.reply_message(
+        event.reply_token,
+        flex_message
+    )
+
+    return
 
     # =========================
     # MENU
@@ -605,6 +663,41 @@ def handle_message(event):
         )
 
         return
+    # =========================
+    # EXCEL FAQ
+    # =========================
+
+    else:
+
+        found = False
+
+        for index, row in faq_df.iterrows():
+
+            keyword = str(row["keyword"]).lower()
+
+            if keyword in text.lower():
+
+                reply = str(row["answer"])
+
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=reply)
+                )
+
+                found = True
+
+                return
+
+        if not found:
+
+            reply = "ไม่พบข้อมูล กรุณาพิมพ์ menu"
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=reply)
+            )
+
+            return
 
     # =========================
     # LOGOUT
