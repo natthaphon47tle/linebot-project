@@ -521,7 +521,7 @@ def handle_follow(event):
 
                             "label": "Login",
 
-                            "uri": f"https://liff.line.me/2010152202-xzzmHkWl?user_id={event.source.user_id}"
+                            "uri": f"https://liff.line.me/2010152202-xzzmHkWl"
 
                         }
 
