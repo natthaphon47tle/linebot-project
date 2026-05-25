@@ -29,11 +29,12 @@ cursor = conn.cursor()
 
 # USERS TABLE
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS users (
-    username TEXT,
-    password TEXT
+CREATE TABLE IF NOT EXISTS sessions (
+    user_id TEXT
 )
 """)
+
+conn.commit()
 
 # TRACKING TABLE
 cursor.execute("""
@@ -407,20 +408,21 @@ def save_user():
 
     user_id = data.get("user_id")
 
-    users = []
+    cursor.execute(
+    "SELECT * FROM sessions WHERE user_id=?",
+    (user_id,)
+)
 
-    if os.path.exists("sessions.txt"):
+existing = cursor.fetchone()
 
-        with open("sessions.txt", "r") as f:
+if not existing:
 
+    cursor.execute(
+        "INSERT INTO sessions VALUES (?)",
+        (user_id,)
+    )
 
-            users = [u.strip() for u in f.readlines()]
-
-    if user_id not in users:
-
-        with open("sessions.txt", "a") as f:
-
-            f.write(user_id + "\n")
+    conn.commit()
 
     print("SAVE USER:", user_id)
 
@@ -555,17 +557,16 @@ def handle_message(event):
 
     logged_in = False
 
-    if os.path.exists("sessions.txt"):
+    cursor.execute(
+    "SELECT * FROM sessions WHERE user_id=?",
+    (user_id,)
+    )
 
-        with open("sessions.txt", "r") as f:
+    session_user = cursor.fetchone()
 
-            users = [u.strip() for u in f.readlines()]
+    if session_user:
 
-            print("ALL USERS:", users)
-
-            if user_id in users:
-
-                logged_in = True
+        logged_in = True
 
     print("LOGIN STATUS:", logged_in)
 
@@ -852,13 +853,12 @@ def handle_message(event):
 
     if "logout" in text.lower():
 
-        users = [u for u in users if u != user_id]
+        cursor.execute(
+            "DELETE FROM sessions WHERE user_id=?",
+            (user_id,)
+        )
 
-        with open("sessions.txt", "w") as f:
-
-            for u in users:
-
-                f.write(u + "\n")
+        conn.commit()
 
         reply = "✅ Logout สำเร็จ"
 
