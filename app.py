@@ -899,6 +899,49 @@ def handle_message(event):
 
         return
 
+# =========================
+# ADMIN PANEL
+# =========================
+
+if text.lower() == "admin":
+
+    line_bot_api.reply_message(
+
+        event.reply_token,
+
+        TextSendMessage(
+
+            text="🔧 เปิดระบบจัดการ User",
+
+            quick_reply={
+
+                "items":[
+
+                    {
+                        "type":"action",
+
+                        "action":{
+
+                            "type":"uri",
+
+                            "label":"เปิด ADMIN",
+
+                            "uri":"https://linebot-project-0qio.onrender.com/admin"
+
+                        }
+
+                    }
+
+                ]
+
+            }
+
+        )
+
+    )
+
+    return
+
     # =========================
     # MENU
     # =========================
