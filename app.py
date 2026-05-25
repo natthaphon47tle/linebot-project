@@ -388,6 +388,7 @@ def delete_user(username):
     cursor.execute(
 
         """
+        DELETE FROM users
         WHERE username=?
         """,
 
@@ -862,13 +863,21 @@ existing_users = cursor.fetchall()
 # ถ้ายังไม่มี user ใน database
 # ให้ import จาก Excel ครั้งแรก
 
-if not existing_users:
+for index, row in users_df.iterrows():
 
-    for index, row in users_df.iterrows():
+    username = str(row["username"])
 
-        username = str(row["username"])
+    password = str(row["password"])
 
-        password = str(row["password"])
+    cursor.execute(
+        "SELECT * FROM users WHERE username=?",
+        (username,)
+    )
+
+    existing = cursor.fetchone()
+
+    # ถ้ายังไม่มี user นี้
+    if not existing:
 
         hashed_password = generate_password_hash(
             password
@@ -887,7 +896,7 @@ if not existing_users:
             )
         )
 
-    conn.commit()
+conn.commit()
 
 # =========================
 # WEBHOOK
