@@ -207,29 +207,29 @@ def admin():
 
     for user in users:
 
-    html += f"""
+        html += f"""
 
-    <p>
+        <p>
 
-        👤 {user[0]}
+            👤 {user[0]}
 
-        |
+            |
 
-        <a href="/delete_user/{user[0]}">
-            🗑 DELETE
-        </a>
+            <a href="/delete_user/{user[0]}">
+                🗑 DELETE
+            </a>
 
-        |
+            |
 
-        <a href="/reset_password/{user[0]}">
-            🔑 RESET PASSWORD
-        </a>
+            <a href="/reset_password/{user[0]}">
+                🔑 RESET PASSWORD
+            </a>
 
-    </p>
+        </p>
 
-    """
-
+        """
     return html
+
 
 # =========================
 # ADD USER
