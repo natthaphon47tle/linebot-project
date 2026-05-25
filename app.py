@@ -324,11 +324,9 @@ async function login() {
             return;
         }
 
-        const urlParams =
-        new URLSearchParams(window.location.search);
+        const profile = await liff.getProfile();
 
-        const lineUserId =
-        urlParams.get("user_id");
+        const lineUserId = profile.userId;
 
         await fetch("/save_user", {
 
@@ -347,6 +345,11 @@ async function login() {
         document.getElementById("msg").innerHTML =
         "✅ LOGIN SUCCESS";
 
+        setTimeout(() => {
+
+            liff.closeWindow();
+
+        }, 1000);
     }
 
     catch(err) {
