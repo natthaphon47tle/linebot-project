@@ -272,24 +272,26 @@ Login
 
 <script>
 
+async function initializeLiff() {
+
+    await liff.init({
+        liffId: "2010152202-xzzmHkWl"
+    });
+
+    // ถ้ายังไม่ได้ login ให้ login ทันที
+    if (!liff.isLoggedIn()) {
+
+        liff.login();
+        return;
+    }
+
+}
+
+initializeLiff();
+
 async function login() {
 
-    alert("LOGIN BUTTON CLICKED");
-
     try {
-
-        await liff.init({
-            liffId: "2010152202-xzzmHkWl"
-        });
-
-        alert("LIFF INIT SUCCESS");
-
-        if (!liff.isLoggedIn()) {
-
-            liff.login();
-
-            return;
-        }
 
         const username =
         document.getElementById("username").value;
@@ -297,7 +299,6 @@ async function login() {
         const password =
         document.getElementById("password").value;
 
-        alert("START CHECK LOGIN");
         const response = await fetch("/check_login", {
 
             method: "POST",
@@ -315,8 +316,6 @@ async function login() {
 
         const result = await response.text();
 
-        alert(result);
-
         if (result !== "SUCCESS") {
 
             document.getElementById("msg").innerHTML =
@@ -325,16 +324,12 @@ async function login() {
             return;
         }
 
-        
+        const urlParams =
+        new URLSearchParams(window.location.search);
 
-    document.getElementById("msg").innerHTML =
-    "✅ LOGIN SUCCESS<br><br>กรุณากด X มุมขวาบนเพื่อกลับไปหน้าแชท";
+        const lineUserId =
+        urlParams.get("user_id");
 
-            const urlParams =
-            new URLSearchParams(window.location.search);
-
-            const lineUserId =
-            urlParams.get("user_id");
         await fetch("/save_user", {
 
             method: "POST",
@@ -346,10 +341,11 @@ async function login() {
             body: JSON.stringify({
                 user_id: lineUserId
             })
-    });
+
+        });
 
         document.getElementById("msg").innerHTML =
-        "✅ LOGIN SUCCESS<br><br>กรุณากด X มุมขวาบนเพื่อกลับไปหน้าแชท";
+        "✅ LOGIN SUCCESS";
 
     }
 
@@ -360,6 +356,7 @@ async function login() {
     }
 
 }
+
 
 </script>
 
@@ -521,7 +518,7 @@ def handle_follow(event):
 
                             "label": "Login",
 
-                            "uri": f"https://liff.line.me/2010152202-xzzmHkWl"
+                            "uri": f"https://liff.line.me/2010152202-xzzmHkWl?user_id={event.source.user_id}"
 
                         }
 
