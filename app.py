@@ -29,10 +29,19 @@ cursor = conn.cursor()
 
 # USERS TABLE
 cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    username TEXT,
+    password TEXT
+)
+""")
+
+# SESSION TABLE
+cursor.execute("""
 CREATE TABLE IF NOT EXISTS sessions (
     user_id TEXT
 )
 """)
+
 
 conn.commit()
 
