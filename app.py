@@ -854,20 +854,15 @@ def save_user():
 # IMPORT USERS FROM EXCEL
 # =========================
 
-cursor.execute(
-    "SELECT * FROM users"
-)
-
-existing_users = cursor.fetchall()
-
-# ถ้ายังไม่มี user ใน database
-# ให้ import จาก Excel ครั้งแรก
-
 for index, row in users_df.iterrows():
 
-    username = str(row["username"])
+    username = str(row["username"]).strip()
 
-    password = str(row["password"])
+    password = str(row["password"]).strip()
+
+    hashed_password = generate_password_hash(
+        password
+    )
 
     cursor.execute(
         "SELECT * FROM users WHERE username=?",
@@ -876,12 +871,31 @@ for index, row in users_df.iterrows():
 
     existing = cursor.fetchone()
 
-    # ถ้ายังไม่มี user นี้
-    if not existing:
+    # =========================
+    # UPDATE PASSWORD
+    # =========================
 
-        hashed_password = generate_password_hash(
-            password
+    if existing:
+
+        cursor.execute(
+
+            """
+            UPDATE users
+            SET password=?
+            WHERE username=?
+            """,
+
+            (
+                hashed_password,
+                username
+            )
         )
+
+    # =========================
+    # INSERT NEW USER
+    # =========================
+
+    else:
 
         cursor.execute(
 
