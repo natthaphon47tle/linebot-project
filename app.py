@@ -130,8 +130,13 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 # =========================
 
 COMPANY_PASSWORD = "BDVM2026"
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "1234"
+ADMIN_USERNAME = os.getenv(
+    "ADMIN_USERNAME"
+)
+
+ADMIN_PASSWORD = os.getenv(
+    "ADMIN_PASSWORD"
+)
 
 # =========================
 # HOME
