@@ -272,6 +272,7 @@ def admin():
         action="/add_user"
         autocomplete="off"
     >
+
         <input
             name="username"
             placeholder="Username"
@@ -287,6 +288,29 @@ def admin():
 
         <button type="submit">
             ➕ ADD USER
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h3>
+    📄 Upload Excel
+    </h3>
+
+    <form
+        action="/upload_excel"
+        method="POST"
+        enctype="multipart/form-data"
+    >
+
+        <input
+            type="file"
+            name="file"
+        >
+
+        <button type="submit">
+            Upload
         </button>
 
     </form>
@@ -320,6 +344,92 @@ def admin():
         """
 
     return html
+
+# =========================
+# UPLOAD EXCEL
+# =========================
+
+@app.route(
+    "/upload_excel",
+    methods=["POST"]
+)
+def upload_excel():
+
+    file = request.files["file"]
+
+    file.save("users.xlsx")
+
+    users_df = pd.read_excel(
+        "users.xlsx"
+    )
+
+    for index, row in users_df.iterrows():
+
+        username = str(
+            row["username"]
+        ).strip()
+
+        password = str(
+            row["password"]
+        ).strip()
+
+        hashed_password = generate_password_hash(
+            password
+        )
+
+        cursor.execute(
+            "SELECT * FROM users WHERE username=?",
+            (username,)
+        )
+
+        existing = cursor.fetchone()
+
+        # UPDATE PASSWORD
+        if existing:
+
+            cursor.execute(
+
+                """
+                UPDATE users
+                SET password=?
+                WHERE username=?
+                """,
+
+                (
+                    hashed_password,
+                    username
+                )
+            )
+
+        # INSERT NEW USER
+        else:
+
+            cursor.execute(
+
+                """
+                INSERT INTO users
+                VALUES (?, ?)
+                """,
+
+                (
+                    username,
+                    hashed_password
+                )
+            )
+
+    conn.commit()
+
+    return """
+
+    <h2>
+    ✅ Upload Success
+    </h2>
+
+    <a href="/admin">
+    🔙 BACK
+    </a>
+
+    """
 
 # =========================
 # ADMIN LOGOUT
