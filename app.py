@@ -74,7 +74,7 @@ cursor.execute("SELECT * FROM users")
 if not cursor.fetchall():
 
     cursor.execute("""
-    INSERT INTO users VALUES
+INSERT INTO users VALUES
 (
     'admin',
     '{}'
@@ -82,10 +82,20 @@ if not cursor.fetchall():
 (
     'leo',
     '{}'
+),
+(
+    'nattaporn',
+    '{}'
+),
+(
+    'manager',
+    '{}'
 )
 """.format(
     generate_password_hash('1234'),
-    generate_password_hash('9999')
+    generate_password_hash('9999'),
+    generate_password_hash('abcd1234'),
+    generate_password_hash('manager2026')
 ))
 # TRACKING
 cursor.execute("SELECT * FROM tracking")
