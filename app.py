@@ -276,6 +276,7 @@ def delete_user(username):
     cursor.execute(
 
         """
+        DELETE FROM users
         WHERE username=?
         """,
 
@@ -285,6 +286,70 @@ def delete_user(username):
     conn.commit()
 
     return redirect("/admin")
+
+# =========================
+# RESET PASSWORD
+# =========================
+
+@app.route("/reset_password/<username>")
+def reset_password(username):
+
+    new_password = "1234"
+
+    hashed_password = generate_password_hash(
+        new_password
+    )
+
+    cursor.execute(
+
+        """
+        UPDATE users
+        SET password=?
+        WHERE username=?
+        """,
+
+        (
+            hashed_password,
+            username
+        )
+    )
+
+    conn.commit()
+
+    return f"""
+
+    <h2>
+    RESET PASSWORD SUCCESS
+    </h2>
+
+    <p>
+
+    {user[0]}
+
+    <a href="/delete_user/{user[0]}">
+        DELETE
+    </a>
+
+    |
+
+    <a href="/reset_password/{user[0]}">
+        RESET PASSWORD
+    </a>
+
+    </p>
+
+    <p>
+
+    NEW PASSWORD:
+    1234
+
+    </p>
+
+    <a href="/admin">
+    BACK
+    </a>
+
+    """
 
 # =========================
 # LIFF LOGIN
