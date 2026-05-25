@@ -313,7 +313,7 @@ button{
 
     background:white;
 
-    color:#06C755;
+    color:#072BF2;
 
     font-weight:bold;
 
