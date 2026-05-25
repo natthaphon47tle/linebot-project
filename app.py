@@ -130,6 +130,8 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 # =========================
 
 COMPANY_PASSWORD = "BDVM2026"
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "1234"
 
 # =========================
 # HOME
@@ -170,8 +172,77 @@ def login():
 # ADMIN PANEL
 # =========================
 
-@app.route("/admin")
+@app.route("/admin", methods=["GET", "POST"])
 def admin():
+
+    # =========================
+    # LOGIN
+    # =========================
+
+    if "admin_logged_in" not in session:
+
+        if request.method == "POST":
+
+            username = request.form["username"]
+
+            password = request.form["password"]
+
+            if (
+                username == ADMIN_USERNAME
+                and
+                password == ADMIN_PASSWORD
+            ):
+
+                session["admin_logged_in"] = True
+
+                return redirect("/admin")
+
+            return """
+
+            <h3>
+            ❌ WRONG USERNAME OR PASSWORD
+            </h3>
+
+            <a href="/admin">
+            BACK
+            </a>
+
+            """
+
+        return """
+
+        <h2>
+        🔐 ADMIN LOGIN
+        </h2>
+
+        <form method="POST">
+
+            <input
+                name="username"
+                placeholder="Username"
+            >
+
+            <br><br>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Password"
+            >
+
+            <br><br>
+
+            <button type="submit">
+                LOGIN
+            </button>
+
+        </form>
+
+        """
+
+    # =========================
+    # ADMIN PAGE
+    # =========================
 
     cursor.execute(
         "SELECT username FROM users"
@@ -181,7 +252,15 @@ def admin():
 
     html = """
 
-    <h2>USER MANAGEMENT</h2>
+    <h2>
+    👨‍💼 USER MANAGEMENT
+    </h2>
+
+    <a href="/admin_logout">
+    🚪 LOGOUT
+    </a>
+
+    <hr>
 
     <form method="POST" action="/add_user">
 
@@ -196,7 +275,7 @@ def admin():
         >
 
         <button type="submit">
-            Add User
+            ➕ ADD USER
         </button>
 
     </form>
@@ -228,8 +307,22 @@ def admin():
         </p>
 
         """
+
     return html
 
+# =========================
+# ADMIN LOGOUT
+# =========================
+
+@app.route("/admin_logout")
+def admin_logout():
+
+    session.pop(
+        "admin_logged_in",
+        None
+    )
+
+    return redirect("/admin")
 
 # =========================
 # ADD USER
