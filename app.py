@@ -261,7 +261,9 @@ body{
 
     width:180px;
 
-    margin-bottom:20px;
+    display:block;
+
+    margin:0 auto 20px auto;
 
     border-radius:20px;
 
