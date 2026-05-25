@@ -267,16 +267,22 @@ def admin():
 
     <hr>
 
-    <form method="POST" action="/add_user">
-
+    <form
+        method="POST"
+        action="/add_user"
+        autocomplete="off"
+    >
         <input
             name="username"
             placeholder="Username"
+            autocomplete="off"
         >
 
         <input
+            type="password"
             name="password"
             placeholder="Password"
+            autocomplete="new-password"
         >
 
         <button type="submit">
