@@ -241,6 +241,17 @@ def add_user():
     cursor.execute(
 
         """
+    cursor.execute(
+        "SELECT * FROM users WHERE username=?",
+        (username,)
+    )
+
+    existing = cursor.fetchone()
+
+    if existing:
+
+        return "USERNAME ALREADY EXISTS"
+
         INSERT INTO users
         VALUES (?, ?)
         """,
@@ -265,7 +276,6 @@ def delete_user(username):
     cursor.execute(
 
         """
-        DELETE FROM users
         WHERE username=?
         """,
 
