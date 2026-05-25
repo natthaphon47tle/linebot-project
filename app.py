@@ -12,6 +12,7 @@ packing_df = pd.read_excel("packing.xlsx")
 customs_df = pd.read_excel("customs_clearance.xlsx")
 insurance_df = pd.read_excel("cargo_insurance.xlsx")
 reefer_df = pd.read_excel("tracking_reefer.xlsx")
+users_df = pd.read_excel("users.xlsx")
 from openai import OpenAI
 
 # =========================
@@ -64,39 +65,7 @@ CREATE TABLE IF NOT EXISTS faq (
 
 conn.commit()
 
-# =========================
-# DEFAULT DATA
-# =========================
 
-# USERS
-cursor.execute("SELECT * FROM users")
-
-if not cursor.fetchall():
-
-    cursor.execute("""
-INSERT INTO users VALUES
-(
-    'admin',
-    '{}'
-),
-(
-    'leo',
-    '{}'
-),
-(
-    'nattaporn',
-    '{}'
-),
-(
-    'manager',
-    '{}'
-)
-""".format(
-    generate_password_hash('1234'),
-    generate_password_hash('9999'),
-    generate_password_hash('abcd1234'),
-    generate_password_hash('manager2026')
-))
 # TRACKING
 cursor.execute("SELECT * FROM tracking")
 
@@ -197,6 +166,115 @@ def login():
 
     return render_template("login.html")
 
+# =========================
+# ADMIN PANEL
+# =========================
+
+@app.route("/admin")
+def admin():
+
+    cursor.execute(
+        "SELECT username FROM users"
+    )
+
+    users = cursor.fetchall()
+
+    html = """
+
+    <h2>USER MANAGEMENT</h2>
+
+    <form method="POST" action="/add_user">
+
+        <input
+            name="username"
+            placeholder="Username"
+        >
+
+        <input
+            name="password"
+            placeholder="Password"
+        >
+
+        <button type="submit">
+            Add User
+        </button>
+
+    </form>
+
+    <hr>
+
+    """
+
+    for user in users:
+
+        html += f"""
+
+        <p>
+
+            {user[0]}
+
+            <a href="/delete_user/{user[0]}">
+                DELETE
+            </a>
+
+        </p>
+
+        """
+
+    return html
+
+# =========================
+# ADD USER
+# =========================
+
+@app.route("/add_user", methods=["POST"])
+def add_user():
+
+    username = request.form["username"]
+
+    password = request.form["password"]
+
+    hashed_password = generate_password_hash(
+        password
+    )
+
+    cursor.execute(
+
+        """
+        INSERT INTO users
+        VALUES (?, ?)
+        """,
+
+        (
+            username,
+            hashed_password
+        )
+    )
+
+    conn.commit()
+
+    return redirect("/admin")
+
+# =========================
+# DELETE USER
+# =========================
+
+@app.route("/delete_user/<username>")
+def delete_user(username):
+
+    cursor.execute(
+
+        """
+        DELETE FROM users
+        WHERE username=?
+        """,
+
+        (username,)
+    )
+
+    conn.commit()
+
+    return redirect("/admin")
 
 # =========================
 # LIFF LOGIN
