@@ -409,20 +409,20 @@ def save_user():
     user_id = data.get("user_id")
 
     cursor.execute(
-    "SELECT * FROM sessions WHERE user_id=?",
-    (user_id,)
-)
-
-existing = cursor.fetchone()
-
-if not existing:
-
-    cursor.execute(
-        "INSERT INTO sessions VALUES (?)",
+        "SELECT * FROM sessions WHERE user_id=?",
         (user_id,)
     )
 
-    conn.commit()
+    existing = cursor.fetchone()
+
+    if not existing:
+
+        cursor.execute(
+            "INSERT INTO sessions VALUES (?)",
+            (user_id,)
+        )
+
+        conn.commit()
 
     print("SAVE USER:", user_id)
 
