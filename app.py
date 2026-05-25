@@ -382,7 +382,6 @@ def delete_user(username):
     cursor.execute(
 
         """
-        DELETE FROM users
         WHERE username=?
         """,
 
@@ -843,6 +842,46 @@ def save_user():
     print("SAVE USER:", user_id)
 
     return "OK"
+
+# =========================
+# IMPORT USERS FROM EXCEL
+# =========================
+
+cursor.execute(
+    "SELECT * FROM users"
+)
+
+existing_users = cursor.fetchall()
+
+# ถ้ายังไม่มี user ใน database
+# ให้ import จาก Excel ครั้งแรก
+
+if not existing_users:
+
+    for index, row in users_df.iterrows():
+
+        username = str(row["username"])
+
+        password = str(row["password"])
+
+        hashed_password = generate_password_hash(
+            password
+        )
+
+        cursor.execute(
+
+            """
+            INSERT INTO users
+            VALUES (?, ?)
+            """,
+
+            (
+                username,
+                hashed_password
+            )
+        )
+
+    conn.commit()
 
 # =========================
 # WEBHOOK
