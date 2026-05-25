@@ -234,13 +234,6 @@ def add_user():
 
     password = request.form["password"]
 
-    hashed_password = generate_password_hash(
-        password
-    )
-
-    cursor.execute(
-
-        """
     cursor.execute(
         "SELECT * FROM users WHERE username=?",
         (username,)
@@ -252,6 +245,13 @@ def add_user():
 
         return "USERNAME ALREADY EXISTS"
 
+    hashed_password = generate_password_hash(
+        password
+    )
+
+    cursor.execute(
+
+        """
         INSERT INTO users
         VALUES (?, ?)
         """,
