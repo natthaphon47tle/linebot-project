@@ -241,30 +241,32 @@ body{
 
 .card{
 
-    width:100%;
-    max-width:350px;
+    animation:fadeIn 0.6s ease;
+}
 
-    background:
-    rgba(255,255,255,0.15);
+@keyframes fadeIn{
 
-    backdrop-filter:blur(15px);
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
 
-    border-radius:25px;
-
-    padding:35px;
-
-    text-align:center;
-
-    box-shadow:
-    0 8px 32px rgba(0,0,0,0.2);
-
-    color:white;
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
 .logo{
 
-    width:90px;
-    margin-bottom:15px;
+    width:180px;
+
+    margin-bottom:20px;
+
+    border-radius:20px;
+
+    box-shadow:
+    0 4px 20px rgba(0,0,0,0.2);
 }
 
 h1{
@@ -363,7 +365,7 @@ button:disabled{
 
     <img
         class="logo"
-        src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg"
+        src="/static/logo.png"
     >
 
     <h1>BDVM BOT</h1>
