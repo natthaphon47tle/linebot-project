@@ -204,45 +204,153 @@ def liff():
 
 <meta charset="utf-8">
 
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
 <style>
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
 body{
-    font-family:Arial;
-    background:#f4f4f4;
+
+    font-family:Arial,sans-serif;
+
+    background:
+    linear-gradient(
+        135deg,
+        #06C755,
+        #00994d
+    );
+
+    height:100vh;
+
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+
+    padding:20px;
 }
 
-.box{
-    background:white;
-    padding:30px;
-    border-radius:20px;
-    width:320px;
+.card{
+
+    width:100%;
+    max-width:350px;
+
+    background:
+    rgba(255,255,255,0.15);
+
+    backdrop-filter:blur(15px);
+
+    border-radius:25px;
+
+    padding:35px;
+
     text-align:center;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
+
+    box-shadow:
+    0 8px 32px rgba(0,0,0,0.2);
+
+    color:white;
+}
+
+.logo{
+
+    width:90px;
+    margin-bottom:15px;
+}
+
+h1{
+
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+
+    font-size:14px;
+    opacity:0.9;
+    margin-bottom:25px;
 }
 
 input{
+
     width:100%;
-    padding:12px;
+
+    padding:14px;
+
     margin-top:15px;
-    border-radius:10px;
-    border:1px solid #ccc;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    outline:none;
 }
 
 button{
+
     width:100%;
-    padding:12px;
+
+    padding:14px;
+
     margin-top:20px;
-    background:#06C755;
-    color:white;
+
     border:none;
-    border-radius:10px;
+
+    border-radius:12px;
+
+    background:white;
+
+    color:#06C755;
+
+    font-weight:bold;
+
     font-size:16px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+button:hover{
+
+    transform:scale(1.03);
+}
+
+button:disabled{
+
+    opacity:0.7;
+}
+
+#msg{
+
+    margin-top:18px;
+
+    font-size:14px;
+
+    font-weight:bold;
+}
+
+.loading{
+
+    animation:blink 1s infinite;
+}
+
+@keyframes blink{
+
+    0%{opacity:1;}
+    50%{opacity:0.5;}
+    100%{opacity:1;}
 }
 
 </style>
@@ -251,57 +359,74 @@ button{
 
 <body>
 
-<div class="box">
+<div class="card">
 
-<h2>🔐 BDVM LOGIN</h2>
+    <img
+        class="logo"
+        src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg"
+    >
 
-<input
-    type="text"
-    id="username"
-    placeholder="Username"
->
+    <h1>BDVM BOT</h1>
 
-<input
-    type="password"
-    id="password"
-    placeholder="Password"
->
+    <p class="subtitle">
+        กรุณาเข้าสู่ระบบเพื่อใช้งาน
+    </p>
 
-<button
-    type="button"
-    onclick="login()"
->
-Login
-</button>
+    <input
+        type="text"
+        id="username"
+        placeholder="Username"
+    >
 
-<p id="msg"></p>
+    <input
+        type="password"
+        id="password"
+        placeholder="Password"
+    >
+
+    <button
+        id="loginBtn"
+        onclick="login()"
+    >
+        Login
+    </button>
+
+    <p id="msg"></p>
 
 </div>
 
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-
 <script>
 
-async function initializeLiff() {
+async function initializeLiff(){
 
     await liff.init({
-        liffId: "2010152202-xzzmHkWl"
+        liffId:"2010152202-xzzmHkWl"
     });
 
-    // ถ้ายังไม่ได้ login ให้ login ทันที
-    if (!liff.isLoggedIn()) {
+    if(!liff.isLoggedIn()){
 
         liff.login();
+
         return;
     }
-
 }
 
 initializeLiff();
 
-async function login() {
+async function login(){
 
-    try {
+    try{
+
+        const btn =
+        document.getElementById("loginBtn");
+
+        btn.disabled = true;
+
+        const msg =
+        document.getElementById("msg");
+
+        msg.innerHTML =
+        "<span class='loading'>⏳ กำลังเข้าสู่ระบบ...</span>";
 
         const username =
         document.getElementById("username").value;
@@ -309,27 +434,31 @@ async function login() {
         const password =
         document.getElementById("password").value;
 
-        const response = await fetch("/check_login", {
+        const response =
+        await fetch("/check_login",{
 
-            method: "POST",
+            method:"POST",
 
-            headers: {
-                "Content-Type": "application/json"
+            headers:{
+                "Content-Type":"application/json"
             },
 
-            body: JSON.stringify({
-                username: username,
-                password: password
+            body:JSON.stringify({
+                username:username,
+                password:password
             })
 
         });
 
-        const result = await response.text();
+        const result =
+        await response.text();
 
-        if (result !== "SUCCESS") {
+        if(result !== "SUCCESS"){
 
-            document.getElementById("msg").innerHTML =
+            msg.innerHTML =
             "❌ Username หรือ Password ไม่ถูกต้อง";
+
+            btn.disabled = false;
 
             return;
         }
@@ -340,38 +469,50 @@ async function login() {
         const lineUserId =
         urlParams.get("user_id");
 
-        await fetch("/save_user", {
+        await fetch("/save_user",{
 
-            method: "POST",
+            method:"POST",
 
-            headers: {
-                "Content-Type": "application/json"
+            headers:{
+                "Content-Type":"application/json"
             },
 
-            body: JSON.stringify({
-                user_id: lineUserId
+            body:JSON.stringify({
+                user_id:lineUserId
             })
 
         });
 
-        document.getElementById("msg").innerHTML =
+        msg.innerHTML =
         "✅ LOGIN SUCCESS";
 
-        setTimeout(() => {
+        setTimeout(()=>{
 
             liff.closeWindow();
 
-        }, 1000);
+        },1000);
+
     }
 
-    catch(err) {
+    catch(err){
 
         alert(err);
 
+        document
+        .getElementById("loginBtn")
+        .disabled = false;
     }
-
 }
 
+document
+.getElementById("password")
+.addEventListener("keypress",function(e){
+
+    if(e.key === "Enter"){
+
+        login();
+    }
+});
 
 </script>
 
