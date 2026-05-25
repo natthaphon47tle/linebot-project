@@ -207,19 +207,27 @@ def admin():
 
     for user in users:
 
-        html += f"""
+    html += f"""
 
-        <p>
+    <p>
 
-            {user[0]}
+        👤 {user[0]}
 
-            <a href="/delete_user/{user[0]}">
-                DELETE
-            </a>
+        |
 
-        </p>
+        <a href="/delete_user/{user[0]}">
+            🗑 DELETE
+        </a>
 
-        """
+        |
+
+        <a href="/reset_password/{user[0]}">
+            🔑 RESET PASSWORD
+        </a>
+
+    </p>
+
+    """
 
     return html
 
@@ -319,22 +327,13 @@ def reset_password(username):
     return f"""
 
     <h2>
-    RESET PASSWORD SUCCESS
+    ✅ RESET PASSWORD SUCCESS
     </h2>
 
     <p>
 
-    {user[0]}
-
-    <a href="/delete_user/{user[0]}">
-        DELETE
-    </a>
-
-    |
-
-    <a href="/reset_password/{user[0]}">
-        RESET PASSWORD
-    </a>
+    USER:
+    {username}
 
     </p>
 
@@ -346,7 +345,7 @@ def reset_password(username):
     </p>
 
     <a href="/admin">
-    BACK
+    🔙 BACK
     </a>
 
     """
