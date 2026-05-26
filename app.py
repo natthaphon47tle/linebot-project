@@ -969,10 +969,6 @@ def save_user():
         "display_name"
     )
 
-    thai_tz = pytz.timezone(
-    "Asia/Bangkok"
-    )
-
     current_time = datetime.now(
 
         ZoneInfo("Asia/Bangkok")
