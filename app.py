@@ -7,6 +7,7 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import pandas as pd
 from datetime import datetime
+from zoneinfo import ZoneInfo
 courier_df = pd.read_excel("courier.xlsx")
 cross_df = pd.read_excel("cross_border.xlsx")
 packing_df = pd.read_excel("packing.xlsx")
@@ -968,8 +969,17 @@ def save_user():
         "display_name"
     )
 
-    current_time = datetime.now().strftime(
-        "%Y-%m-%d %H:%M:%S"
+    thai_tz = pytz.timezone(
+    "Asia/Bangkok"
+    )
+
+    current_time = datetime.now(
+
+        ZoneInfo("Asia/Bangkok")
+
+    ).strftime(
+
+        "%d/%m/%Y %H:%M:%S"
     )
 
     cursor.execute(
