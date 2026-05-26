@@ -1116,15 +1116,15 @@ def save_user():
 
     if DEBUG_MODE:
 
-    print(
+        print(
 
-        "SAVE USER:",
+            "SAVE USER:",
 
-        display_name,
+            display_name,
+ 
+            user_id
 
-        user_id
-
-    )
+        )
 
     return "OK"
 
@@ -1378,10 +1378,10 @@ def handle_message(event):
 
     if DEBUG_MODE:
 
-    print(
-        "CURRENT USER:",
-        user_id
-    )
+        print(
+            "CURRENT USER:",
+            user_id
+        )
 
     logged_in = False
 
@@ -1398,10 +1398,10 @@ def handle_message(event):
 
     if DEBUG_MODE:
 
-    print(
-        "LOGIN STATUS:",
-        logged_in
-    )
+        print(
+            "LOGIN STATUS:",
+            logged_in
+        )
 
         # =========================
     # CHECK LOGIN
