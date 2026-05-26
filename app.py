@@ -1084,6 +1084,13 @@ def save_user():
 
     current_time = datetime.now(
 
+        ZoneInfo("Asia/Bangkok")
+
+    ).strftime(
+
+        "%d/%m/%Y %H:%M:%S"
+    )
+
     # SAVE LOGIN HISTORY
 
     cursor.execute(
@@ -1102,14 +1109,6 @@ def save_user():
     )
 
     conn.commit()
-
-        ZoneInfo("Asia/Bangkok")
-
-    ).strftime(
-
-        "%d/%m/%Y %H:%M:%S"
-    )
-
     cursor.execute(
         "SELECT * FROM sessions WHERE user_id=?",
         (user_id,)
