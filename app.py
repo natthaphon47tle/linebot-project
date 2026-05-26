@@ -128,6 +128,8 @@ LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 app = Flask(__name__)
 app.secret_key = "bdvm_secret"
 
+DEBUG_MODE = True
+
 # =========================
 # LINE API
 # =========================
@@ -1112,10 +1114,16 @@ def save_user():
 
     conn.commit()
 
+    if DEBUG_MODE:
+
     print(
+
         "SAVE USER:",
+
         display_name,
+
         user_id
+
     )
 
     return "OK"
@@ -1368,7 +1376,12 @@ def handle_message(event):
     user_id = event.source.user_id
     text = event.message.text.strip()
 
-    print("CURRENT USER:", user_id)
+    if DEBUG_MODE:
+
+    print(
+        "CURRENT USER:",
+        user_id
+    )
 
     logged_in = False
 
@@ -1383,7 +1396,12 @@ def handle_message(event):
 
         logged_in = True
 
-    print("LOGIN STATUS:", logged_in)
+    if DEBUG_MODE:
+
+    print(
+        "LOGIN STATUS:",
+        logged_in
+    )
 
         # =========================
     # CHECK LOGIN
