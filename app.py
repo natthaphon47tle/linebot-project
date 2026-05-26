@@ -39,7 +39,14 @@ CREATE TABLE IF NOT EXISTS users (
 # SESSION TABLE
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS sessions (
-    user_id TEXT
+
+    user_id TEXT,
+
+    display_name TEXT,
+
+    login_time TEXT,
+
+    last_active TEXT
 )
 """)
 
@@ -272,6 +279,7 @@ def admin():
         action="/add_user"
         autocomplete="off"
     >
+
         <input
             name="username"
             placeholder="Username"
@@ -287,6 +295,29 @@ def admin():
 
         <button type="submit">
             ➕ ADD USER
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h3>
+    📄 Upload Excel
+    </h3>
+
+    <form
+        action="/upload_excel"
+        method="POST"
+        enctype="multipart/form-data"
+    >
+
+        <input
+            type="file"
+            name="file"
+        >
+
+        <button type="submit">
+            Upload
         </button>
 
     </form>
@@ -320,6 +351,92 @@ def admin():
         """
 
     return html
+
+# =========================
+# UPLOAD EXCEL
+# =========================
+
+@app.route(
+    "/upload_excel",
+    methods=["POST"]
+)
+def upload_excel():
+
+    file = request.files["file"]
+
+    file.save("users.xlsx")
+
+    users_df = pd.read_excel(
+        "users.xlsx"
+    )
+
+    for index, row in users_df.iterrows():
+
+        username = str(
+            row["username"]
+        ).strip()
+
+        password = str(
+            row["password"]
+        ).strip()
+
+        hashed_password = generate_password_hash(
+            password
+        )
+
+        cursor.execute(
+            "SELECT * FROM users WHERE username=?",
+            (username,)
+        )
+
+        existing = cursor.fetchone()
+
+        # UPDATE PASSWORD
+        if existing:
+
+            cursor.execute(
+
+                """
+                UPDATE users
+                SET password=?
+                WHERE username=?
+                """,
+
+                (
+                    hashed_password,
+                    username
+                )
+            )
+
+        # INSERT NEW USER
+        else:
+
+            cursor.execute(
+
+                """
+                INSERT INTO users
+                VALUES (?, ?)
+                """,
+
+                (
+                    username,
+                    hashed_password
+                )
+            )
+
+    conn.commit()
+
+    return """
+
+    <h2>
+    ✅ Upload Success
+    </h2>
+
+    <a href="/admin">
+    🔙 BACK
+    </a>
+
+    """
 
 # =========================
 # ADMIN LOGOUT
@@ -739,6 +856,12 @@ async function login(){
         const lineUserId =
         urlParams.get("user_id");
 
+        const profile =
+        await liff.getProfile();
+
+        const displayName =
+        profile.displayName;
+
         await fetch("/save_user",{
 
             method:"POST",
@@ -748,7 +871,11 @@ async function login(){
             },
 
             body:JSON.stringify({
-                user_id:lineUserId
+
+                user_id:lineUserId,
+
+                display_name:displayName
+
             })
 
         });
@@ -830,6 +957,14 @@ def save_user():
 
     user_id = data.get("user_id")
 
+    display_name = data.get(
+        "display_name"
+    )
+
+    current_time = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
     cursor.execute(
         "SELECT * FROM sessions WHERE user_id=?",
         (user_id,)
@@ -837,16 +972,48 @@ def save_user():
 
     existing = cursor.fetchone()
 
+    # NEW USER
     if not existing:
 
         cursor.execute(
-            "INSERT INTO sessions VALUES (?)",
-            (user_id,)
+
+            """
+            INSERT INTO sessions
+            VALUES (?, ?, ?, ?)
+            """,
+
+            (
+                user_id,
+                display_name,
+                current_time,
+                current_time
+            )
         )
 
-        conn.commit()
+    # UPDATE LAST ACTIVE
+    else:
 
-    print("SAVE USER:", user_id)
+        cursor.execute(
+
+            """
+            UPDATE sessions
+            SET last_active=?
+            WHERE user_id=?
+            """,
+
+            (
+                current_time,
+                user_id
+            )
+        )
+
+    conn.commit()
+
+    print(
+        "SAVE USER:",
+        display_name,
+        user_id
+    )
 
     return "OK"
 
@@ -911,6 +1078,64 @@ for index, row in users_df.iterrows():
         )
 
 conn.commit()
+
+# =========================
+# LOGIN LOGS
+# =========================
+
+@app.route("/login_logs")
+def login_logs():
+
+    if "admin_logged_in" not in session:
+
+        return redirect("/admin")
+
+    cursor.execute(
+        "SELECT * FROM sessions"
+    )
+
+    records = cursor.fetchall()
+
+    html = """
+
+    <h2>
+    👥 USERS LOGIN LOGS
+    </h2>
+
+    <table border="1" cellpadding="10">
+
+        <tr>
+
+            <th>LINE NAME</th>
+            <th>USER ID</th>
+            <th>LOGIN TIME</th>
+            <th>LAST ACTIVE</th>
+
+        </tr>
+
+    """
+
+    for row in records:
+
+        html += f"""
+
+        <tr>
+
+            <td>{row[1]}</td>
+
+            <td>{row[0]}</td>
+
+            <td>{row[2]}</td>
+
+            <td>{row[3]}</td>
+
+        </tr>
+
+        """
+
+    html += "</table>"
+
+    return html
 
 # =========================
 # WEBHOOK
