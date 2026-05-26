@@ -57,6 +57,24 @@ CREATE TABLE IF NOT EXISTS sessions (
 
 conn.commit()
 
+# LOGIN HISTORY TABLE
+
+cursor.execute("""
+
+CREATE TABLE IF NOT EXISTS login_history (
+
+    user_id TEXT,
+
+    username TEXT,
+
+    display_name TEXT,
+
+    login_time TEXT
+
+)
+
+""")
+
 # TRACKING TABLE
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS tracking (
@@ -282,6 +300,10 @@ def admin():
 
     <a href="/login_logs">
     📊 LOGIN LOGS
+    <br><br>
+
+    <a href="/login_history">
+    📜 LOGIN HISTORY
     </a>
 
     <hr>
@@ -1062,6 +1084,25 @@ def save_user():
 
     current_time = datetime.now(
 
+    # SAVE LOGIN HISTORY
+
+    cursor.execute(
+
+        """
+        INSERT INTO login_history
+        VALUES (?, ?, ?, ?)
+        """,
+
+        (
+            user_id,
+            username,
+            display_name,
+            current_time
+        )
+    )
+
+    conn.commit()
+
         ZoneInfo("Asia/Bangkok")
 
     ).strftime(
@@ -1242,6 +1283,65 @@ def login_logs():
             <td>{row[3]}</td>
 
             <td>{row[4]}</td>
+
+        </tr>
+
+        """
+
+    html += "</table>"
+
+    return html
+
+# =========================
+# LOGIN HISTORY
+# =========================
+
+@app.route("/login_history")
+def login_history():
+
+    if "admin_logged_in" not in session:
+
+        return redirect("/admin")
+
+    cursor.execute(
+
+        """
+        SELECT * FROM login_history
+        ORDER BY rowid DESC
+        """
+    )
+
+    records = cursor.fetchall()
+
+    html = """
+
+    <h2>
+    📜 LOGIN HISTORY
+    </h2>
+
+    <table border="1" cellpadding="10">
+
+        <tr>
+
+            <th>USERNAME</th>
+            <th>LINE NAME</th>
+            <th>LOGIN TIME</th>
+
+        </tr>
+
+    """
+
+    for row in records:
+
+        html += f"""
+
+        <tr>
+
+            <td>{row[1]}</td>
+
+            <td>{row[2]}</td>
+
+            <td>{row[3]}</td>
 
         </tr>
 
