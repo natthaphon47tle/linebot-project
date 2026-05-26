@@ -372,75 +372,156 @@ def admin():
 )
 def upload_excel():
 
+    global courier_df
+    global customs_df
+    global packing_df
+    global cross_df
+    global insurance_df
+    global reefer_df
+    global users_df
+
     file = request.files["file"]
 
-    file.save("users.xlsx")
+    filename = file.filename
 
-    users_df = pd.read_excel(
-        "users.xlsx"
-    )
+    file.save(filename)
 
-    for index, row in users_df.iterrows():
+    # =========================
+    # USERS
+    # =========================
 
-        username = str(
-            row["username"]
-        ).strip()
+    if filename == "users.xlsx":
 
-        password = str(
-            row["password"]
-        ).strip()
-
-        hashed_password = generate_password_hash(
-            password
+        users_df = pd.read_excel(
+            "users.xlsx"
         )
 
-        cursor.execute(
-            "SELECT * FROM users WHERE username=?",
-            (username,)
+        for index, row in users_df.iterrows():
+
+            username = str(
+                row["username"]
+            ).strip()
+
+            password = str(
+                row["password"]
+            ).strip()
+
+            hashed_password = generate_password_hash(
+                password
+            )
+
+            cursor.execute(
+                "SELECT * FROM users WHERE username=?",
+                (username,)
+            )
+
+            existing = cursor.fetchone()
+
+            # UPDATE
+            if existing:
+
+                cursor.execute(
+
+                    """
+                    UPDATE users
+                    SET password=?
+                    WHERE username=?
+                    """,
+
+                    (
+                        hashed_password,
+                        username
+                    )
+                )
+
+            # INSERT
+            else:
+
+                cursor.execute(
+
+                    """
+                    INSERT INTO users
+                    VALUES (?, ?)
+                    """,
+
+                    (
+                        username,
+                        hashed_password
+                    )
+                )
+
+        conn.commit()
+
+    # =========================
+    # COURIER
+    # =========================
+
+    elif filename == "courier.xlsx":
+
+        courier_df = pd.read_excel(
+            "courier.xlsx"
         )
 
-        existing = cursor.fetchone()
+    # =========================
+    # CUSTOMS
+    # =========================
 
-        # UPDATE PASSWORD
-        if existing:
+    elif filename == "customs_clearance.xlsx":
 
-            cursor.execute(
+        customs_df = pd.read_excel(
+            "customs_clearance.xlsx"
+        )
 
-                """
-                UPDATE users
-                SET password=?
-                WHERE username=?
-                """,
+    # =========================
+    # PACKING
+    # =========================
 
-                (
-                    hashed_password,
-                    username
-                )
-            )
+    elif filename == "packing.xlsx":
 
-        # INSERT NEW USER
-        else:
+        packing_df = pd.read_excel(
+            "packing.xlsx"
+        )
 
-            cursor.execute(
+    # =========================
+    # CROSS BORDER
+    # =========================
 
-                """
-                INSERT INTO users
-                VALUES (?, ?)
-                """,
+    elif filename == "cross_border.xlsx":
 
-                (
-                    username,
-                    hashed_password
-                )
-            )
+        cross_df = pd.read_excel(
+            "cross_border.xlsx"
+        )
 
-    conn.commit()
+    # =========================
+    # INSURANCE
+    # =========================
 
-    return """
+    elif filename == "cargo_insurance.xlsx":
+
+        insurance_df = pd.read_excel(
+            "cargo_insurance.xlsx"
+        )
+
+    # =========================
+    # TRUCKING
+    # =========================
+
+    elif filename == "tracking_reefer.xlsx":
+
+        reefer_df = pd.read_excel(
+            "tracking_reefer.xlsx"
+        )
+
+    return f"""
 
     <h2>
     ✅ Upload Success
     </h2>
+
+    <p>
+    FILE:
+    {filename}
+    </p>
 
     <a href="/admin">
     🔙 BACK
