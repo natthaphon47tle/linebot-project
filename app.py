@@ -273,6 +273,12 @@ def admin():
     🚪 LOGOUT
     </a>
 
+    <br><br>
+
+    <a href="/login_logs">
+    📊 LOGIN LOGS
+    </a>
+
     <hr>
 
     <form
