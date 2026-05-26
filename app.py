@@ -44,6 +44,8 @@ CREATE TABLE IF NOT EXISTS sessions (
 
     user_id TEXT,
 
+    username TEXT,
+
     display_name TEXT,
 
     login_time TEXT,
@@ -882,6 +884,8 @@ async function login(){
 
                 user_id:lineUserId,
 
+                username:username,
+
                 display_name:displayName
 
             })
@@ -968,6 +972,9 @@ def save_user():
     display_name = data.get(
         "display_name"
     )
+    username = data.get(
+        "username"
+    )
 
     current_time = datetime.now(
 
@@ -992,11 +999,12 @@ def save_user():
 
             """
             INSERT INTO sessions
-            VALUES (?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?)
             """,
 
             (
                 user_id,
+                username,
                 display_name,
                 current_time,
                 current_time
@@ -1119,6 +1127,7 @@ def login_logs():
 
         <tr>
 
+            <th>USERNAME</th>
             <th>LINE NAME</th>
             <th>USER ID</th>
             <th>LOGIN TIME</th>
@@ -1136,11 +1145,13 @@ def login_logs():
 
             <td>{row[1]}</td>
 
-            <td>{row[0]}</td>
-
             <td>{row[2]}</td>
 
+            <td>{row[0]}</td>
+
             <td>{row[3]}</td>
+
+            <td>{row[4]}</td>
 
         </tr>
 
