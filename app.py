@@ -46,6 +46,8 @@ CREATE TABLE IF NOT EXISTS sessions (
 
     username TEXT,
 
+    display_name TEXT,
+
     login_time TEXT,
 
     last_active TEXT
@@ -1079,12 +1081,13 @@ def save_user():
 
             """
             INSERT INTO sessions
-            VALUES (?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?)
             """,
 
             (
                 user_id,
                 username,
+                display_name,
                 current_time,
                 current_time
             )
@@ -1208,6 +1211,7 @@ def login_logs():
 
             <th>USERNAME</th>
             <th>LINE NAME</th>
+            <th>USER ID</th>
             <th>LOGIN TIME</th>
             <th>LAST ACTIVE</th>
 
@@ -1224,6 +1228,8 @@ def login_logs():
             <td>{row[1]}</td>
 
             <td>{row[2]}</td>
+
+            <td>{row[0]}</td>
 
             <td>{row[3]}</td>
 
