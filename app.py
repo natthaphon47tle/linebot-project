@@ -46,8 +46,6 @@ CREATE TABLE IF NOT EXISTS sessions (
 
     username TEXT,
 
-    display_name TEXT,
-
     login_time TEXT,
 
     last_active TEXT
