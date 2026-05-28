@@ -1734,7 +1734,7 @@ h2{
 
 .user-card{
 
-    background:#f8f9ff;
+    background:#16FF12;
 
     padding:18px;
 
