@@ -1674,8 +1674,8 @@ body{
     background:
     linear-gradient(
         135deg,
-        #0F95F5,
-        #5B9BF0
+        #FC3F00,
+        #FCFC00
     );
 
     min-height:100vh;
