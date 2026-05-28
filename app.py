@@ -1459,45 +1459,170 @@ def login_logs():
 
     html = """
 
-    <h2>
-    👥 USERS LOGIN LOGS
-    </h2>
+<!DOCTYPE html>
 
-    <table border="1" cellpadding="10">
+<html>
 
-        <tr>
+<head>
 
-            <th>USERNAME</th>
-            <th>LINE NAME</th>
-            <th>USER ID</th>
-            <th>LOGIN TIME</th>
-            <th>LAST ACTIVE</th>
+<style>
 
-        </tr>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    """
+body{
+
+    font-family:Arial,sans-serif;
+
+    background:
+    linear-gradient(
+        135deg,
+        #0F95F5,
+        #5B9BF0
+    );
+
+    min-height:100vh;
+
+    padding:40px;
+}
+
+.container{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:25px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.2);
+}
+
+h2{
+
+    text-align:center;
+
+    color:#0F95F5;
+
+    margin-bottom:25px;
+}
+
+.top-buttons{
+
+    text-align:center;
+
+    margin-bottom:25px;
+}
+
+.top-buttons a{
+
+    text-decoration:none;
+
+    background:#0F95F5;
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    margin:5px;
+
+    display:inline-block;
+}
+
+.user-card{
+
+    background:#f8f9ff;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    margin-top:18px;
+
+    box-shadow:
+    0 3px 10px rgba(0,0,0,0.08);
+}
+
+.info{
+
+    margin-top:8px;
+
+    color:#444;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>
+📊 LOGIN LOGS
+</h2>
+
+<div class="top-buttons">
+
+<a href="/admin">
+🏠 ADMIN
+</a>
+
+<a href="/login_history">
+📜 LOGIN HISTORY
+</a>
+
+</div>
+
+"""
 
     for row in records:
 
         html += f"""
 
-        <tr>
+<div class="user-card">
 
-            <td>{row[1]}</td>
+    <h3>
+    👤 {row[1]}
+    </h3>
 
-            <td>{row[2]}</td>
+    <div class="info">
+    LINE NAME:
+    {row[2]}
+    </div>
 
-            <td>{row[0]}</td>
+    <div class="info">
+    LOGIN TIME:
+    {row[3]}
+    </div>
 
-            <td>{row[3]}</td>
+    <div class="info">
+    LAST ACTIVE:
+    {row[4]}
+    </div>
 
-            <td>{row[4]}</td>
+</div>
 
-        </tr>
+"""
 
-        """
+    html += """
 
-    html += "</table>"
+</div>
+
+</body>
+
+</html>
+
+"""
 
     return html
 
@@ -1524,39 +1649,165 @@ def login_history():
 
     html = """
 
-    <h2>
-    📜 LOGIN HISTORY
-    </h2>
+<!DOCTYPE html>
 
-    <table border="1" cellpadding="10">
+<html>
 
-        <tr>
+<head>
 
-            <th>USERNAME</th>
-            <th>LINE NAME</th>
-            <th>LOGIN TIME</th>
+<style>
 
-        </tr>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    """
+body{
+
+    font-family:Arial,sans-serif;
+
+    background:
+    linear-gradient(
+        135deg,
+        #0F95F5,
+        #5B9BF0
+    );
+
+    min-height:100vh;
+
+    padding:40px;
+}
+
+.container{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:25px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.2);
+}
+
+h2{
+
+    text-align:center;
+
+    color:#0F95F5;
+
+    margin-bottom:25px;
+}
+
+.top-buttons{
+
+    text-align:center;
+
+    margin-bottom:25px;
+}
+
+.top-buttons a{
+
+    text-decoration:none;
+
+    background:#0F95F5;
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    margin:5px;
+
+    display:inline-block;
+}
+
+.history-card{
+
+    background:#f8f9ff;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    margin-top:18px;
+
+    box-shadow:
+    0 3px 10px rgba(0,0,0,0.08);
+}
+
+.info{
+
+    margin-top:8px;
+
+    color:#444;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>
+📜 LOGIN HISTORY
+</h2>
+
+<div class="top-buttons">
+
+<a href="/admin">
+🏠 ADMIN
+</a>
+
+<a href="/login_logs">
+📊 LOGIN LOGS
+</a>
+
+</div>
+
+"""
 
     for row in records:
 
         html += f"""
 
-        <tr>
+<div class="history-card">
 
-            <td>{row[1]}</td>
+    <h3>
+    👤 {row[1]}
+    </h3>
 
-            <td>{row[2]}</td>
+    <div class="info">
+    LINE NAME:
+    {row[2]}
+    </div>
 
-            <td>{row[3]}</td>
+    <div class="info">
+    LOGIN TIME:
+    {row[3]}
+    </div>
 
-        </tr>
+</div>
 
-        """
+"""
 
-    html += "</table>"
+    html += """
+
+</div>
+
+</body>
+
+</html>
+
+"""
 
     return html
 
