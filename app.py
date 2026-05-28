@@ -1864,7 +1864,7 @@ body{
     background:
     linear-gradient(
         135deg,
-        #0F95F5,
+        #7D33B4,
         #5B9BF0
     );
 
