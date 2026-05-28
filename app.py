@@ -247,34 +247,228 @@ def admin():
 
         return """
 
-        <h2>
-        🔐 ADMIN LOGIN
-        </h2>
+<!DOCTYPE html>
 
-        <form method="POST">
+<html>
 
-            <input
-                name="username"
-                placeholder="Username"
-            >
+<head>
 
-            <br><br>
+<meta charset="utf-8">
 
-            <input
-                type="password"
-                name="password"
-                placeholder="Password"
-            >
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
-            <br><br>
+<style>
 
-            <button type="submit">
-                LOGIN
-            </button>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        </form>
+body{
 
-        """
+    font-family:Arial,sans-serif;
+
+    background:
+    linear-gradient(
+        135deg,
+        #0F95F5,
+        #5B9BF0
+    );
+
+    height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:20px;
+}
+
+.login-card{
+
+    width:100%;
+    max-width:420px;
+
+    background:
+    rgba(255,255,255,0.15);
+
+    backdrop-filter:blur(12px);
+
+    border:
+    1px solid rgba(255,255,255,0.2);
+
+    border-radius:25px;
+
+    padding:40px 30px;
+
+    text-align:center;
+
+    box-shadow:
+    0 8px 30px rgba(0,0,0,0.2);
+
+    animation:fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.logo{
+
+    width:120px;
+
+    margin-bottom:20px;
+
+    border-radius:20px;
+
+    box-shadow:
+    0 4px 20px rgba(0,0,0,0.2);
+}
+
+h2{
+
+    color:white;
+
+    margin-bottom:10px;
+
+    font-size:30px;
+}
+
+.subtitle{
+
+    color:white;
+
+    opacity:0.9;
+
+    margin-bottom:25px;
+
+    font-size:14px;
+}
+
+input{
+
+    width:100%;
+
+    padding:14px;
+
+    margin-top:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    outline:none;
+}
+
+button{
+
+    width:100%;
+
+    padding:14px;
+
+    margin-top:20px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:white;
+
+    color:#0F95F5;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+button:hover{
+
+    transform:scale(1.03);
+}
+
+.footer{
+
+    margin-top:20px;
+
+    color:white;
+
+    font-size:13px;
+
+    opacity:0.8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <img
+        class="logo"
+        src="/static/logo.png"
+    >
+
+    <h2>
+    🔐 ADMIN LOGIN
+    </h2>
+
+    <p class="subtitle">
+    กรุณาเข้าสู่ระบบเพื่อจัดการผู้ใช้งาน
+    </p>
+
+    <form method="POST">
+
+        <input
+            name="username"
+            placeholder="Username"
+            autocomplete="off"
+        >
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            autocomplete="new-password"
+        >
+
+        <button type="submit">
+            LOGIN
+        </button>
+
+    </form>
+
+    <div class="footer">
+    BDVM BOT MANAGEMENT SYSTEM
+    </div>
+
+</div>
+
+</body>
+
+</html>
+
+"""
 
     # =========================
     # ADMIN PAGE
