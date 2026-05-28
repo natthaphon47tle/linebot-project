@@ -288,25 +288,215 @@ def admin():
 
     html = """
 
+    <!DOCTYPE html>
+
+    <html>
+
+    <head>
+
+    <style>
+
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+
+    body{
+
+        font-family:Arial,sans-serif;
+
+        background:
+        linear-gradient(
+            135deg,
+            #0F95F5,
+            #5B9BF0
+        );
+
+        min-height:100vh;
+
+        padding:40px;
+    }
+
+    .container{
+
+        max-width:900px;
+
+        margin:auto;
+
+        background:white;
+
+        padding:30px;
+
+        border-radius:25px;
+
+        box-shadow:
+        0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    h2{
+
+        color:#0F95F5;
+
+        margin-bottom:20px;
+
+        text-align:center;
+    }
+
+    .top-buttons{
+
+        text-align:center;
+
+        margin-bottom:25px;
+    }
+
+    .top-buttons a{
+
+        text-decoration:none;
+
+        background:#0F95F5;
+
+        color:white;
+
+        padding:10px 18px;
+
+        border-radius:12px;
+
+        margin:5px;
+
+        display:inline-block;
+
+        transition:0.3s;
+    }
+
+    .top-buttons a:hover{
+
+        transform:scale(1.05);
+    }
+
+    form{
+
+        margin-bottom:25px;
+    }
+
+    input{
+
+        width:100%;
+
+        padding:14px;
+
+        margin-top:12px;
+
+        border:none;
+
+        border-radius:12px;
+
+        background:#f1f1f1;
+ 
+        font-size:15px;
+    }
+
+    button{
+
+        width:100%;
+
+        padding:14px;
+
+        margin-top:15px;
+
+        border:none;
+
+        border-radius:12px;
+
+        background:#0F95F5;
+
+        color:white;
+
+        font-size:16px;
+
+        font-weight:bold;
+
+        cursor:pointer;
+
+        transition:0.3s;
+    }
+
+    button:hover{
+
+        transform:scale(1.02);
+    }
+
+    .user-card{
+
+        background:#f8f9ff;
+
+        padding:18px;
+
+        border-radius:15px;
+
+        margin-top:15px;
+
+        box-shadow:
+        0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    .user-card a{
+
+        text-decoration:none;
+
+        margin-right:15px;
+
+        font-weight:bold;
+    }
+
+    .delete{
+
+        color:red;
+    }
+
+    .reset{
+
+        color:orange;
+    }
+
+    hr{
+
+        margin:30px 0;
+    }
+
+    </style>
+
+    </head>
+
+    <body>
+
+    <div class="container">
+
     <h2>
     👨‍💼 USER MANAGEMENT
     </h2>
+
+    <div class="top-buttons">
 
     <a href="/admin_logout">
     🚪 LOGOUT
     </a>
 
-    <br><br>
-
     <a href="/login_logs">
     📊 LOGIN LOGS
-    <br><br>
+    </a>
 
     <a href="/login_history">
     📜 LOGIN HISTORY
     </a>
 
+    </div>
+
     <hr>
+
+    <h3>
+    ➕ ADD USER
+    </h3>
 
     <form
         method="POST"
@@ -324,11 +514,11 @@ def admin():
             type="password"
             name="password"
             placeholder="Password"
-            autocomplete="new-password"
+           autocomplete="new-password"
         >
 
         <button type="submit">
-            ➕ ADD USER
+             ADD USER
         </button>
 
     </form>
@@ -358,29 +548,49 @@ def admin():
 
     <hr>
 
+    <h3>
+    👥 USER LIST
+    </h3>
+
     """
 
     for user in users:
 
         html += f"""
 
-        <p>
+        <div class="user-card">
 
+            <h3>
             👤 {user[0]}
+            </h3>
 
-            |
+            <br>
 
-            <a href="/delete_user/{user[0]}">
+            <a
+                class="delete"
+                href="/delete_user/{user[0]}"
+            >
                 🗑 DELETE
             </a>
 
-            |
-
-            <a href="/reset_password/{user[0]}">
+            <a
+                class="reset"
+                href="/reset_password/{user[0]}"
+            >
                 🔑 RESET PASSWORD
             </a>
 
-        </p>
+        </div>
+
+        """
+
+        html += """
+
+        </div>
+
+        </body>
+
+        </html>
 
         """
 
