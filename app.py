@@ -1924,7 +1924,7 @@ h2{
 
 .history-card{
 
-    background:#FFF200;
+    background:#AF0FFF;
 
     padding:18px;
 
