@@ -2168,6 +2168,15 @@ h2{
 
     return html
 
+@app.route("/check_action_logs")
+def check_action_logs():
+
+    cursor.execute(
+        "SELECT * FROM action_logs"
+    )
+
+    return str(cursor.fetchall())
+
 @app.route("/dashboard")
 def dashboard():
 
