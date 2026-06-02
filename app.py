@@ -760,7 +760,7 @@ button:hover{
             else "🔴 INACTIVE"
         )
 
-        html += f"""
+    html += f"""
 
         <div class="user-card">
 
@@ -806,16 +806,16 @@ button:hover{
 
         """
 
-html += """
+    html += """
 
-</div>
+    </div>
 
-</body>
+    </body>
 
-</html>
+    </html>
 
-"""
-return html
+    """
+    return html
 
 # =========================
 # UPLOAD EXCEL
