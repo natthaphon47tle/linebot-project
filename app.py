@@ -2052,6 +2052,16 @@ h2{
 
     return html
 
+@app.route("/check_users")
+def check_users():
+
+    cursor.execute("""
+    SELECT username,status
+    FROM users
+    """)
+
+    return str(cursor.fetchall())
+
 # =========================
 # WEBHOOK
 # =========================
