@@ -682,6 +682,10 @@ button:hover{
 
     <div class="top-buttons">
 
+    <a href="/dashboard">
+    📈 DASHBOARD
+    </a>
+
     <a href="/admin_logout">
     🚪 LOGOUT
     </a>
@@ -2057,6 +2061,118 @@ h2{
 """
 
     return html
+
+@app.route("/dashboard")
+def dashboard():
+
+    if "admin_logged_in" not in session:
+
+        return redirect("/admin")
+    cursor.execute(
+        "SELECT COUNT(*) FROM users"
+    )
+
+    total_users = cursor.fetchone()[0]
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM users
+        WHERE status='active'
+        """
+    )
+
+    active_users = cursor.fetchone()[0]
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM users
+        WHERE status='inactive'
+        """
+    )
+
+    inactive_users = cursor.fetchone()[0]
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM login_history
+        """
+    )
+
+    login_count = cursor.fetchone()[0]
+
+html = f"""
+
+<html>
+
+<head>
+
+<style>
+
+body{{
+    font-family:Arial;
+    background:#f5f7fb;
+    padding:30px;
+}}
+
+.card{{
+    background:white;
+    padding:20px;
+    margin-top:15px;
+    border-radius:15px;
+    box-shadow:
+    0 3px 10px rgba(0,0,0,0.1);
+}}
+
+h1{{
+    color:#0F95F5;
+}}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>
+📈 DASHBOARD
+</h1>
+
+<div class="card">
+👥 Total Users: {total_users}
+</div>
+
+<div class="card">
+🟢 Active Users: {active_users}
+</div>
+
+<div class="card">
+🔴 Inactive Users: {inactive_users}
+</div>
+
+<div class="card">
+📜 Login History: {login_count}
+</div>
+
+<div class="card">
+👤 Current Login: {online_users}
+</div>
+
+<br>
+
+<a href="/admin">
+🔙 Back
+</a>
+
+</body>
+
+</html>
+
+"""
+
+return html
 
 @app.route("/check_users")
 def check_users():
