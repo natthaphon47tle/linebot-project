@@ -760,7 +760,7 @@ button:hover{
             else "🔴 INACTIVE"
         )
 
-    html += f"""
+        html += f"""
 
         <div class="user-card">
 
