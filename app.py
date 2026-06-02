@@ -754,57 +754,57 @@ button:hover{
 
     for user in users:
 
-    status_color = (
-        "🟢 ACTIVE"
-        if user[1] == "active"
-        else "🔴 INACTIVE"
-    )
+        status_color = (
+            "🟢 ACTIVE"
+            if user[1] == "active"
+            else "🔴 INACTIVE"
+        )
 
-    html += f"""
+        html += f"""
 
-    <div class="user-card">
+        <div class="user-card">
 
-        <h3>
-        👤 {user[0]}
-        </h3>
+            <h3>
+            👤 {user[0]}
+            </h3>
 
-        <p>
-        {status_color}
-        </p>
+            <p>
+            {status_color}
+            </p>
 
-        <br>
+            <br>
 
-        <a
-            href="/disable_user/{user[0]}"
-        >
-            🔴 DISABLE
-        </a>
+            <a
+                href="/disable_user/{user[0]}"
+            >
+                🔴 DISABLE
+            </a>
 
-        <a
-            href="/enable_user/{user[0]}"
-        >
-            🟢 ENABLE
-        </a>
+            <a
+                href="/enable_user/{user[0]}"
+            >
+                🟢 ENABLE
+            </a>
 
-        <br><br>
+            <br><br>
 
-        <a
-            class="delete"
-            href="/delete_user/{user[0]}"
-        >
-            🗑 DELETE
-        </a>
+            <a
+                class="delete"
+                href="/delete_user/{user[0]}"
+            >
+                🗑 DELETE
+            </a>
 
-        <a
-            class="reset"
-            href="/reset_password/{user[0]}"
-        >
-            🔑 RESET PASSWORD
-        </a>
+            <a
+                class="reset"
+                href="/reset_password/{user[0]}"
+            >
+                🔑 RESET PASSWORD
+            </a>
 
-    </div>
+        </div>
 
-    """
+        """
 
 html += """
 
