@@ -2103,6 +2103,15 @@ def dashboard():
 
     login_count = cursor.fetchone()[0]
 
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM sessions
+        """
+    )
+
+    online_users = cursor.fetchone()[0]
+
     html = f"""
 
     <html>
