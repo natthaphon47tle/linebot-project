@@ -806,16 +806,16 @@ button:hover{
 
         """
 
-        html += """
+html += """
 
-        </div>
+</div>
 
-        </body>
+</body>
 
-        </html>
+</html>
 
-        """
-        return html
+"""
+return html
 
 # =========================
 # UPLOAD EXCEL
