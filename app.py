@@ -924,6 +924,7 @@ def upload_excel():
         courier_df = pd.read_excel(
             "courier.xlsx"
     )
+
 cursor.execute(
     "DELETE FROM courier_service"
 )
@@ -953,7 +954,7 @@ conn.commit()
     # =========================
     # CUSTOMS
     # =========================
-
+ 
     elif filename == "customs_clearance.xlsx":
 
         customs_df = pd.read_excel(
