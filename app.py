@@ -686,6 +686,10 @@ button:hover{
     📈 DASHBOARD
     </a>
 
+    <a href="/service_management">
+    📦 SERVICE
+    </a>
+
     <a href="/admin_logout">
     🚪 LOGOUT
     </a>
@@ -2177,6 +2181,99 @@ def dashboard():
 
     </body>
 
+    </html>
+
+    """
+
+    return html
+
+@app.route("/service_management")
+def service_management():
+
+    if "admin_logged_in" not in session:
+
+        return redirect("/admin")
+
+    html = """
+
+    <html>
+    <body>
+
+    <h1>
+    📦 SERVICE MANAGEMENT
+    </h1>
+
+    """
+
+    keyword = request.args.get(
+        "search",
+        ""
+    ).lower()
+
+    for index,row in courier_df.iterrows():
+
+    if keyword:
+
+        if keyword not in str(
+            row["company"]
+        ).lower():
+
+            continue
+
+    html += """
+
+    <form>
+
+    <input
+    name="search"
+    placeholder="Search Company"
+    >
+ 
+    <button>
+    Search
+    </button>
+
+    </form>
+
+    """
+
+        html += f"""
+
+        <div
+        style="
+        border:1px solid #ddd;
+        padding:15px;
+        margin:10px;
+        border-radius:10px;
+        ">
+
+        <b>
+        {row['company']}
+        </b>
+
+        <br>
+
+        {row['contact']}
+
+        <br>
+
+        {row['tel']}
+
+        </div>
+
+        """
+
+    html += """
+
+    <br>
+
+    <a href="/admin">
+
+    🔙 BACK
+
+    </a>
+
+    </body>
     </html>
 
     """
