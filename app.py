@@ -1135,28 +1135,6 @@ def disable_user(username):
 
     return redirect("/admin")
 
-@app.route("/disable_user/<username>")
-def disable_user(username):
-
-    cursor.execute(
-        """
-        UPDATE users
-        SET status='inactive'
-        WHERE username=?
-        """,
-        (username,)
-    )
-
-    conn.commit()
-
-    log_action(
-        "admin",
-        "DISABLE USER",
-        username
-    )
-
-    return redirect("/admin")
-
 # =========================
 # RESET PASSWORD
 # =========================
