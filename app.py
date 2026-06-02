@@ -2426,18 +2426,18 @@ def handle_message(event):
     if "courier" in text.lower():
 
         replies = []
-
-        cursor.execute(
-            "SELECT * FROM courier_service"
-        )
-
-        records = cursor.fetchall()
+ 
+        for index, row in courier_df.iterrows():
 
             text_data = ""
 
             for col in courier_df.columns:
 
-                if "Unnamed" not in str(col) and pd.notna(row[col]):
+                if (
+                    "Unnamed" not in str(col)
+                    and
+                    pd.notna(row[col])
+                ):
 
                     text_data += f"{col}: {row[col]}\n"
 
