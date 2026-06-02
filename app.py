@@ -109,9 +109,15 @@ if not cursor.fetchall():
 
 # FAQ TABLE
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS faq (
-    keyword TEXT,
-    answer TEXT
+CREATE TABLE IF NOT EXISTS courier_service (
+
+    company TEXT,
+    contact TEXT,
+    email TEXT,
+    tel TEXT,
+    service_type TEXT,
+    base_location TEXT
+
 )
 """)
 
@@ -915,9 +921,35 @@ def upload_excel():
 
     elif filename == "courier.xlsx":
 
-        courier_df = pd.read_excel(
-            "courier.xlsx"
+        df = pd.read_excel(
+    "courier.xlsx"
+)
+
+cursor.execute(
+    "DELETE FROM courier_service"
+)
+
+for index,row in df.iterrows():
+
+    cursor.execute(
+
+        """
+        INSERT INTO courier_service
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+
+        (
+            str(row["company"]),
+            str(row["contact"]),
+            str(row["email"]),
+            str(row["tel"]),
+            str(row["Type"]),
+            str(row["Base"])
         )
+
+    )
+
+conn.commit()
 
     # =========================
     # CUSTOMS
@@ -2421,7 +2453,11 @@ def handle_message(event):
 
         replies = []
 
-        for index, row in courier_df.iterrows():
+        cursor.execute(
+            "SELECT * FROM courier_service"
+        )
+
+        records = cursor.fetchall()
 
             text_data = ""
 
