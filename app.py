@@ -288,6 +288,7 @@ def admin():
             ):
 
                 session["admin_logged_in"] = True
+                session["admin_username"] = username
 
                 return redirect("/admin")
 
@@ -1034,6 +1035,11 @@ def upload_excel():
             "tracking_reefer.xlsx"
         )
 
+    log_action(
+        "admin",
+        "UPLOAD FILE",
+        filename
+    )
     return f"""
 
     <h2>
@@ -1107,6 +1113,12 @@ def add_user():
 
     conn.commit()
 
+    log_action(
+        "admin",
+        "ADD USER",
+        username
+    )
+
     return redirect("/admin")
 
 # =========================
@@ -1135,6 +1147,49 @@ def disable_user(username):
     log_action(
         "admin",
         "DISABLE USER",
+        username
+    )
+
+    return redirect("/admin")
+
+@app.route("/enable_user/<username>")
+def enable_user(username):
+
+    cursor.execute(
+        """
+        UPDATE users
+        SET status='active'
+        WHERE username=?
+        """,
+        (username,)
+    )
+
+    conn.commit()
+
+    log_action(
+        "admin",
+        "ENABLE USER",
+        username
+    )
+
+    return redirect("/admin")
+
+@app.route("/delete_user/<username>")
+def delete_user(username):
+
+    cursor.execute(
+        """
+        DELETE FROM users
+        WHERE username=?
+        """,
+        (username,)
+    )
+
+    conn.commit()
+
+    log_action(
+        "admin",
+        "DELETE USER",
         username
     )
 
