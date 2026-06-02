@@ -754,66 +754,67 @@ button:hover{
 
     for user in users:
 
-        html += f"""
+    status_color = (
+        "🟢 ACTIVE"
+        if user[1] == "active"
+        else "🔴 INACTIVE"
+    )
 
-        <div class="user-card">
+    html += f"""
 
-            <h3>
-            status_color = (
-                "🟢 ACTIVE"
-                if user[1] == "active"
-                else "🔴 INACTIVE"
-            )
+    <div class="user-card">
 
-            html += f"""
+        <h3>
+        👤 {user[0]}
+        </h3>
 
-            <div class="user-card">
-            <a
+        <p>
+        {status_color}
+        </p>
+
+        <br>
+
+        <a
             href="/disable_user/{user[0]}"
-            >
-
+        >
             🔴 DISABLE
+        </a>
 
-            </a>
+        <a
+            href="/enable_user/{user[0]}"
+        >
+            🟢 ENABLE
+        </a>
 
-            <h3>
-            👤 {user[0]}
-            </h3>
+        <br><br>
 
-            <p>
-            {status_color}
-            </p>
-            </h3>
+        <a
+            class="delete"
+            href="/delete_user/{user[0]}"
+        >
+            🗑 DELETE
+        </a>
 
-            <br>
+        <a
+            class="reset"
+            href="/reset_password/{user[0]}"
+        >
+            🔑 RESET PASSWORD
+        </a>
 
-            <a
-                class="delete"
-                href="/delete_user/{user[0]}"
-            >
-                🗑 DELETE
-            </a>
+    </div>
 
-            <a
-                class="reset"
-                href="/reset_password/{user[0]}"
-            >
-                🔑 RESET PASSWORD
-            </a>
+    """
 
-        </div>
+html += """
 
-        """
+</div>
 
-        html += """
+</body>
 
-        </div>
+</html>
 
-        </body>
-
-        </html>
-
-        """
+"""
 
     return html
 
@@ -1030,12 +1031,13 @@ def add_user():
 
         """
         INSERT INTO users
-        VALUES (?, ?)
+        VALUES (?, ?, ?)
         """,
 
         (
             username,
-            hashed_password
+            hashed_password,
+            "active"
         )
     )
 
@@ -1058,6 +1060,22 @@ def disable_user(username):
         WHERE username=?
         """,
 
+        (username,)
+    )
+
+    conn.commit()
+
+    return redirect("/admin")
+
+@app.route("/enable_user/<username>")
+def enable_user(username):
+
+    cursor.execute(
+        """
+        UPDATE users
+        SET status='active'
+        WHERE username=?
+        """,
         (username,)
     )
 
@@ -1652,12 +1670,13 @@ for index, row in users_df.iterrows():
 
             """
             INSERT INTO users
-            VALUES (?, ?)
+            VALUES (?, ?, ?)
             """,
 
             (
                 username,
-                hashed_password
+                hashed_password,
+                "active"
             )
         )
 
@@ -2177,7 +2196,7 @@ def handle_message(event):
 
     if session_user:
 
-    username = session_user[1]
+        username = session_user[1]
 
     cursor.execute(
 
