@@ -39,6 +39,57 @@ CREATE TABLE IF NOT EXISTS users (
 )
 """)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS action_logs (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    username TEXT,
+
+    action TEXT,
+
+    target TEXT,
+
+    action_time TEXT
+
+)
+""")
+
+conn.commit()
+from datetime import datetime
+def log_action(
+    username,
+    action,
+    target
+):
+
+    cursor.execute(
+
+        """
+        INSERT INTO action_logs
+        (
+            username,
+            action,
+            target,
+            action_time
+        )
+        VALUES
+        (?, ?, ?, ?)
+        """,
+
+        (
+            username,
+            action,
+            target,
+            datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+        )
+
+    )
+
+    conn.commit()
+
 # SESSION TABLE
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS sessions (
@@ -686,6 +737,10 @@ button:hover{
     📈 DASHBOARD
     </a>
 
+    <a href="/action_logs">
+    📋 ACTION LOGS
+    </a>
+
     <a href="/admin_logout">
     🚪 LOGOUT
     </a>
@@ -1074,6 +1129,15 @@ def disable_user(username):
 
     conn.commit()
 
+log_action(
+
+    session["admin_username"],
+
+    "DELETE USER",
+
+    username
+
+)
     return redirect("/admin")
 
 @app.route("/enable_user/<username>")
@@ -1089,6 +1153,15 @@ def enable_user(username):
     )
 
     conn.commit()
+log_action(
+
+    session["admin_username"],
+
+    "DISABLE USER",
+
+    username
+
+)
 
     return redirect("/admin")
 
@@ -1119,6 +1192,15 @@ def reset_password(username):
         )
     )
 
+log_action(
+
+    session["admin_username"],
+
+    "RESET PASSWORD",
+
+    username
+
+)
     conn.commit()
 
     return f"""
@@ -1146,6 +1228,87 @@ def reset_password(username):
     </a>
 
     """
+# =========================
+# ACTION LOGS
+# =========================
+@app.route("/action_logs")
+def action_logs():
+
+    cursor.execute(
+        """
+        SELECT
+        username,
+        action,
+        target,
+        action_time
+
+        FROM action_logs
+
+        ORDER BY id DESC
+        """
+    )
+
+    logs = cursor.fetchall()
+
+    html = """
+
+    <html>
+
+    <body>
+
+    <h1>
+    📋 ACTION LOGS
+    </h1>
+
+    """
+
+    for log in logs:
+
+        html += f"""
+
+        <div
+        style="
+        border:1px solid #ddd;
+        padding:10px;
+        margin:10px;
+        border-radius:10px;
+        ">
+
+        👤 {log[0]}
+
+        <br>
+
+        ⚙ {log[1]}
+
+        <br>
+
+        🎯 {log[2]}
+
+        <br>
+
+        🕒 {log[3]}
+
+        </div>
+
+        """
+
+    html += """
+
+    <br>
+
+    <a href="/admin">
+
+    🔙 Back
+
+    </a>
+
+    </body>
+
+    </html>
+
+    """
+
+    return html
 
 # =========================
 # LIFF LOGIN
