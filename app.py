@@ -2195,18 +2195,35 @@ def handle_message(event):
 
     if session_user:
 
-        username = session_user[1]
+    logged_in = True
+
+    username = session_user[1]
 
     cursor.execute(
-
         """
         SELECT status
         FROM users
         WHERE username=?
         """,
-
         (username,)
     )
+
+    user_status = cursor.fetchone()
+
+    if (
+        user_status
+        and
+        user_status[0] == "inactive"
+    ):
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(
+                text="⛔ บัญชีของคุณถูกระงับการใช้งาน"
+            )
+        )
+
+        return
 
     user_status = cursor.fetchone()
 
