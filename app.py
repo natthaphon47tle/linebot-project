@@ -1140,28 +1140,25 @@ log_action(
 )
     return redirect("/admin")
 
-@app.route("/enable_user/<username>")
-def enable_user(username):
+@app.route("/disable_user/<username>")
+def disable_user(username):
 
     cursor.execute(
         """
         UPDATE users
-        SET status='active'
+        SET status='inactive'
         WHERE username=?
         """,
         (username,)
     )
 
     conn.commit()
-log_action(
 
-    session["admin_username"],
-
-    "DISABLE USER",
-
-    username
-
-)
+    log_action(
+        "admin",
+        "DISABLE USER",
+        username
+    )
 
     return redirect("/admin")
 
@@ -1179,54 +1176,27 @@ def reset_password(username):
     )
 
     cursor.execute(
-
         """
         UPDATE users
         SET password=?
         WHERE username=?
         """,
-
         (
             hashed_password,
             username
         )
     )
 
-log_action(
-
-    session["admin_username"],
-
-    "RESET PASSWORD",
-
-    username
-
-)
     conn.commit()
 
+    log_action(
+        "admin",
+        "RESET PASSWORD",
+        username
+    )
+
     return f"""
-
-    <h2>
-    ✅ RESET PASSWORD SUCCESS
-    </h2>
-
-    <p>
-
-    USER:
-    {username}
-
-    </p>
-
-    <p>
-
-    NEW PASSWORD:
-    1234
-
-    </p>
-
-    <a href="/admin">
-    🔙 BACK
-    </a>
-
+    ...
     """
 # =========================
 # ACTION LOGS
