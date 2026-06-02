@@ -921,35 +921,9 @@ def upload_excel():
 
     elif filename == "courier.xlsx":
 
-        courier_df = pd.read_excel(
-            "courier.xlsx"
+    courier_df = pd.read_excel(
+        "courier.xlsx"
     )
-
-cursor.execute(
-    "DELETE FROM courier_service"
-)
-
-for index,row in df.iterrows():
-
-    cursor.execute(
-
-        """
-        INSERT INTO courier_service
-        VALUES (?, ?, ?, ?, ?, ?)
-        """,
-
-        (
-            str(row["company"]),
-            str(row["contact"]),
-            str(row["email"]),
-            str(row["tel"]),
-            str(row["Type"]),
-            str(row["Base"])
-        )
-
-    )
-
-conn.commit()
 
     # =========================
     # CUSTOMS
