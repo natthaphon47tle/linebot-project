@@ -1116,6 +1116,11 @@ def add_user():
 @app.route("/disable_user/<username>")
 def disable_user(username):
 
+    print(
+        "DISABLE USER:",
+        username
+    )
+
     cursor.execute(
         """
         UPDATE users
@@ -2176,6 +2181,17 @@ def check_action_logs():
     )
 
     return str(cursor.fetchall())
+
+@app.route("/test_log")
+def test_log():
+
+    log_action(
+        "admin",
+        "TEST",
+        "system"
+    )
+
+    return "OK"
 
 @app.route("/dashboard")
 def dashboard():
