@@ -1117,27 +1117,22 @@ def add_user():
 def disable_user(username):
 
     cursor.execute(
-
         """
         UPDATE users
         SET status='inactive'
         WHERE username=?
         """,
-
         (username,)
     )
 
     conn.commit()
 
-log_action(
+    log_action(
+        "admin",
+        "DISABLE USER",
+        username
+    )
 
-    session["admin_username"],
-
-    "DELETE USER",
-
-    username
-
-)
     return redirect("/admin")
 
 @app.route("/disable_user/<username>")
