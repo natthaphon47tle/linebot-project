@@ -2212,30 +2212,30 @@ def service_management():
 
     for index,row in courier_df.iterrows():
 
-    if keyword:
+        if keyword:
 
-        if keyword not in str(
-            row["company"]
-        ).lower():
+            if keyword not in str(
+                row["company"]
+            ).lower():
 
-            continue
+                continue
 
-    html += """
+        html += """
 
-    <form>
+        <form>
 
-    <input
-    name="search"
-    placeholder="Search Company"
-    >
+        <input
+        name="search"
+        placeholder="Search Company"
+        >
  
-    <button>
-    Search
-    </button>
+        <button>
+        Search
+        </button>
 
-    </form>
+        </form>
 
-    """
+        """
 
         html += f"""
 
