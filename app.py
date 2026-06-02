@@ -921,9 +921,9 @@ def upload_excel():
 
     elif filename == "courier.xlsx":
 
-    courier_df = pd.read_excel(
-        "courier.xlsx"
-    )
+        courier_df = pd.read_excel(
+            "courier.xlsx"
+        )
 
     # =========================
     # CUSTOMS
