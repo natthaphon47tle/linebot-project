@@ -34,7 +34,8 @@ cursor = conn.cursor()
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS users (
     username TEXT,
-    password TEXT
+    password TEXT,
+    status TEXT
 )
 """)
 
@@ -475,7 +476,10 @@ button:hover{
     # =========================
 
     cursor.execute(
-        "SELECT username FROM users"
+        """
+        SELECT username,status
+        FROM users
+        """
     )
 
     users = cursor.fetchall()
@@ -755,7 +759,30 @@ button:hover{
         <div class="user-card">
 
             <h3>
+            status_color = (
+                "🟢 ACTIVE"
+                if user[1] == "active"
+                else "🔴 INACTIVE"
+            )
+
+            html += f"""
+
+            <div class="user-card">
+            <a
+            href="/disable_user/{user[0]}"
+            >
+
+            🔴 DISABLE
+
+            </a>
+
+            <h3>
             👤 {user[0]}
+            </h3>
+
+            <p>
+            {status_color}
+            </p>
             </h3>
 
             <br>
@@ -869,12 +896,13 @@ def upload_excel():
 
                     """
                     INSERT INTO users
-                    VALUES (?, ?)
+                    VALUES (?, ?, ?)
                     """,
 
                     (
                         username,
-                        hashed_password
+                        hashed_password,
+                        "active"
                     )
                 )
 
@@ -1019,13 +1047,14 @@ def add_user():
 # DELETE USER
 # =========================
 
-@app.route("/delete_user/<username>")
-def delete_user(username):
+@app.route("/disable_user/<username>")
+def disable_user(username):
 
     cursor.execute(
 
         """
-        DELETE FROM users
+        UPDATE users
+        SET status='inactive'
         WHERE username=?
         """,
 
@@ -2148,7 +2177,40 @@ def handle_message(event):
 
     if session_user:
 
-        logged_in = True
+    username = session_user[1]
+
+    cursor.execute(
+
+        """
+        SELECT status
+        FROM users
+        WHERE username=?
+        """,
+
+        (username,)
+    )
+
+    user_status = cursor.fetchone()
+
+    if (
+        user_status
+        and
+        user_status[0] == "inactive"
+    ):
+
+        line_bot_api.reply_message(
+
+            event.reply_token,
+
+            TextSendMessage(
+
+                text=
+                "⛔ บัญชีของคุณถูกระงับการใช้งาน"
+            )
+
+        )
+
+        return
 
     if DEBUG_MODE:
 
