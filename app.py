@@ -2114,72 +2114,172 @@ def dashboard():
 
     html = f"""
 
-    <html>
+<html>
 
-    <head>
+<head>
 
-    <style>
+<style>
 
-    body{{
-        font-family:Arial;
-        background:#f5f7fb;
-        padding:30px;
-    }}
+body{{
+    font-family:Arial,sans-serif;
+    background:#f4f7fc;
+    margin:0;
+    padding:30px;
+}}
 
-    .card{{
-        background:white;
-        padding:20px;
-        margin-top:15px;
-        border-radius:15px;
-        box-shadow:
-        0 3px 10px rgba(0,0,0,0.1);
-    }}
+.header{{
+    background:linear-gradient(
+        135deg,
+        #0F95F5,
+        #0056b3
+    );
 
-    h1{{
-        color:#0F95F5;
-    }}
+    color:white;
 
-    </style>
-    
-    </head>
+    padding:25px;
 
-    <body>
+    border-radius:20px;
+
+    margin-bottom:25px;
+
+    box-shadow:
+    0 4px 15px rgba(0,0,0,0.15);
+}}
+
+.header h1{{
+    margin:0;
+}}
+
+.dashboard-grid{{
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(220px,1fr)
+    );
+
+    gap:20px;
+}}
+
+.card{{
+    background:white;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    text-align:center;
+
+    box-shadow:
+    0 4px 12px rgba(0,0,0,0.1);
+
+    transition:0.3s;
+}}
+
+.card:hover{{
+    transform:translateY(-5px);
+}}
+
+.card h2{{
+    margin:0;
+    font-size:18px;
+    color:#666;
+}}
+
+.card h1{{
+    margin-top:10px;
+    color:#0F95F5;
+}}
+
+.menu{{
+    margin-top:30px;
+}}
+
+.menu a{{
+    display:inline-block;
+
+    margin-right:10px;
+
+    padding:12px 18px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    background:#0F95F5;
+
+    color:white;
+}}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
 
     <h1>
-    📈 DASHBOARD
+    🚚 Logistics Dashboard
     </h1>
 
+    <p>
+    LEO Global Logistics
+    </p>
+
+</div>
+
+<div class="dashboard-grid">
+
     <div class="card">
-    👥 Total Users: {total_users}
+        <h2>👥 Total Users</h2>
+        <h1>{total_users}</h1>
     </div>
 
     <div class="card">
-    🟢 Active Users: {active_users}
+        <h2>🟢 Active Users</h2>
+        <h1>{active_users}</h1>
     </div>
 
     <div class="card">
-    🔴 Inactive Users: {inactive_users}
+        <h2>🔴 Inactive Users</h2>
+        <h1>{inactive_users}</h1>
     </div>
 
     <div class="card">
-    📜 Login History: {login_count}
+        <h2>📜 Login History</h2>
+        <h1>{login_count}</h1>
     </div>
 
     <div class="card">
-    👤 Current Login: {online_users}
+        <h2>👤 Current Login</h2>
+        <h1>{online_users}</h1>
     </div>
 
-    <br>
+</div>
+
+<div class="menu">
 
     <a href="/admin">
-    🔙 Back
+    👥 User Management
     </a>
 
-    </body>
+    <a href="/login_logs">
+    📊 Login Logs
+    </a>
 
-    </html>
+    <a href="/login_history">
+    📜 Login History
+    </a>
 
-    """
+</div>
+
+</body>
+
+</html>
+
+"""
 
     return html
 
