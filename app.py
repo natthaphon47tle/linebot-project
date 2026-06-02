@@ -921,9 +921,9 @@ def upload_excel():
 
     elif filename == "courier.xlsx":
 
-        df = pd.read_excel(
-    "courier.xlsx"
-)
+        courier_df = pd.read_excel(
+        "courier.xlsx"
+    )
 
 cursor.execute(
     "DELETE FROM courier_service"
