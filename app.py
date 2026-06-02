@@ -2103,76 +2103,76 @@ def dashboard():
 
     login_count = cursor.fetchone()[0]
 
-html = f"""
+    html = f"""
 
-<html>
+    <html>
 
-<head>
+    <head>
 
-<style>
+    <style>
 
-body{{
-    font-family:Arial;
-    background:#f5f7fb;
-    padding:30px;
-}}
+    body{{
+        font-family:Arial;
+        background:#f5f7fb;
+        padding:30px;
+    }}
 
-.card{{
-    background:white;
-    padding:20px;
-    margin-top:15px;
-    border-radius:15px;
-    box-shadow:
-    0 3px 10px rgba(0,0,0,0.1);
-}}
+    .card{{
+        background:white;
+        padding:20px;
+        margin-top:15px;
+        border-radius:15px;
+        box-shadow:
+        0 3px 10px rgba(0,0,0,0.1);
+    }}
 
-h1{{
-    color:#0F95F5;
-}}
+    h1{{
+        color:#0F95F5;
+    }}
 
-</style>
+    </style>
+    
+    </head>
 
-</head>
+    <body>
 
-<body>
+    <h1>
+    📈 DASHBOARD
+    </h1>
 
-<h1>
-📈 DASHBOARD
-</h1>
+    <div class="card">
+    👥 Total Users: {total_users}
+    </div>
 
-<div class="card">
-👥 Total Users: {total_users}
-</div>
+    <div class="card">
+    🟢 Active Users: {active_users}
+    </div>
 
-<div class="card">
-🟢 Active Users: {active_users}
-</div>
+    <div class="card">
+    🔴 Inactive Users: {inactive_users}
+    </div>
 
-<div class="card">
-🔴 Inactive Users: {inactive_users}
-</div>
+    <div class="card">
+    📜 Login History: {login_count}
+    </div>
 
-<div class="card">
-📜 Login History: {login_count}
-</div>
+    <div class="card">
+    👤 Current Login: {online_users}
+    </div>
 
-<div class="card">
-👤 Current Login: {online_users}
-</div>
+    <br>
 
-<br>
+    <a href="/admin">
+    🔙 Back
+    </a>
 
-<a href="/admin">
-🔙 Back
-</a>
+    </body>
 
-</body>
+    </html>
 
-</html>
+    """
 
-"""
-
-return html
+    return html
 
 @app.route("/check_users")
 def check_users():
