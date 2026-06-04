@@ -4550,7 +4550,89 @@ def handle_message(event):
 
             return
 
+    if DEBUG_MODE:
+
+        print(
+            "LOGIN STATUS:",
+            logged_in
+        )
+
+        # =========================
+    # CHECK LOGIN
     # =========================
+
+    if not logged_in:
+
+        flex_message = FlexSendMessage(
+
+            alt_text="Login",
+
+            contents={
+
+                "type": "bubble",
+
+                "body": {
+
+                    "type": "box",
+
+                    "layout": "vertical",
+
+                    "contents": [
+
+                        {
+                            "type": "text",
+                            "text": "🔐 กรุณา Login ก่อนใช้งาน",
+                            "weight": "bold",
+                            "size": "lg",
+                            "wrap": True
+                        }
+
+                    ]
+
+                },
+
+                "footer": {
+
+                    "type": "box",
+
+                    "layout": "vertical",
+
+                    "contents": [
+
+                        {
+
+                            "type": "button",
+
+                            "style": "primary",
+
+                            "action": {
+
+                                "type": "uri",
+
+                                "label": "Login",
+
+                                "uri": f"https://liff.line.me/2010152202-xzzmHkWl?user_id={user_id}"
+
+                            }
+
+                        }
+
+                    ]
+
+                }
+
+            }
+
+        )
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            flex_message
+        )
+
+        return
+
+# =========================
     # SEARCH COURIER
     # =========================
 
@@ -4828,88 +4910,6 @@ def handle_message(event):
 
         return
 
-    if DEBUG_MODE:
-
-        print(
-            "LOGIN STATUS:",
-            logged_in
-        )
-
-        # =========================
-    # CHECK LOGIN
-    # =========================
-
-    if not logged_in:
-
-        flex_message = FlexSendMessage(
-
-            alt_text="Login",
-
-            contents={
-
-                "type": "bubble",
-
-                "body": {
-
-                    "type": "box",
-
-                    "layout": "vertical",
-
-                    "contents": [
-
-                        {
-                            "type": "text",
-                            "text": "🔐 กรุณา Login ก่อนใช้งาน",
-                            "weight": "bold",
-                            "size": "lg",
-                            "wrap": True
-                        }
-
-                    ]
-
-                },
-
-                "footer": {
-
-                    "type": "box",
-
-                    "layout": "vertical",
-
-                    "contents": [
-
-                        {
-
-                            "type": "button",
-
-                            "style": "primary",
-
-                            "action": {
-
-                                "type": "uri",
-
-                                "label": "Login",
-
-                                "uri": f"https://liff.line.me/2010152202-xzzmHkWl?user_id={user_id}"
-
-                            }
-
-                        }
-
-                    ]
-
-                }
-
-            }
-
-        )
-
-        line_bot_api.reply_message(
-            event.reply_token,
-            flex_message
-        )
-
-        return
-
     # =========================
     # ADMIN PANEL
     # =========================
@@ -4996,7 +4996,7 @@ def handle_message(event):
 
         records = cursor.fetchall()
 
-        reply = ""
+        if result:
 
         for row in records:
 
@@ -5038,7 +5038,7 @@ def handle_message(event):
 
         records = cursor.fetchall()
 
-        reply = ""
+        if result:
 
         for row in records:
 
