@@ -4536,6 +4536,11 @@ Tel : {result[3]}
     )
 
     return
+
+# =========================
+# SEARCH CUSTOMS
+# =========================
+
 cursor.execute(
 
     """
@@ -4578,6 +4583,10 @@ Base : {result[4]}
     )
 
     return
+
+# =========================
+# SEARCH PACKING
+# =========================
 
 cursor.execute(
 
@@ -4624,6 +4633,10 @@ Base : {result[5]}
 
     return
 
+# =========================
+# SEARCH CROSS_BORDER
+# =========================
+
 cursor.execute(
 
     """
@@ -4667,6 +4680,10 @@ Route : {result[4]}
 
     return
 
+# =========================
+# SEARCH INSURANCE
+# =========================
+
 cursor.execute(
 
     """
@@ -4709,6 +4726,10 @@ Tel : {result[4]}
     )
 
     return
+
+# =========================
+# SEARCH TRUCKING
+# =========================
 
 cursor.execute(
 
