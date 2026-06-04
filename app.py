@@ -175,28 +175,75 @@ CREATE TABLE IF NOT EXISTS courier_service (
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS customs_service (
+
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    service TEXT,
-    detail TEXT
+
+    company TEXT,
+    contact TEXT,
+    email TEXT,
+    tel TEXT,
+    base TEXT
+
 )
 """)
 
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS packing_service (
+CREATE TABLE IF NOT EXISTS packing_service(
+
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    company TEXT,
+    contact TEXT,
+    email TEXT,
+    tel TEXT,
     service TEXT,
-    detail TEXT
+    base TEXT
+
 )
 """)
 
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS cross_border_service (
+CREATE TABLE IF NOT EXISTS cross_border_service(
+
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    service TEXT,
-    detail TEXT
+
+    company TEXT,
+    contact TEXT,
+    email TEXT,
+    tel TEXT,
+    route TEXT
+
 )
 """)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS insurance_service(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    company TEXT,
+    department TEXT,
+    contact TEXT,
+    email TEXT,
+    tel TEXT
+
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS trucking_service(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    company TEXT,
+    contact TEXT,
+    email TEXT,
+    tel TEXT,
+    type TEXT,
+    base TEXT
+
+)
+""")
 conn.commit()
 
 from linebot import LineBotApi, WebhookHandler
@@ -783,6 +830,10 @@ button:hover{
     🚚 COURIER
     </a>
 
+    <a href="/customs_management">
+    📄 CUSTOMS MANAGEMENT
+    </a>
+
     </div>
 
     <hr>
@@ -1061,6 +1112,40 @@ def upload_excel():
             "customs_clearance.xlsx"
         )
 
+        cursor.execute(
+            "DELETE FROM customs_service"
+        )
+
+        for index, row in customs_df.iterrows():
+
+            cursor.execute(
+
+                """
+                INSERT INTO customs_service
+                (
+                    company,
+                    contact,
+                    email,
+                    tel,
+                    base
+                )
+                VALUES
+                (?, ?, ?, ?, ?)
+                """,
+
+                (
+                    str(row["company"]),
+                    str(row["contact"]),
+                    str(row["email"]),
+                    str(row["tel"]),
+                    str(row["base"])
+                )
+
+            )
+
+        conn.commit()
+        os.remove(filename)
+
     # =========================
     # PACKING
     # =========================
@@ -1071,6 +1156,40 @@ def upload_excel():
             "packing.xlsx"
         )
 
+        cursor.execute(
+            "DELETE FROM packing_service"
+        )
+
+        for index,row in packing_df.iterrows():
+
+            cursor.execute(
+
+                """
+                INSERT INTO packing_service
+                (
+                    company,
+                    contact,
+                    email,
+                    tel,
+                    service,
+                    base
+                )
+                VALUES
+                (?, ?, ?, ?, ?, ?)
+                """,
+
+                (
+                    str(row["company"]),
+                    str(row["contact"]),
+                    str(row["email"]),
+                    str(row["tel"]),
+                    str(row["service"]),
+                    str(row["base"])
+                )
+
+            )
+
+        conn.commit()
     # =========================
     # CROSS BORDER
     # =========================
@@ -1080,6 +1199,39 @@ def upload_excel():
         cross_df = pd.read_excel(
             "cross_border.xlsx"
         )
+
+        cursor.execute(
+            "DELETE FROM cross_border_service"
+        )
+
+        for index,row in cross_df.iterrows():
+
+            cursor.execute(
+
+                """
+                INSERT INTO cross_border_service
+                (
+                    company,
+                    contact,
+                    email,
+                    tel,
+                    route
+                )
+                VALUES
+                (?, ?, ?, ?, ?)
+                """,
+
+                (
+                    str(row["company"]),
+                    str(row["contact"]),
+                    str(row["email"]),
+                    str(row["tel"]),
+                    str(row["route"])
+                )
+
+            )
+
+        conn.commit()
 
     # =========================
     # INSURANCE
@@ -1091,6 +1243,39 @@ def upload_excel():
             "cargo_insurance.xlsx"
         )
 
+        cursor.execute(
+            "DELETE FROM insurance_service"
+        )
+
+        for index,row in insurance_df.iterrows():
+
+            cursor.execute(
+
+                """
+                INSERT INTO insurance_service
+                (
+                    company,
+                    department,
+                    contact,
+                    email,
+                    tel
+                )
+                VALUES
+                (?, ?, ?, ?, ?)
+                """,
+
+                (
+                    str(row["company"]),
+                    str(row["department"]),
+                    str(row["contact"]),
+                    str(row["email"]),
+                    str(row["tel"])
+                )
+
+            )
+
+        conn.commit()
+
     # =========================
     # TRUCKING
     # =========================
@@ -1100,6 +1285,41 @@ def upload_excel():
         reefer_df = pd.read_excel(
             "tracking_reefer.xlsx"
         )
+
+        cursor.execute(
+            "DELETE FROM trucking_service"
+        )
+
+        for index,row in reefer_df.iterrows():
+
+            cursor.execute(
+
+                """
+                INSERT INTO trucking_service
+                (
+                    company,
+                    contact,
+                    email,
+                    tel,
+                    type,
+                    base
+                )
+                VALUES
+                (?, ?, ?, ?, ?, ?)
+                """,
+
+                (
+                    str(row["company"]),
+                    str(row["contact"]),
+                    str(row["email"]),
+                    str(row["tel"]),
+                    str(row["Type"]),
+                    str(row["Base"])
+                )
+
+            )
+
+        conn.commit()
 
     log_action(
         "admin",
@@ -2602,6 +2822,80 @@ def check_courier_table():
 
     return str(cursor.fetchall())
 
+@app.route("/customs_management")
+def customs_management():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM customs_service
+        """
+    )
+
+    records = cursor.fetchall()
+
+    html = "<h1>📄 CUSTOMS MANAGEMENT</h1>"
+
+    for row in records:
+
+        html += f"""
+        <div>
+
+        Company : {row[1]}<br>
+        Contact : {row[2]}<br>
+        Email : {row[3]}<br>
+        Tel : {row[4]}<br>
+        Base : {row[5]}<br>
+
+        </div>
+        <hr>
+        """
+
+    return html
+
+@app.route("/check_customs")
+def check_customs():
+
+    cursor.execute(
+        "SELECT * FROM customs_service"
+    )
+
+    return str(
+        cursor.fetchall()
+    )
+
+@app.route("/check_packing")
+def check_customs():
+
+    cursor.execute(
+        "SELECT * FROM customs_service"
+    )
+
+    return str(
+        cursor.fetchall()
+    )
+
+@app.route("/check_insurance")
+def check_customs():
+
+    cursor.execute(
+        "SELECT * FROM customs_service"
+    )
+
+    return str(
+        cursor.fetchall()
+    )
+
+@app.route("/check_trucking")
+def check_customs():
+
+    cursor.execute(
+        "SELECT * FROM customs_service"
+    )
+
+    return str(
+        cursor.fetchall()
+    )
 @app.route("/dashboard")
 def dashboard():
 
@@ -3160,29 +3454,42 @@ def handle_message(event):
 
     if "customs" in text.lower():
 
-        replies = []
+        cursor.execute(
+            """
+            SELECT
+            company,
+            contact,
+            email,
+            tel,
+            base
+            FROM customs_service
+            """
+        )
 
-        for index, row in customs_df.iterrows():
+        records = cursor.fetchall()
 
-            text_data = ""
+        reply = ""
 
-            for col in customs_df.columns:
+        for row in records:
 
-                if "Unnamed" not in str(col) and pd.notna(row[col]):
+            reply += f"""
+    📄 {row[0]}
+    👤 {row[1]}
+    📧 {row[2]}
+    📞 {row[3]}
+    📍 {row[4]}
 
-                    text_data += f"{col}: {row[col]}\n"
-
-            replies.append(text_data)
-
-        reply = "\n-----------------\n".join(replies)
+    ----------------
+    """
 
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=reply[:5000])
+            TextSendMessage(
+                text=reply[:5000]
+            )
         )
 
         return
-
 
     # =========================
     # COURIER
