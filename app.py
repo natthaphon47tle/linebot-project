@@ -1005,52 +1005,6 @@ def upload_excel():
         os.remove(filename)
 
     # =========================
-    # COURIER
-    # =========================
-
-    elif filename == "courier.xlsx":
-
-        courier_df = pd.read_excel(
-            "courier.xlsx"
-        )
-
-        cursor.execute(
-            "DELETE FROM courier_service"
-        )
-
-        for index, row in courier_df.iterrows():
-
-            cursor.execute(
-
-                """
-                INSERT INTO courier_service
-                (
-                    company,
-                    contact,
-                    email,
-                    tel,
-                    service_type,
-                    base_location
-                )
-                VALUES
-                (?, ?, ?, ?, ?, ?)
-                """,
-
-                (
-                    str(row["company"]),
-                    str(row["contact"]),
-                    str(row["email"]),
-                    str(row["tel"]),
-                    "",
-                    ""
-                )
-
-            )
-
-        conn.commit()
-        os.remove(filename)
-
-    # =========================
     # CUSTOMS
     # =========================
  
@@ -2375,19 +2329,19 @@ def courier_management():
         "
         >
 
-        <b>Company:</b> {row[0]}
+        <b>Company:</b> {row[1]}
 
         <br>
 
-        <b>Contact:</b> {row[1]}
+        <b>Contact:</b> {row[2]}
 
         <br>
 
-        <b>Email:</b> {row[2]}
+        <b>Email:</b> {row[3]}
 
         <br>
  
-        <b>Tel:</b> {row[3]}
+        <b>Tel:</b> {row[4]}
 
         <br><br>
 
@@ -2433,10 +2387,10 @@ def add_courier():
     """,
 
     (
-        str(row["company"]),
-        str(row["contact"]),
-        str(row["email"]),
-        str(row["tel"]),
+        request.form["company"],
+        request.form["contact"],
+        request.form["email"],
+        request.form["tel"],
         "",
         ""
     )
