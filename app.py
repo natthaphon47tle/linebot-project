@@ -1005,6 +1005,53 @@ def upload_excel():
         os.remove(filename)
 
     # =========================
+    # COURIER
+    # =========================
+
+    elif filename == "courier.xlsx":
+
+        courier_df = pd.read_excel(
+            "courier.xlsx"
+        )
+
+        cursor.execute(
+            "DELETE FROM courier_service"
+        )
+
+        for index, row in courier_df.iterrows():
+
+            cursor.execute(
+
+                """
+                INSERT INTO courier_service
+                (
+                    company,
+                    contact,
+                    email,
+                    tel,
+                    service_type,
+                    base_location
+                )
+                VALUES
+                (?, ?, ?, ?, ?, ?)
+                """,
+
+                (
+                    str(row["company"]),
+                    str(row["contact"]),
+                    str(row["email"]),
+                    str(row["tel"]),
+                    "",
+                    ""
+                )
+
+            )
+
+        conn.commit()
+        os.remove(filename)
+
+
+    # =========================
     # CUSTOMS
     # =========================
  
@@ -3030,50 +3077,6 @@ def handle_message(event):
     # =========================
 # COURIER
 # =========================
-
-elif filename == "courier.xlsx":
-
-    courier_df = pd.read_excel(
-        "courier.xlsx"
-    )
-
-    cursor.execute(
-        "DELETE FROM courier_service"
-    )
-
-    for index, row in courier_df.iterrows():
-
-        cursor.execute(
-
-            """
-            INSERT INTO courier_service
-            (
-                company,
-                contact,
-                email,
-                tel,
-                service_type,
-                base_location
-            )
-            VALUES
-            (?, ?, ?, ?, ?, ?)
-            """,
-
-            (
-                request.form["company"],
-                request.form["contact"],
-                request.form["email"],
-                request.form["tel"],
-                "",
-                ""
-            )
-
-        )
-
-    conn.commit()
-
-    os.remove(filename)
-
 
     # =========================
     # CROSS BORDER
