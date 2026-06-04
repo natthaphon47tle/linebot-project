@@ -3185,8 +3185,45 @@ def handle_message(event):
 
 
     # =========================
-# COURIER
-# =========================
+    # COURIER
+    # =========================
+
+    if "courier" in text.lower():
+
+        cursor.execute(
+            """
+            SELECT
+            company,
+            contact,
+            email,
+            tel
+            FROM courier_service
+            """
+        )
+
+        records = cursor.fetchall()
+
+        reply = ""
+
+        for row in records:
+
+            reply += f"""
+    🚚 {row[0]}
+    👤 {row[1]}
+    📧 {row[2]}
+    📞 {row[3]}
+
+    -------------------
+    """
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(
+                text=reply[:5000]
+            )
+        )
+
+        return
 
     # =========================
     # CROSS BORDER
