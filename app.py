@@ -168,7 +168,30 @@ CREATE TABLE IF NOT EXISTS courier_service (
     tel TEXT,
     service_type TEXT,
     base_location TEXT
+)
+""")
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS customs_service (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    service TEXT,
+    detail TEXT
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS packing_service (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    service TEXT,
+    detail TEXT
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS cross_border_service (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    service TEXT,
+    detail TEXT
 )
 """)
 
@@ -754,6 +777,10 @@ button:hover{
     📜 LOGIN HISTORY
     </a>
 
+    <a href="/courier_management">
+    🚚 COURIER
+    </a>
+
     </div>
 
     <hr>
@@ -981,9 +1008,36 @@ def upload_excel():
 
     elif filename == "courier.xlsx":
 
-        courier_df = pd.read_excel(
-            "courier.xlsx"
+    courier_df = pd.read_excel(
+        "courier.xlsx"
+    )
+
+    cursor.execute(
+        "DELETE FROM courier_service"
+    )
+
+    for index,row in courier_df.iterrows():
+
+        cursor.execute(
+
+            """
+            INSERT INTO courier_service
+            VALUES
+            (?, ?, ?, ?, ?, ?)
+            """,
+
+            (
+                str(row["company"]),
+                str(row["contact"]),
+                str(row["email"]),
+                str(row["tel"]),
+                str(row["Type"]),
+                str(row["Base"])
+            )
+
         )
+
+    conn.commit()
 
     # =========================
     # CUSTOMS
@@ -2248,6 +2302,191 @@ def test_log():
 
     return "OK"
 
+@app.route("/courier_management")
+def courier_management():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM courier_service
+        """
+    )
+
+    records = cursor.fetchall()
+
+    html = """
+
+    <h1>
+    🚚 COURIER MANAGEMENT
+    </h1>
+
+    <form
+        method="POST"
+        action="/add_courier"
+    >
+
+    Company
+
+    <input name="company">
+
+    Contact
+
+    <input name="contact">
+
+    Email
+
+    <input name="email">
+
+    Tel
+
+    <input name="tel">
+
+    Type
+
+    <input name="service_type">
+
+    Base
+
+    <input name="base">
+
+    <button>
+    SAVE
+    </button>
+
+    </form>
+
+    <hr>
+
+    """
+
+    for row in records:
+
+        html += f"""
+
+        <div
+        style="
+        border:1px solid #ddd;
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:10px;
+        "
+        >
+
+        <b>Company:</b> {row[1]}
+
+        <br>
+
+        <b>Contact:</b> {row[2]}
+
+        <br>
+
+        <b>Email:</b> {row[3]}
+
+        <br>
+ 
+        <b>Tel:</b> {row[4]}
+
+        <br>
+
+        <b>Type:</b> {row[5]}
+
+        <br>
+
+        <b>Base:</b> {row[6]}
+
+        <br><br>
+
+        <a href="/delete_courier/{row[0]}">
+
+        🗑 DELETE
+
+        </a>
+
+        </div>
+
+        """
+
+        html += """
+        <br>
+        <a href="/admin">
+        🔙 BACK
+        </a>
+        """
+
+        return html
+
+@app.route(
+    "/add_courier",
+    methods=["POST"]
+)
+def add_courier():
+
+    cursor.execute(
+
+        """
+        INSERT INTO courier_service
+        (
+            company,
+            contact,
+            email,
+            tel,
+            service_type,
+            base_location
+        )
+        VALUES
+        (?, ?, ?, ?, ?, ?)
+        """,
+
+        (
+            request.form["company"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"],
+            request.form["service_type"],
+            request.form["base"]
+        )
+
+    )
+
+    conn.commit()
+
+    log_action(
+        "admin",
+        "ADD COURIER",
+        request.form["company"]
+    )
+
+    return redirect(
+        "/courier_management"
+    )
+
+@app.route(
+    "/delete_courier/<id>"
+)
+def delete_courier(id):
+
+    cursor.execute(
+
+        """
+        DELETE FROM courier_service
+        WHERE rowid=?
+        """,
+
+        (id,)
+    )
+
+    conn.commit()
+
+    log_action(
+        "admin",
+        "DELETE COURIER",
+        id
+    )
+
+    return redirect(
+        "/courier_management"
+    )
+
 @app.route("/dashboard")
 def dashboard():
 
@@ -2838,27 +3077,36 @@ def handle_message(event):
 
         replies = []
  
-        for index, row in courier_df.iterrows():
+        cursor.execute(
+            """
+            SELECT *
+            FROM courier_service
+            """
+        )
 
-            text_data = ""
+        records = cursor.fetchall()
 
-            for col in courier_df.columns:
+        reply = ""
 
-                if (
-                    "Unnamed" not in str(col)
-                    and
-                    pd.notna(row[col])
-                ):
+        for row in records:
 
-                    text_data += f"{col}: {row[col]}\n"
+            reply += f"""
 
-            replies.append(text_data)
+        Company: {row[1]}
+        Contact: {row[2]}
+        Email: {row[3]}
+        Tel: {row[4]}
+        Type: {row[5]}
+        Base: {row[6]}
 
-        reply = "\n-----------------\n".join(replies)
+        ----------------
 
+        """
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=reply[:5000])
+            TextSendMessage(
+                text=reply[:5000]
+            )
         )
 
         return
