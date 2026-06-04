@@ -4902,7 +4902,7 @@ def handle_message(event):
 
     results = cursor.fetchall()
 
-    if result:
+    if results:
         row = results[0]
 
         reply = f"""
@@ -5011,7 +5011,7 @@ def handle_message(event):
 
         records = cursor.fetchall()
 
-        if result:
+        if results:
 
             for row in records:
 
@@ -5053,7 +5053,7 @@ def handle_message(event):
 
         records = cursor.fetchall()
 
-        if result:
+        if results:
 
             for row in records:
 
