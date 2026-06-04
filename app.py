@@ -1008,36 +1008,32 @@ def upload_excel():
     # COURIER
     # =========================
 
-    elif filename == "courier.xlsx":
+    cursor.execute(
 
-        courier_df = pd.read_excel(
-            "courier.xlsx"
+        """
+        INSERT INTO courier_service
+        (
+            company,
+            contact,
+            email,
+            tel,
+            service_type,
+            base_location
+        )
+        VALUES
+        (?, ?, ?, ?, ?, ?)
+        """,
+
+        (
+            str(row["company"]),
+            str(row["contact"]),
+            str(row["email"]),
+            str(row["tel"]),
+            "",
+            ""
         )
 
-        cursor.execute(
-            "DELETE FROM courier_service"
-        )
-
-        for index, row in courier_df.iterrows():
-
-            cursor.execute(
-
-                """
-                INSERT INTO courier_service
-                VALUES
-                (?, ?, ?, ?)
-                """,
-
-                (
-                    str(row["company"]),
-                    str(row["contact"]),
-                    str(row["email"]),
-                    str(row["tel"]),
-                )
-
-            )
-
-        conn.commit()
+    )
 
     # =========================
     # CUSTOMS
@@ -3063,46 +3059,51 @@ def handle_message(event):
 
 
     # =========================
-    # COURIER
-    # =========================
+# COURIER
+# =========================
 
-    if "courier" in text.lower():
+elif filename == "courier.xlsx":
 
-        replies = []
- 
+    courier_df = pd.read_excel(
+        "courier.xlsx"
+    )
+
+    cursor.execute(
+        "DELETE FROM courier_service"
+    )
+
+    for index, row in courier_df.iterrows():
+
         cursor.execute(
+
             """
-            SELECT *
-            FROM courier_service
-            """
-        )
-
-        records = cursor.fetchall()
-
-        reply = ""
-
-        for row in records:
-
-            reply += f"""
-
-        Company: {row[1]}
-        Contact: {row[2]}
-        Email: {row[3]}
-        Tel: {row[4]}
-        Type: {row[5]}
-        Base: {row[6]}
-
-        ----------------
-
-        """
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(
-                text=reply[:5000]
+            INSERT INTO courier_service
+            (
+                company,
+                contact,
+                email,
+                tel,
+                service_type,
+                base_location
             )
+            VALUES
+            (?, ?, ?, ?, ?, ?)
+            """,
+
+            (
+                request.form["company"],
+                request.form["contact"],
+                request.form["email"],
+                request.form["tel"],
+                "",
+                ""
+            )
+
         )
 
-        return
+    conn.commit()
+
+    os.remove(filename)
 
 
     # =========================
