@@ -4642,45 +4642,34 @@ def handle_message(event):
     # SEARCH COURIER
     # =========================
 
-    cursor.execute(
+    if text.lower() == "courier":
 
-        """
+        cursor.execute("""
         SELECT
         company,
         contact,
         email,
         tel
         FROM courier_service
-        WHERE lower(company)
-        LIKE ?
-        """,
+        """)
 
-        (
-            f"%{text.lower()}%",
-        )
+        results = cursor.fetchall()
 
-    )
+        reply = "🚚 COURIER\n\n"
 
-    results = cursor.fetchall()
+        for row in results:
 
-    if results:
+            reply += f"""
+    {row[0]}
+    👤 {row[1]}
+    📧 {row[2]}
+    📞 {row[3]}
 
-        row = results[0]
-
-        reply = f"""
-    🚚 COURIER
-
-    Company : {row[0]}
-    Contact : {row[1]}
-    Email : {row[2]}
-    Tel : {row[3]}
     """
 
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(
-                text=reply
-            )
+            TextSendMessage(text=reply[:5000])
         )
 
         return
