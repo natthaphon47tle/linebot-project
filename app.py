@@ -1005,50 +1005,50 @@ def upload_excel():
         os.remove(filename)
 
     # =========================
-# COURIER
-# =========================
+    # COURIER
+    # =========================
 
-elif filename == "courier.xlsx":
+    elif filename == "courier.xlsx":
 
-    courier_df = pd.read_excel(
-        "courier.xlsx"
-    )
-
-    cursor.execute(
-        "DELETE FROM courier_service"
-    )
-
-    for index, row in courier_df.iterrows():
-
-        cursor.execute(
-
-            """
-            INSERT INTO courier_service
-            (
-                company,
-                contact,
-                email,
-                tel,
-                service_type,
-                base_location
-            )
-            VALUES
-            (?, ?, ?, ?, ?, ?)
-            """,
-
-            (
-                str(row["company"]),
-                str(row["contact"]),
-                str(row["email"]),
-                str(row["tel"]),
-                "",
-                ""
-            )
-
+        courier_df = pd.read_excel(
+            "courier.xlsx"
         )
 
-    conn.commit()
-    os.remove(filename)
+        cursor.execute(
+            "DELETE FROM courier_service"
+        )
+
+        for index, row in courier_df.iterrows():
+
+            cursor.execute(
+
+                """
+                INSERT INTO courier_service
+                (
+                    company,
+                    contact,
+                    email,
+                    tel,
+                    service_type,
+                    base_location
+                )
+                VALUES
+                (?, ?, ?, ?, ?, ?)
+                """,
+
+                (
+                    str(row["company"]),
+                    str(row["contact"]),
+                    str(row["email"]),
+                    str(row["tel"]),
+                    "",
+                    ""
+                )
+
+            )
+
+        conn.commit()
+        os.remove(filename)
 
     # =========================
     # CUSTOMS
