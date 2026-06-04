@@ -2489,6 +2489,15 @@ def delete_courier(company):
         "/courier_management"
     )
 
+@app.route("/check_courier")
+def check_courier():
+
+    cursor.execute(
+        "SELECT * FROM courier_service"
+    )
+
+    return str(cursor.fetchall())
+
 @app.route("/dashboard")
 def dashboard():
 
