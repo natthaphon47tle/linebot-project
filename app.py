@@ -4852,9 +4852,11 @@ def handle_message(event):
             """
         )
 
+        print("INSURANCE RESULTS =", results)
         results = cursor.fetchall()
 
         reply = "🛡 INSURANCE\n\n"
+        print("TOTAL =", len(results))
 
         for row in results:
 
