@@ -4659,7 +4659,7 @@ def handle_message(event):
 
     if results:
 
-        row = results[0]
+        row = row[0]
 
         reply = f"""
     🚚 COURIER
@@ -4707,7 +4707,7 @@ def handle_message(event):
 
     if results:
 
-    row = results[0]
+    row = row[0]
 
         reply = f"""
     📄 CUSTOMS
@@ -4757,7 +4757,7 @@ def handle_message(event):
 
     if results:
 
-    row = results[0]
+    row = row[0]
 
         reply = f"""
     📦 PACKING
@@ -4807,7 +4807,7 @@ def handle_message(event):
 
     if results:
 
-    row = results[0]
+    row = row[0]
 
         reply = f"""
     🌏 CROSS BORDER
