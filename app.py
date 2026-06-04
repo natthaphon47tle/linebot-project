@@ -162,6 +162,8 @@ if not cursor.fetchall():
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS courier_service (
 
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+   
     company TEXT,
     contact TEXT,
     email TEXT,
@@ -2372,27 +2374,27 @@ def courier_management():
         "
         >
 
-        <b>Company:</b> {row[1]}
+        <b>Company:</b> {row[0]}
 
         <br>
 
-        <b>Contact:</b> {row[2]}
+        <b>Contact:</b> {row[1]}
 
         <br>
 
-        <b>Email:</b> {row[3]}
+        <b>Email:</b> {row[2]}
 
         <br>
  
-        <b>Tel:</b> {row[4]}
+        <b>Tel:</b> {row[3]}
 
         <br>
 
-        <b>Type:</b> {row[5]}
+        <b>Type:</b> {row[4]}
 
         <br>
 
-        <b>Base:</b> {row[6]}
+        <b>Base:</b> {row[5]}
 
         <br><br>
 
@@ -2406,14 +2408,14 @@ def courier_management():
 
         """
 
-        html += """
-        <br>
-        <a href="/admin">
-        🔙 BACK
-        </a>
-        """
+    html += """
+    <br>
+    <a href="/admin">
+    🔙 BACK
+    </a>
+    """
 
-        return html
+    return html
 
 @app.route(
     "/add_courier",
@@ -2460,22 +2462,22 @@ def add_courier():
         "/courier_management"
     )
 
-@app.route(
-    "/delete_courier/<id>"
-)
-def delete_courier(id):
+@app.route("/delete_courier/<company>")
+def delete_courier(company):
 
     cursor.execute(
 
         """
         DELETE FROM courier_service
-        WHERE rowid=?
+        WHERE company=?
         """,
 
-        (id,)
+        (company,)
     )
 
     conn.commit()
+
+    return redirect("/courier_management")
 
     log_action(
         "admin",
