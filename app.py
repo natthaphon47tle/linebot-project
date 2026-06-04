@@ -2392,10 +2392,12 @@ def courier_management():
 
         <br><br>
 
+        <a href="/edit_courier/{row[0]}">
+        ✏️ EDIT
+        </a>
+
         <a href="/delete_courier/{row[0]}">
-
         🗑 DELETE
-
         </a>
 
         </div>
@@ -2478,6 +2480,114 @@ def delete_courier(company):
         "DELETE COURIER",
         id
     )
+
+    return redirect(
+        "/courier_management"
+    )
+
+@app.route("/edit_courier/<int:id>")
+def edit_courier(id):
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM courier_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    row = cursor.fetchone()
+
+    return f"""
+
+    <h1>
+    ✏️ EDIT COURIER
+    </h1>
+
+    <form
+        method="POST"
+        action="/update_courier/{id}"
+    >
+
+    Company
+
+    <input
+        name="company"
+        value="{row[1]}"
+    >
+
+    <br><br>
+
+    Contact
+
+    <input
+        name="contact"
+        value="{row[2]}"
+    >
+
+    <br><br>
+
+    Email
+
+    <input
+        name="email"
+        value="{row[3]}"
+    >
+
+    <br><br>
+
+    Tel
+
+    <input
+        name="tel"
+        value="{row[4]}"
+    >
+
+    <br><br>
+
+    <button>
+    UPDATE
+    </button>
+
+    </form>
+
+    """
+
+@app.route(
+    "/update_courier/<int:id>",
+    methods=["POST"]
+)
+def update_courier(id):
+
+    company = request.form["company"]
+    contact = request.form["contact"]
+    email = request.form["email"]
+    tel = request.form["tel"]
+
+    cursor.execute(
+
+        """
+        UPDATE courier_service
+        SET
+            company=?,
+            contact=?,
+            email=?,
+            tel=?
+        WHERE id=?
+        """,
+
+        (
+            company,
+            contact,
+            email,
+            tel,
+            id
+        )
+
+    )
+
+    conn.commit()
 
     return redirect(
         "/courier_management"
