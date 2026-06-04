@@ -2865,10 +2865,10 @@ def check_customs():
     )
 
 @app.route("/check_packing")
-def check_customs():
+def check_packing():
 
     cursor.execute(
-        "SELECT * FROM customs_service"
+        "SELECT * FROM packing_service"
     )
 
     return str(
@@ -2876,10 +2876,10 @@ def check_customs():
     )
 
 @app.route("/check_insurance")
-def check_customs():
+def check_insurance():
 
     cursor.execute(
-        "SELECT * FROM customs_service"
+        "SELECT * FROM insurance_service"
     )
 
     return str(
@@ -2887,10 +2887,10 @@ def check_customs():
     )
 
 @app.route("/check_trucking")
-def check_customs():
+def check_trucking():
 
     cursor.execute(
-        "SELECT * FROM customs_service"
+        "SELECT * FROM trucking_service"
     )
 
     return str(
