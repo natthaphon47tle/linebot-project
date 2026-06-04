@@ -2407,30 +2407,30 @@ def add_courier():
 
     cursor.execute(
 
-        """
-        INSERT INTO courier_service
-        (
-            company,
-            contact,
-            email,
-            tel,
-            service_type,
-            base_location
-        )
-        VALUES
-        (?, ?, ?, ?, ?, ?)
-        """,
-
-        (
-            request.form["company"],
-            request.form["contact"],
-            request.form["email"],
-            request.form["tel"],
-            request.form["service_type"],
-            request.form["base"]
-        )
-
+    """
+    INSERT INTO courier_service
+    (
+        company,
+        contact,
+        email,
+        tel,
+        service_type,
+        base_location
     )
+    VALUES
+    (?, ?, ?, ?, ?, ?)
+    """,
+
+    (
+        str(row["company"]),
+        str(row["contact"]),
+        str(row["email"]),
+        str(row["tel"]),
+        "",
+        ""
+    )
+
+)
 
     conn.commit()
 
