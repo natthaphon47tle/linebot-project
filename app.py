@@ -834,6 +834,22 @@ button:hover{
     📄 CUSTOMS MANAGEMENT
     </a>
 
+    <a href="/packing_management">
+    📦 PACKING MANAGEMENT
+    </a>
+
+    <a href="/cross_management">
+    🌏 CROSS BORDER MANAGEMENT
+    </a>
+
+    <a href="/insurance_management">
+    🛡 INSURANCE MANAGEMENT
+    </a>
+
+    <a href="/trucking_management">
+    🚛 TRUCKING MANAGEMENT
+    </a>
+
     </div>
 
     <hr>
@@ -2834,25 +2850,229 @@ def customs_management():
 
     records = cursor.fetchall()
 
-    html = "<h1>📄 CUSTOMS MANAGEMENT</h1>"
+    html = """
+
+    <h1>
+    📄 CUSTOMS MANAGEMENT
+    </h1>
+
+    """
+
+    html += """
+
+    <form
+    method="POST"
+    action="/add_customs"
+    >
+
+    Company
+
+    <input name="company">
+
+    Contact
+
+    <input name="contact">
+
+    Email
+
+    <input name="email">
+
+    Tel
+
+    <input name="tel">
+
+    Base
+
+    <input name="base">
+
+    <button>
+    SAVE
+    </button>
+
+    </form>
+
+    <hr>
+
+    """
 
     for row in records:
 
         html += f"""
-        <div>
 
-        Company : {row[1]}<br>
-        Contact : {row[2]}<br>
-        Email : {row[3]}<br>
-        Tel : {row[4]}<br>
-        Base : {row[5]}<br>
+        <div
+        style="
+        border:1px solid #ddd;
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:10px;
+        "
+        >
+
+        <b>Company:</b> {row[1]}
+        <br>
+
+        <b>Contact:</b> {row[2]}
+        <br>
+
+        <b>Email:</b> {row[3]}
+        <br>
+
+        <b>Tel:</b> {row[4]}
+        <br>
+
+        <b>Base:</b> {row[5]}
+        <br><br>
+
+        <a href="/delete_customs/{row[0]}">
+        🗑 DELETE
+        </a>
 
         </div>
-        <hr>
+
         """
+
+    html += """
+
+    <br>
+
+    <a href="/admin">
+    🔙 BACK
+    </a>
+
+    """
 
     return html
 
+@app.route("/delete_customs/<int:id>")
+def delete_customs(id):
+
+    cursor.execute(
+        """
+        DELETE FROM customs_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/customs_management"
+    )
+
+@app.route(
+    "/add_customs",
+    methods=["POST"]
+)
+def add_customs():
+
+    cursor.execute(
+
+        """
+        INSERT INTO customs_service
+        (
+            company,
+            contact,
+            email,
+            tel,
+            base
+        )
+        VALUES
+        (?, ?, ?, ?, ?)
+        """,
+
+        (
+            request.form["company"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"],
+            request.form["base"]
+        )
+
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/customs_management"
+    )
+
+@app.route("/edit_customs/<int:id>")
+def edit_customs(id):
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM customs_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    row = cursor.fetchone()
+
+    return f"""
+
+    <h1>
+    ✏️ EDIT C
+    </h1>
+
+    <form
+        method="POST"
+        action="/update_customs/{id}"
+    >
+
+    Company
+
+    <input
+        name="company"
+        value="{row[1]}"
+    >
+
+    <br><br>
+
+    Contact
+
+    <input
+        name="contact"
+        value="{row[2]}"
+    >
+
+    <br><br>
+
+    Email
+
+    <input
+        name="email"
+        value="{row[3]}"
+    >
+
+    <br><br>
+
+    Tel
+
+    <input
+        name="tel"
+        value="{row[4]}"
+    >
+
+    <br><br>
+
+    Base
+
+    <input
+        name="base"
+        value="{row[5]}"
+    >
+    <br><br>
+
+    <button>
+    UPDATE
+    </button>
+
+    </form>
+
+    """
 @app.route("/check_customs")
 def check_customs():
 
@@ -2864,6 +3084,255 @@ def check_customs():
         cursor.fetchall()
     )
 
+@app.route("/packing_management")
+def packing_management():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM packing_service
+        """
+    )
+
+    records = cursor.fetchall()
+
+    html = """
+
+    <h1>
+    📦 PACKING MANAGEMENT
+    </h1>
+
+    <form
+    method="POST"
+    action="/add_packing"
+    >
+
+    Company
+    <input name="company">
+
+    Contact
+    <input name="contact">
+
+    Email
+    <input name="email">
+
+    Tel
+    <input name="tel">
+
+    Service
+    <input name="service">
+
+    Base
+    <input name="base">
+
+    <button>
+    SAVE
+    </button>
+
+    </form>
+
+    <hr>
+
+    """
+
+    for row in records:
+
+        html += f"""
+
+        <div
+        style="
+        border:1px solid #ddd;
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:10px;
+        "
+        >
+
+        <b>Company:</b> {row[1]}
+        <br>
+
+        <b>Contact:</b> {row[2]}
+        <br>
+
+        <b>Email:</b> {row[3]}
+        <br>
+
+        <b>Tel:</b> {row[4]}
+        <br>
+
+        <b>Service:</b> {row[5]}
+        <br>
+
+        <b>Base:</b> {row[6]}
+        <br><br>
+
+        <a href="/edit_packing/{row[0]}">
+        ✏️ EDIT
+        </a>
+
+        &nbsp;&nbsp;
+
+        <a href="/delete_packing/{row[0]}">
+        🗑 DELETE
+        </a>
+
+        </div>
+
+        """
+
+    html += """
+
+    <br>
+
+    <a href="/admin">
+    🔙 BACK
+    </a>
+
+    """
+
+    return html
+
+@app.route("/delete_packing/<int:id>")
+def delete_packing(id):
+
+    cursor.execute(
+        """
+        DELETE FROM packing_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/packing_management"
+    )
+
+@app.route(
+    "/add_packing",
+    methods=["POST"]
+)
+def add_packing():
+
+    cursor.execute(
+
+        """
+        INSERT INTO packing_service
+        (
+            company,
+            contact,
+            email,
+            tel,
+            service,
+            base
+        )
+        VALUES
+        (?, ?, ?, ?, ?, ?)
+        """,
+
+        (
+            request.form["company"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"],
+            request.form["service"],
+            request.form["base"]
+        )
+
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/packing_management"
+    )
+
+@app.route("/edit_packing/<int:id>")
+def edit_packing(id):
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM packing_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    row = cursor.fetchone()
+
+    return f"""
+
+    <h1>
+    ✏️ EDIT C
+    </h1>
+
+    <form
+        method="POST"
+        action="/update_packing/{id}"
+    >
+
+    Company
+
+    <input
+        name="company"
+        value="{row[1]}"
+    >
+
+    <br><br>
+
+    Contact
+
+    <input
+        name="contact"
+        value="{row[2]}"
+    >
+
+    <br><br>
+
+    Email
+
+    <input
+        name="email"
+        value="{row[3]}"
+    >
+
+    <br><br>
+
+    Tel
+
+    <input
+        name="tel"
+        value="{row[4]}"
+    >
+
+    <br><br>
+
+    Service
+
+    <input
+        name="service"
+        value="{row[5]}"
+    >
+
+    <br><br>
+
+    Base
+
+    <input
+        name="base"
+        value="{row[6]}"
+    >
+    <br><br>
+
+    <button>
+    UPDATE
+    </button>
+
+    </form>
+
+    """
 @app.route("/check_packing")
 def check_packing():
 
@@ -2875,6 +3344,505 @@ def check_packing():
         cursor.fetchall()
     )
 
+@app.route("/cross_management")
+def cross_management():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM cross_border_service
+        """
+    )
+
+    records = cursor.fetchall()
+
+    html = """
+
+    <h1>
+    🌏 CROSS BORDER MANAGEMENT
+    </h1>
+
+    <form
+    method="POST"
+    action="/add_cross"
+    >
+
+    Company
+    <input name="company">
+
+    Contact
+    <input name="contact">
+
+    Email
+    <input name="email">
+
+    Tel
+    <input name="tel">
+
+    Route
+    <input name="route">
+
+    <button>
+    SAVE
+    </button>
+
+    </form>
+
+    <hr>
+
+    """
+
+    for row in records:
+
+        html += f"""
+
+        <div
+        style="
+        border:1px solid #ddd;
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:10px;
+        "
+        >
+
+        <b>Company:</b> {row[1]}
+        <br>
+
+        <b>Contact:</b> {row[2]}
+        <br>
+
+        <b>Email:</b> {row[3]}
+        <br>
+
+        <b>Tel:</b> {row[4]}
+        <br>
+
+        <b>Route:</b> {row[5]}
+        <br><br>
+
+        <a href="/edit_cross/{row[0]}">
+        ✏️ EDIT
+        </a>
+
+        &nbsp;&nbsp;
+
+        <a href="/delete_cross/{row[0]}">
+        🗑 DELETE
+        </a>
+
+        </div>
+
+        """
+
+    html += """
+
+    <br>
+
+    <a href="/admin">
+    🔙 BACK
+    </a>
+
+    """
+
+    return html
+
+@app.route(
+    "/add_cross",
+    methods=["POST"]
+)
+def add_cross():
+
+    cursor.execute(
+
+        """
+        INSERT INTO cross_border_service
+        (
+            company,
+            contact,
+            email,
+            tel,
+            route
+        )
+        VALUES
+        (?, ?, ?, ?, ?)
+        """,
+
+        (
+            request.form["company"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"],
+            request.form["route"]
+        )
+
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/cross_management"
+    )
+
+@app.route("/delete_cross/<int:id>")
+def delete_cross(id):
+
+    cursor.execute(
+        """
+        DELETE FROM cross_border_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/cross_management"
+    )
+
+@app.route("/edit_cross/<int:id>")
+def edit_cross(id):
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM cross_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    row = cursor.fetchone()
+
+    return f"""
+
+    <h1>
+    ✏️ EDIT C
+    </h1>
+
+    <form
+        method="POST"
+        action="/update_cross/{id}"
+    >
+
+    Company
+
+    <input
+        name="company"
+        value="{row[1]}"
+    >
+
+    <br><br>
+
+    Contact
+
+    <input
+        name="contact"
+        value="{row[2]}"
+    >
+
+    <br><br>
+
+    Email
+
+    <input
+        name="email"
+        value="{row[3]}"
+    >
+
+    <br><br>
+
+    Tel
+
+    <input
+        name="tel"
+        value="{row[4]}"
+    >
+
+    <br><br>
+
+    Route
+
+    <input
+        name="route"
+        value="{row[5]}"
+    >
+
+    <br><br>
+
+    <button>
+    UPDATE
+    </button>
+
+    </form>
+
+    """
+
+@app.route("/insurance_management")
+def insurance_management():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM insurance_service
+        """
+    )
+
+    records = cursor.fetchall()
+
+    html = """
+
+    <h1>
+    🛡 INSURANCE MANAGEMENT
+    </h1>
+
+    <form
+    method="POST"
+    action="/add_insurance"
+    >
+
+    Company
+    <input name="company">
+
+    Department
+    <input name="department">
+
+    Contact
+    <input name="contact">
+
+    Email
+    <input name="email">
+
+    Tel
+    <input name="tel">
+
+    <button>
+    SAVE
+    </button>
+
+    </form>
+
+    <hr>
+
+    """
+
+    for row in records:
+
+        html += f"""
+
+        <div
+        style="
+        border:1px solid #ddd;
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:10px;
+        "
+        >
+
+        <b>Company:</b> {row[1]}
+        <br>
+
+        <b>Department:</b> {row[2]}
+        <br>
+
+        <b>Contact:</b> {row[3]}
+        <br>
+
+        <b>Email:</b> {row[4]}
+        <br>
+
+        <b>Tel:</b> {row[5]}
+        <br><br>
+
+        <a href="/edit_insurance/{row[0]}">
+        ✏️ EDIT
+        </a>
+
+        &nbsp;&nbsp;
+
+        <a href="/delete_insurance/{row[0]}">
+        🗑 DELETE
+        </a>
+
+        </div>
+
+        """
+
+    html += """
+
+    <br>
+
+    <a href="/admin">
+    🔙 BACK
+    </a>
+
+    """
+
+    return html
+
+@app.route(
+    "/add_insurance",
+    methods=["POST"]
+)
+def add_insurance():
+
+    cursor.execute(
+
+        """
+        INSERT INTO insurance_service
+        (
+            company,
+            department,
+            contact,
+            email,
+            tel
+        )
+        VALUES
+        (?, ?, ?, ?, ?)
+        """,
+
+        (
+            request.form["company"],
+            request.form["department"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"]
+        )
+
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/insurance_management"
+    )
+
+@app.route("/delete_insurance/<int:id>")
+def delete_insurance(id):
+
+    cursor.execute(
+        """
+        DELETE FROM insurance_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/insurance_management"
+    )
+
+@app.route("/edit_insurance/<int:id>")
+def edit_insurance(id):
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM insurance_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    row = cursor.fetchone()
+
+    return f"""
+
+    <h1>
+    ✏️ EDIT INSURANCE
+    </h1>
+
+    <form
+    method="POST"
+    action="/update_insurance/{id}"
+    >
+
+    Company
+    <input
+    name="company"
+    value="{row[1]}"
+    >
+
+    <br><br>
+
+    Department
+    <input
+    name="department"
+    value="{row[2]}"
+    >
+
+    <br><br>
+
+    Contact
+    <input
+    name="contact"
+    value="{row[3]}"
+    >
+
+    <br><br>
+
+    Email
+    <input
+    name="email"
+    value="{row[4]}"
+    >
+
+    <br><br>
+
+    Tel
+    <input
+    name="tel"
+    value="{row[5]}"
+    >
+
+    <br><br>
+
+    <button>
+    UPDATE
+    </button>
+
+    </form>
+
+    """
+
+@app.route(
+    "/update_insurance/<int:id>",
+    methods=["POST"]
+)
+def update_insurance(id):
+
+    cursor.execute(
+
+        """
+        UPDATE insurance_service
+        SET
+            company=?,
+            department=?,
+            contact=?,
+            email=?,
+            tel=?
+        WHERE id=?
+        """,
+
+        (
+            request.form["company"],
+            request.form["department"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"],
+            id
+        )
+
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/insurance_management"
+    )
+
 @app.route("/check_insurance")
 def check_insurance():
 
@@ -2884,6 +3852,289 @@ def check_insurance():
 
     return str(
         cursor.fetchall()
+    )
+
+@app.route("/trucking_management")
+def trucking_management():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM trucking_service
+        """
+    )
+
+    records = cursor.fetchall()
+
+    html = """
+
+    <h1>
+    🚛 TRUCKING MANAGEMENT
+    </h1>
+
+    <form
+    method="POST"
+    action="/add_trucking"
+    >
+
+    Company
+    <input name="company">
+
+    Contact
+    <input name="contact">
+
+    Email
+    <input name="email">
+
+    Tel
+    <input name="tel">
+
+    Type
+    <input name="type">
+
+    Base
+    <input name="base">
+
+    <button>
+    SAVE
+    </button>
+
+    </form>
+
+    <hr>
+
+    """
+
+    for row in records:
+
+        html += f"""
+
+        <div
+        style="
+        border:1px solid #ddd;
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:10px;
+        "
+        >
+
+        <b>Company:</b> {row[1]}
+        <br>
+
+        <b>Contact:</b> {row[2]}
+        <br>
+
+        <b>Email:</b> {row[3]}
+        <br>
+
+        <b>Tel:</b> {row[4]}
+        <br>
+
+        <b>Type:</b> {row[5]}
+        <br>
+
+        <b>Base:</b> {row[6]}
+        <br><br>
+
+        <a href="/edit_trucking/{row[0]}">
+        ✏️ EDIT
+        </a>
+
+        &nbsp;&nbsp;
+
+        <a href="/delete_trucking/{row[0]}">
+        🗑 DELETE
+        </a>
+
+        </div>
+
+        """
+
+    html += """
+
+    <br>
+
+    <a href="/admin">
+    🔙 BACK
+    </a>
+
+    """
+
+    return html
+
+@app.route(
+    "/add_trucking",
+    methods=["POST"]
+)
+def add_trucking():
+
+    cursor.execute(
+
+        """
+        INSERT INTO trucking_service
+        (
+            company,
+            contact,
+            email,
+            tel,
+            type,
+            base
+        )
+        VALUES
+        (?, ?, ?, ?, ?, ?)
+        """,
+
+        (
+            request.form["company"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"],
+            request.form["type"],
+            request.form["base"]
+        )
+
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/trucking_management"
+    )
+
+@app.route("/delete_trucking/<int:id>")
+def delete_trucking(id):
+
+    cursor.execute(
+        """
+        DELETE FROM trucking_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/trucking_management"
+    )
+
+@app.route("/edit_trucking/<int:id>")
+def edit_trucking(id):
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM trucking_service
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    row = cursor.fetchone()
+
+    return f"""
+
+    <h1>
+    ✏️ EDIT TRUCKING
+    </h1>
+
+    <form
+    method="POST"
+    action="/update_trucking/{id}"
+    >
+
+    Company
+    <input
+    name="company"
+    value="{row[1]}"
+    >
+
+    <br><br>
+
+    Contact
+    <input
+    name="contact"
+    value="{row[2]}"
+    >
+
+    <br><br>
+
+    Email
+    <input
+    name="email"
+    value="{row[3]}"
+    >
+
+    <br><br>
+
+    Tel
+    <input
+    name="tel"
+    value="{row[4]}"
+    >
+
+    <br><br>
+
+    Type
+    <input
+    name="type"
+    value="{row[5]}"
+    >
+
+    <br><br>
+
+    Base
+    <input
+    name="base"
+    value="{row[6]}"
+    >
+
+    <br><br>
+
+    <button>
+    UPDATE
+    </button>
+
+    </form>
+
+    """
+
+@app.route(
+    "/update_trucking/<int:id>",
+    methods=["POST"]
+)
+def update_trucking(id):
+
+    cursor.execute(
+
+        """
+        UPDATE trucking_service
+        SET
+            company=?,
+            contact=?,
+            email=?,
+            tel=?,
+            type=?,
+            base=?
+        WHERE id=?
+        """,
+
+        (
+            request.form["company"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"],
+            request.form["type"],
+            request.form["base"],
+            id
+        )
+
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/trucking_management"
     )
 
 @app.route("/check_trucking")
