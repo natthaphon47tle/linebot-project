@@ -4493,290 +4493,6 @@ def handle_follow(event):
     )
 
 # =========================
-# SEARCH COURIER
-# =========================
-
-cursor.execute(
-
-    """
-    SELECT
-    company,
-    contact,
-    email,
-    tel
-    FROM courier_service
-    WHERE lower(company)
-    LIKE ?
-    """,
-
-    (
-        f"%{text.lower()}%",
-    )
-
-)
-
-result = cursor.fetchone()
-
-if result:
-
-    reply = f"""
-🚚 COURIER
-
-Company : {result[0]}
-Contact : {result[1]}
-Email : {result[2]}
-Tel : {result[3]}
-"""
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(
-            text=reply
-        )
-    )
-
-    return
-
-# =========================
-# SEARCH CUSTOMS
-# =========================
-
-cursor.execute(
-
-    """
-    SELECT
-    company,
-    contact,
-    email,
-    tel,
-    base
-    FROM customs_service
-    WHERE lower(company)
-    LIKE ?
-    """,
-
-    (
-        f"%{text.lower()}%",
-    )
-
-)
-
-result = cursor.fetchone()
-
-if result:
-
-    reply = f"""
-📄 CUSTOMS
-
-Company : {result[0]}
-Contact : {result[1]}
-Email : {result[2]}
-Tel : {result[3]}
-Base : {result[4]}
-"""
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(
-            text=reply
-        )
-    )
-
-    return
-
-# =========================
-# SEARCH PACKING
-# =========================
-
-cursor.execute(
-
-    """
-    SELECT
-    company,
-    contact,
-    email,
-    tel,
-    service,
-    base
-    FROM packing_service
-    WHERE lower(company)
-    LIKE ?
-    """,
-
-    (
-        f"%{text.lower()}%",
-    )
-
-)
-
-result = cursor.fetchone()
-
-if result:
-
-    reply = f"""
-📦 PACKING
-
-Company : {result[0]}
-Contact : {result[1]}
-Email : {result[2]}
-Tel : {result[3]}
-Service : {result[4]}
-Base : {result[5]}
-"""
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(
-            text=reply
-        )
-    )
-
-    return
-
-# =========================
-# SEARCH CROSS_BORDER
-# =========================
-
-cursor.execute(
-
-    """
-    SELECT
-    company,
-    contact,
-    email,
-    tel,
-    route
-    FROM cross_border_service
-    WHERE lower(company)
-    LIKE ?
-    """,
-
-    (
-        f"%{text.lower()}%",
-    )
-
-)
-
-result = cursor.fetchone()
-
-if result:
-
-    reply = f"""
-🌏 CROSS BORDER
-
-Company : {result[0]}
-Contact : {result[1]}
-Email : {result[2]}
-Tel : {result[3]}
-Route : {result[4]}
-"""
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(
-            text=reply
-        )
-    )
-
-    return
-
-# =========================
-# SEARCH INSURANCE
-# =========================
-
-cursor.execute(
-
-    """
-    SELECT
-    company,
-    department,
-    contact,
-    email,
-    tel
-    FROM insurance_service
-    WHERE lower(company)
-    LIKE ?
-    """,
-
-    (
-        f"%{text.lower()}%",
-    )
-
-)
-
-result = cursor.fetchone()
-
-if result:
-
-    reply = f"""
-🛡 INSURANCE
-
-Company : {result[0]}
-Department : {result[1]}
-Contact : {result[2]}
-Email : {result[3]}
-Tel : {result[4]}
-"""
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(
-            text=reply
-        )
-    )
-
-    return
-
-# =========================
-# SEARCH TRUCKING
-# =========================
-
-cursor.execute(
-
-    """
-    SELECT
-    company,
-    contact,
-    email,
-    tel,
-    type,
-    base
-    FROM trucking_service
-    WHERE lower(company)
-    LIKE ?
-    """,
-
-    (
-        f"%{text.lower()}%",
-    )
-
-)
-
-result = cursor.fetchone()
-
-if result:
-
-    reply = f"""
-🚛 TRUCKING
-
-Company : {result[0]}
-Contact : {result[1]}
-Email : {result[2]}
-Tel : {result[3]}
-Type : {result[4]}
-Base : {result[5]}
-"""
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(
-            text=reply
-        )
-    )
-
-    return
-
-# =========================
 # MESSAGE EVENT
 # =========================
 
@@ -4833,6 +4549,290 @@ def handle_message(event):
             )
 
             return
+
+    # =========================
+    # SEARCH COURIER
+    # =========================
+
+    cursor.execute(
+
+        """
+        SELECT
+        company,
+        contact,
+        email,
+        tel
+        FROM courier_service
+        WHERE lower(company)
+        LIKE ?
+        """,
+
+        (
+            f"%{text.lower()}%",
+        )
+
+    )
+
+    result = cursor.fetchone()
+
+    if result:
+
+        reply = f"""
+    🚚 COURIER
+
+    Company : {result[0]}
+    Contact : {result[1]}
+    Email : {result[2]}
+    Tel : {result[3]}
+    """
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(
+                text=reply
+            )
+        )
+
+        return
+
+    # =========================
+    # SEARCH CUSTOMS
+    # =========================
+
+    cursor.execute(
+
+        """
+        SELECT
+        company,
+        contact,
+        email,
+        tel,
+        base
+        FROM customs_service
+        WHERE lower(company)
+        LIKE ?
+        """,
+
+        (
+            f"%{text.lower()}%",
+        )
+
+    )
+
+    result = cursor.fetchone()
+
+    if result:
+
+        reply = f"""
+    📄 CUSTOMS
+
+    Company : {result[0]}
+    Contact : {result[1]}
+    Email : {result[2]}
+    Tel : {result[3]}
+    Base : {result[4]}
+    """
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(
+                text=reply
+            )
+        )
+
+        return
+
+    # =========================
+    # SEARCH PACKING
+    # =========================
+
+    cursor.execute(
+
+        """
+        SELECT
+        company,
+        contact,
+        email,
+        tel,
+        service,
+        base
+        FROM packing_service
+        WHERE lower(company)
+        LIKE ?
+        """,
+
+        (
+            f"%{text.lower()}%",
+        )
+
+    )
+
+    result = cursor.fetchone()
+
+    if result:
+
+        reply = f"""
+    📦 PACKING
+
+    Company : {result[0]}
+    Contact : {result[1]}
+    Email : {result[2]}
+    Tel : {result[3]}
+    Service : {result[4]}
+    Base : {result[5]}
+    """
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(
+                text=reply
+            )
+        )
+
+        return
+
+    # =========================
+    # SEARCH CROSS_BORDER
+    # =========================
+
+    cursor.execute(
+
+        """
+        SELECT
+        company,
+        contact,
+        email,
+        tel,
+        route
+        FROM cross_border_service
+        WHERE lower(company)
+        LIKE ?
+        """,
+
+        (
+            f"%{text.lower()}%",
+        )
+
+    )
+
+    result = cursor.fetchone()
+
+    if result:
+
+        reply = f"""
+    🌏 CROSS BORDER
+
+    Company : {result[0]}
+    Contact : {result[1]}
+    Email : {result[2]}
+    Tel : {result[3]}
+    Route : {result[4]}
+    """
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(
+                text=reply
+            )
+        )
+
+        return
+
+    # =========================
+    # SEARCH INSURANCE
+    # =========================
+
+    cursor.execute(
+
+        """
+        SELECT
+        company,
+        department,
+        contact,
+        email,
+        tel
+        FROM insurance_service
+        WHERE lower(company)
+        LIKE ?
+        """,
+
+        (
+            f"%{text.lower()}%",
+        )
+
+    )
+
+    result = cursor.fetchone()
+
+    if result:
+
+        reply = f"""
+    🛡 INSURANCE
+
+    Company : {result[0]}
+    Department : {result[1]}
+    Contact : {result[2]}
+    Email : {result[3]}
+    Tel : {result[4]}
+    """
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(
+                text=reply
+            )
+        )
+
+        return
+
+    # =========================
+    # SEARCH TRUCKING
+    # =========================
+
+    cursor.execute(
+
+        """
+        SELECT
+        company,
+        contact,
+        email,
+        tel,
+        type,
+        base
+        FROM trucking_service
+        WHERE lower(company)
+        LIKE ?
+        """,
+
+        (
+            f"%{text.lower()}%",
+        )
+
+    )
+
+    result = cursor.fetchone()
+
+    if result:
+
+        reply = f"""
+    🚛 TRUCKING
+
+    Company : {result[0]}
+    Contact : {result[1]}
+    Email : {result[2]}
+    Tel : {result[3]}
+    Type : {result[4]}
+    Base : {result[5]}
+    """
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(
+                text=reply
+            )
+        )
+
+        return
 
     if DEBUG_MODE:
 
