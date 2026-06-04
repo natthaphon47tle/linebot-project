@@ -4998,26 +4998,26 @@ def handle_message(event):
 
         if result:
 
-        for row in records:
+            for row in records:
 
-            reply += f"""
-    📄 {row[0]}
-    👤 {row[1]}
-    📧 {row[2]}
-    📞 {row[3]}
-    📍 {row[4]}
+                reply += f"""
+        📄 {row[0]}
+        👤 {row[1]}
+        📧 {row[2]}
+        📞 {row[3]}
+        📍 {row[4]}
 
-    ----------------
-    """
+        ----------------
+        """
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(
-                text=reply[:5000]
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(
+                    text=reply[:5000]
+                )
             )
-        )
 
-        return
+            return
 
     # =========================
     # COURIER
@@ -5040,25 +5040,25 @@ def handle_message(event):
 
         if result:
 
-        for row in records:
+            for row in records:
 
-            reply += f"""
-    🚚 {row[0]}
-    👤 {row[1]}
-    📧 {row[2]}
-    📞 {row[3]}
+                reply += f"""
+        🚚 {row[0]}
+        👤 {row[1]}
+        📧 {row[2]}
+        📞 {row[3]}
 
-    -------------------
-    """
+        -------------------
+        """
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(
-                text=reply[:5000]
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(
+                    text=reply[:5000]
+                )
             )
-        )
 
-        return
+            return
 
     # =========================
     # CROSS BORDER
