@@ -1025,7 +1025,7 @@ def upload_excel():
                 """
                 INSERT INTO courier_service
                 VALUES
-                (?, ?, ?, ?, ?, ?)
+                (?, ?, ?, ?)
                 """,
 
                 (
@@ -1033,8 +1033,6 @@ def upload_excel():
                     str(row["contact"]),
                     str(row["email"]),
                     str(row["tel"]),
-                    str(row["Type"]),
-                    str(row["Base"])
                 )
 
             )
@@ -2343,14 +2341,6 @@ def courier_management():
 
     <input name="tel">
 
-    Type
-
-    <input name="service_type">
-
-    Base
-
-    <input name="base">
-
     <button>
     SAVE
     </button>
@@ -2387,14 +2377,6 @@ def courier_management():
         <br>
  
         <b>Tel:</b> {row[3]}
-
-        <br>
-
-        <b>Type:</b> {row[4]}
-
-        <br>
-
-        <b>Base:</b> {row[5]}
 
         <br><br>
 
