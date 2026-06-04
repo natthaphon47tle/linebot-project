@@ -4573,7 +4573,7 @@ def handle_message(event):
 
     )
 
-    result = cursor.fetchone()
+    results = cursor.fetchall()
 
     if result:
 
@@ -4619,7 +4619,7 @@ def handle_message(event):
 
     )
 
-    result = cursor.fetchone()
+    results = cursor.fetchall()
 
     if result:
 
@@ -4667,7 +4667,7 @@ def handle_message(event):
 
     )
 
-    result = cursor.fetchone()
+    results = cursor.fetchall()
 
     if result:
 
@@ -4715,7 +4715,7 @@ def handle_message(event):
 
     )
 
-    result = cursor.fetchone()
+    results = cursor.fetchall()
 
     if result:
 
@@ -4742,44 +4742,38 @@ def handle_message(event):
     # SEARCH INSURANCE
     # =========================
 
-    cursor.execute(
+    if text.lower() == "insurance":
 
-        """
-        SELECT
-        company,
-        department,
-        contact,
-        email,
-        tel
-        FROM insurance_service
-        WHERE lower(company)
-        LIKE ?
-        """,
-
-        (
-            f"%{text.lower()}%",
+        cursor.execute(
+            """
+            SELECT
+            company,
+            department,
+            contact,
+            email,
+            tel
+            FROM insurance_service
+            """
         )
 
-    )
+        results = cursor.fetchall()
 
-    result = cursor.fetchone()
+        reply = "🛡 INSURANCE\n\n"
 
-    if result:
+        for row in results:
 
-        reply = f"""
-    🛡 INSURANCE
+            reply += f"""
+    {row[0]}
+    👤 {row[2]}
+    📧 {row[3]}
+    📞 {row[4]}
 
-    Company : {result[0]}
-    Department : {result[1]}
-    Contact : {result[2]}
-    Email : {result[3]}
-    Tel : {result[4]}
     """
 
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
-                text=reply
+                text=reply[:5000]
             )
         )
 
@@ -4810,7 +4804,7 @@ def handle_message(event):
 
     )
 
-    result = cursor.fetchone()
+    results = cursor.fetchall()
 
     if result:
 
