@@ -3506,7 +3506,7 @@ def edit_cross(id):
     cursor.execute(
         """
         SELECT *
-        FROM cross_service
+        FROM cross_border_service
         WHERE id=?
         """,
         (id,)
@@ -4657,15 +4657,17 @@ def handle_message(event):
 
     results = cursor.fetchall()
 
-    if result:
+    if results:
+
+        row = results[0]
 
         reply = f"""
     🚚 COURIER
 
-    Company : {result[0]}
-    Contact : {result[1]}
-    Email : {result[2]}
-    Tel : {result[3]}
+    Company : {row[0]}
+    Contact : {row[1]}
+    Email : {row[2]}
+    Tel : {row[3]}
     """
 
         line_bot_api.reply_message(
@@ -4703,7 +4705,9 @@ def handle_message(event):
 
     results = cursor.fetchall()
 
-    if result:
+    if results:
+
+    row = results[0]
 
         reply = f"""
     📄 CUSTOMS
@@ -4751,7 +4755,9 @@ def handle_message(event):
 
     results = cursor.fetchall()
 
-    if result:
+    if results:
+
+    row = results[0]
 
         reply = f"""
     📦 PACKING
@@ -4799,7 +4805,9 @@ def handle_message(event):
 
     results = cursor.fetchall()
 
-    if result:
+    if results:
+
+    row = results[0]
 
         reply = f"""
     🌏 CROSS BORDER
