@@ -4660,10 +4660,10 @@ def handle_message(event):
         for row in results:
 
             reply += f"""
-    {row[0]}
-    👤 {row[1]}
-    📧 {row[2]}
-    📞 {row[3]}
+    Company{row[0]}
+    Contact{row[1]}
+    E-mail{row[2]}
+    Tel{row[3]}
 
     """
 
@@ -4850,10 +4850,10 @@ def handle_message(event):
         for row in results:
 
             reply += f"""
-    {row[0]}
-    👤 {row[2]}
-    📧 {row[3]}
-    📞 {row[4]}
+    Company{row[0]}
+    Contact {row[2]}
+    E-mail{row[3]}
+    Tel{row[4]}
 
     """
 
