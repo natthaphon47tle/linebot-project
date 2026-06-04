@@ -4659,7 +4659,7 @@ def handle_message(event):
 
     if results:
 
-        row = row[0]
+        row = results[0]
 
         reply = f"""
     🚚 COURIER
@@ -4707,16 +4707,16 @@ def handle_message(event):
 
     if results:
 
-    row = row[0]
+        row = results[0]
 
         reply = f"""
     📄 CUSTOMS
 
-    Company : {result[0]}
-    Contact : {result[1]}
-    Email : {result[2]}
-    Tel : {result[3]}
-    Base : {result[4]}
+    Company : {row[0]}
+    Contact : {row[1]}
+    Email : {row[2]}
+    Tel : {row[3]}
+    Base : {row[4]}
     """
 
         line_bot_api.reply_message(
@@ -4757,17 +4757,17 @@ def handle_message(event):
 
     if results:
 
-    row = row[0]
+        row = results[0]
 
         reply = f"""
     📦 PACKING
 
-    Company : {result[0]}
-    Contact : {result[1]}
-    Email : {result[2]}
-    Tel : {result[3]}
-    Service : {result[4]}
-    Base : {result[5]}
+    Company : {row[0]}
+    Contact : {row[1]}
+    Email : {row[2]}
+    Tel : {row[3]}
+    Service : {row[4]}
+    Base : {row[5]}
     """
 
         line_bot_api.reply_message(
@@ -4807,16 +4807,16 @@ def handle_message(event):
 
     if results:
 
-    row = row[0]
+        row = results[0]
 
         reply = f"""
     🌏 CROSS BORDER
 
-    Company : {result[0]}
-    Contact : {result[1]}
-    Email : {result[2]}
-    Tel : {result[3]}
-    Route : {result[4]}
+    Company : {row[0]}
+    Contact : {row[1]}
+    Email : {row[2]}
+    Tel : {row[3]}
+    Route : {row[4]}
     """
 
         line_bot_api.reply_message(
@@ -4897,16 +4897,17 @@ def handle_message(event):
     results = cursor.fetchall()
 
     if result:
+        row = results[0]
 
         reply = f"""
     🚛 TRUCKING
 
-    Company : {result[0]}
-    Contact : {result[1]}
-    Email : {result[2]}
-    Tel : {result[3]}
-    Type : {result[4]}
-    Base : {result[5]}
+    Company : {row[0]}
+    Contact : {row[1]}
+    Email : {row[2]}
+    Tel : {row[3]}
+    Type : {row[4]}
+    Base : {row[5]}
     """
 
         line_bot_api.reply_message(
