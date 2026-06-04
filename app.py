@@ -2471,11 +2471,11 @@ def delete_courier(company):
         "/courier_management"
     )
 
-@app.route("/check_courier")
-def check_courier():
+@app.route("/check_courier_table")
+def check_courier_table():
 
     cursor.execute(
-        "SELECT * FROM courier_service"
+        "PRAGMA table_info(courier_service)"
     )
 
     return str(cursor.fetchall())
