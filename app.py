@@ -4838,178 +4838,178 @@ def delete_category(id):
 @app.route("/faq_management")
 def faq_management():
 
-search = request.args.get(
-    "search",
-    ""
-)
+    search = request.args.get(
+        "search",
+        ""
+    )
 
-if search:
+    if search:
 
-    cursor.execute(
-        """
-        SELECT rowid,*
-        FROM faq
-        WHERE lower(keyword) LIKE ?
-        ORDER BY keyword
-        """,
-        (
-            f"%{search.lower()}%",
+        cursor.execute(
+            """
+            SELECT rowid,*
+            FROM faq
+            WHERE lower(keyword) LIKE ?
+            ORDER BY keyword
+            """,
+            (
+                f"%{search.lower()}%",
+            )
         )
-    )
 
-else:
+    else:
 
+        cursor.execute(
+            """
+            SELECT rowid,*
+            FROM faq
+            ORDER BY keyword
+            """
+        )
+
+    records = cursor.fetchall()
+
+    # โหลด Category จาก Database
     cursor.execute(
         """
-        SELECT rowid,*
-        FROM faq
-        ORDER BY keyword
+        SELECT category_name
+        FROM faq_categories
+        ORDER BY category_name
         """
     )
 
-records = cursor.fetchall()
+    categories = cursor.fetchall()
 
-# โหลด Category จาก Database
-cursor.execute(
-    """
-    SELECT category_name
-    FROM faq_categories
-    ORDER BY category_name
-    """
-)
+    category_options = ""
 
-categories = cursor.fetchall()
+    for category in categories:
 
-category_options = ""
+        category_options += f"""
+        <option value="{category[0]}">
+        {category[0]}
+        </option>
+        """
 
-for category in categories:
+    html = f"""
 
-    category_options += f"""
-    <option value="{category[0]}">
-    {category[0]}
-    </option>
-    """
+    <h1>📚 FAQ MANAGEMENT</h1>
 
-html = f"""
+    <form method="GET">
 
-<h1>📚 FAQ MANAGEMENT</h1>
+        <input
+        name="search"
+        placeholder="Search FAQ"
+        style="
+        width:300px;
+        padding:8px;
+        "
+        >
 
-<form method="GET">
+        <button>
+        🔍 Search
+        </button>
 
-    <input
-    name="search"
-    placeholder="Search FAQ"
-    style="
-    width:300px;
-    padding:8px;
-    "
-    >
-
-    <button>
-    🔍 Search
-    </button>
-
-</form>
-
-<br>
-
-<form method="POST" action="/add_faq">
-
-    Category
+    </form>
 
     <br>
 
-    <select name="category">
+    <form method="POST" action="/add_faq">
 
-    {category_options}
+        Category
 
-    </select>
+        <br>
 
-    <br><br>
+        <select name="category">
 
-    Keyword
+        {category_options}
+
+        </select>
+
+        <br><br>
+
+        Keyword
+
+        <br>
+
+        <input
+        name="keyword"
+        style="width:300px;"
+        >
+
+        <br><br>
+
+        Answer
+
+        <br>
+
+        <textarea
+        name="answer"
+        rows="8"
+        cols="60"
+        ></textarea>
+
+        <br><br>
+
+        <button>
+        SAVE
+        </button>
+
+    </form>
+
+    <hr>
+
+    """
+
+    for row in records:
+
+        html += f"""
+
+        <div
+        style="
+        border:1px solid #ddd;
+        padding:15px;
+        margin:10px;
+        border-radius:10px;
+        "
+        >
+
+        <b>Category:</b> {row[1]}
+
+        <br><br>
+
+        <b>Keyword:</b> {row[2]}
+
+        <br><br>
+
+        {row[3]}
+
+        <br><br>
+
+        <a href="/edit_faq/{row[0]}">
+        ✏️ EDIT
+        </a>
+
+        &nbsp;&nbsp;
+
+        <a href="/delete_faq/{row[0]}">
+        🗑 DELETE
+        </a>
+
+        </div>
+
+        """
+
+    html += """
 
     <br>
 
-    <input
-    name="keyword"
-    style="width:300px;"
-    >
-
-    <br><br>
-
-    Answer
-
-    <br>
-
-    <textarea
-    name="answer"
-    rows="8"
-    cols="60"
-    ></textarea>
-
-    <br><br>
-
-    <button>
-    SAVE
-    </button>
-
-</form>
-
-<hr>
-
-"""
-
-for row in records:
-
-    html += f"""
-
-    <div
-    style="
-    border:1px solid #ddd;
-    padding:15px;
-    margin:10px;
-    border-radius:10px;
-    "
-    >
-
-    <b>Category:</b> {row[1]}
-
-    <br><br>
-
-    <b>Keyword:</b> {row[2]}
-
-    <br><br>
-
-    {row[3]}
-
-    <br><br>
-
-    <a href="/edit_faq/{row[0]}">
-    ✏️ EDIT
+    <a href="/admin">
+    🔙 BACK
     </a>
 
-    &nbsp;&nbsp;
-
-    <a href="/delete_faq/{row[0]}">
-    🗑 DELETE
-    </a>
-
-    </div>
-
     """
-
-html += """
-
-<br>
-
-<a href="/admin">
-🔙 BACK
-</a>
-
-"""
-
-return html
+ 
+    return html
 
 @app.route(
     "/add_faq",
