@@ -4686,10 +4686,15 @@ def faq_management():
 
         <br><br>
 
+        <a href="/edit_faq/{row[0]}">
+        ✏️ EDIT
+        </a>
+
+        &nbsp;&nbsp;
+
         <a href="/delete_faq/{row[0]}">
         🗑 DELETE
         </a>
-
         </div>
 
         """
@@ -4750,6 +4755,103 @@ def delete_faq(id):
         WHERE rowid=?
         """,
         (id,)
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/faq_management"
+    )
+
+@app.route("/edit_faq/<int:id>")
+def edit_faq(id):
+
+    cursor.execute(
+        """
+        SELECT rowid,* 
+        FROM faq
+        WHERE rowid=?
+        """,
+        (id,)
+    )
+
+    row = cursor.fetchone()
+
+    html = f"""
+
+    <h1>✏️ EDIT FAQ</h1>
+
+    <form
+    method="POST"
+    action="/update_faq/{id}"
+    >
+
+    Keyword
+
+    <br>
+
+    <input
+    name="keyword"
+    value="{row[1]}"
+    style="width:400px;"
+    >
+
+    <br><br>
+
+    Answer
+
+    <br>
+
+    <textarea
+    name="answer"
+    rows="10"
+    cols="80"
+    >{row[2]}</textarea>
+
+    <br><br>
+
+    <button>
+    SAVE
+    </button>
+
+    </form>
+
+    <br>
+
+    <a href="/faq_management">
+    🔙 BACK
+    </a>
+
+    """
+
+    return html
+
+@app.route(
+    "/update_faq/<int:id>",
+    methods=["POST"]
+)
+def update_faq(id):
+
+    keyword = request.form["keyword"]
+
+    answer = request.form["answer"]
+
+    cursor.execute(
+
+        """
+        UPDATE faq
+        SET
+        keyword=?,
+        answer=?
+        WHERE rowid=?
+        """,
+
+        (
+            keyword.lower(),
+            answer,
+            id
+        )
+
     )
 
     conn.commit()
