@@ -4623,16 +4623,60 @@ def check_users():
 @app.route("/faq_management")
 def faq_management():
 
-    cursor.execute("""
-    SELECT rowid,* FROM faq
-    ORDER BY keyword
-    """)
+    search = request.args.get(
+    "search",
+    ""
+    )
+
+    if search:
+
+        cursor.execute(
+            """
+            SELECT rowid,*
+            FROM faq
+            WHERE lower(keyword)
+            LIKE ?
+            ORDER BY keyword
+            """,
+            (
+                f"%{search.lower()}%",
+            )
+        )
+
+    else:
+
+        cursor.execute(
+            """
+            SELECT rowid,*
+            FROM faq
+            ORDER BY keyword
+            """
+        )
 
     records = cursor.fetchall()
 
     html = """
 
     <h1>📚 FAQ MANAGEMENT</h1>
+
+    <form method="GET">
+
+    <input
+    name="search"
+    placeholder="Search FAQ"
+    style="
+    width:300px;
+    padding:8px;
+    "
+    >
+
+    <button>
+    🔍 Search
+    </button>
+
+    </form>
+
+    <br>
 
     <form method="POST" action="/add_faq">
 
