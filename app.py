@@ -4241,7 +4241,7 @@ def dashboard():
 
 <style>
 
-body{{
+.body{{
     font-family:Arial,sans-serif;
     background:#f4f7fc;
     margin:0;
@@ -4319,7 +4319,7 @@ body{{
     margin-top:30px;
 }}
 
-.quick-grid{
+.quick-grid{{
 
     display:grid;
 
@@ -4331,7 +4331,7 @@ body{{
     margin-top:30px;
 }
 
-.quick-card{
+.quick-card{{
 
     background:white;
 
@@ -4349,7 +4349,7 @@ body{{
     transition:0.3s;
 }
 
-.quick-card:hover{
+.quick-card:hover{{
 
     transform:translateY(-5px);
 
@@ -4357,7 +4357,7 @@ body{{
     0 8px 20px rgba(0,0,0,0.15);
 }
 
-.quick-title{
+.quick-title{{
 
     font-size:22px;
 
@@ -4366,7 +4366,7 @@ body{{
     margin-bottom:10px;
 }
 
-.quick-desc{
+.quick-desc{{
 
     color:#666;
 }
