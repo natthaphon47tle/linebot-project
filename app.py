@@ -4337,6 +4337,8 @@ body{{
 
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
@@ -4412,6 +4414,16 @@ body{{
 
     </div>
 
+<div class="card">
+
+    <h2>
+    📊 Logistics Service Overview
+    </h2>
+
+    <canvas id="serviceChart"></canvas>
+
+</div>
+
 <div class="menu">
 
     <a href="/admin">
@@ -4427,6 +4439,72 @@ body{{
     </a>
 
 </div>
+
+<script>
+
+const ctx =
+document.getElementById(
+'serviceChart'
+);
+
+new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: [
+
+            'Courier',
+            'Customs',
+            'Packing',
+            'Cross Border',
+            'Insurance',
+            'Trucking'
+
+        ],
+
+        datasets: [{
+
+            label:
+            'Companies',
+
+            data: [
+
+                {courier_count},
+                {customs_count},
+                {packing_count},
+                {cross_count},
+                {insurance_count},
+                {trucking_count}
+
+            ],
+
+            borderWidth: 1
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+
+                display: false
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
 
 </body>
 
