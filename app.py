@@ -5404,7 +5404,7 @@ Base : {row[5]}
 
     cursor.execute(
         """
-        SELECT company, contact, E-mail, Tel
+        SELECT company, contact, Email, Tel
         FROM courier_service
         WHERE lower(company) LIKE ?
         """,
@@ -5532,7 +5532,7 @@ Route : {row[4]}
 
     cursor.execute(
         """
-        SELECT company, contact, E-mail, Tel
+        SELECT company, contact, Email, Tel
         FROM insurance_service
         WHERE lower(company) LIKE ?
         """,
