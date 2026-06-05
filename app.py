@@ -4904,6 +4904,26 @@ def update_faq(id):
         "/faq_management"
     )
 
+@app.route("/update_faq_table")
+def update_faq_table():
+
+    try:
+
+        cursor.execute(
+            """
+            ALTER TABLE faq
+            ADD COLUMN category TEXT
+            """
+        )
+
+        conn.commit()
+
+        return "SUCCESS"
+
+    except Exception as e:
+
+        return str(e)
+
 # =========================
 # WEBHOOK
 # =========================
