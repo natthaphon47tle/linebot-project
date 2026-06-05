@@ -5023,6 +5023,44 @@ def check_category():
 
     return str(cursor.fetchall())
 
+@app.route("/create_default_categories")
+def create_default_categories():
+
+    categories = [
+
+        "Customs",
+        "Shipping",
+        "Insurance",
+        "Trucking",
+        "Cross Border",
+        "Warehouse",
+        "General"
+
+    ]
+
+    for category in categories:
+
+        cursor.execute(
+
+            """
+            INSERT INTO faq_categories
+            (
+                category_name
+            )
+            VALUES
+            (?)
+            """,
+
+            (
+                category,
+            )
+
+        )
+
+    conn.commit()
+
+    return "SUCCESS"
+
 @app.route(
     "/add_faq",
     methods=["POST"]
