@@ -4983,6 +4983,15 @@ def update_faq_table():
 
         return str(e)
 
+@app.route("/check_faq_table")
+def check_faq_table():
+
+    cursor.execute(
+        "PRAGMA table_info(faq)"
+    )
+
+    return str(cursor.fetchall())
+
 # =========================
 # WEBHOOK
 # =========================
