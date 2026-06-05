@@ -175,6 +175,18 @@ CREATE TABLE IF NOT EXISTS courier_service (
 """)
 
 cursor.execute("""
+CREATE TABLE IF NOT EXISTS faq_categories (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    category_name TEXT
+
+)
+""")
+
+conn.commit()
+
+cursor.execute("""
 CREATE TABLE IF NOT EXISTS customs_service (
 
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -853,6 +865,10 @@ button:hover{
 
     <a href="/faq_management">
     📚 FAQ MANAGEMENT
+    </a>
+
+    <a href="/faq_category_management">
+    📂 FAQ CATEGORY
     </a>
 
     </div>
@@ -4621,124 +4637,38 @@ def check_users():
 
     return str(cursor.fetchall())
 
-@app.route("/faq_management")
-def faq_management():
+@app.route("/faq_category_management")
+def faq_category_management():
 
-    search = request.args.get(
-    "search",
-    ""
+    cursor.execute(
+        """
+        SELECT *
+        FROM faq_categories
+        ORDER BY category_name
+        """
     )
-
-    if search:
-
-        cursor.execute(
-            """
-            SELECT rowid,*
-            FROM faq
-            WHERE lower(keyword)
-            LIKE ?
-            ORDER BY keyword
-            """,
-            (
-                f"%{search.lower()}%",
-            )
-        )
-
-    else:
-
-        cursor.execute(
-            """
-            SELECT rowid,*
-            FROM faq
-            ORDER BY keyword
-            """
-        )
 
     records = cursor.fetchall()
 
     html = """
 
-    <h1>📚 FAQ MANAGEMENT</h1>
+    <h1>📂 FAQ CATEGORY MANAGEMENT</h1>
 
-    <form method="GET">
-
-    <input
-    name="search"
-    placeholder="Search FAQ"
-    style="
-    width:300px;
-    padding:8px;
-    "
+    <form
+    method="POST"
+    action="/add_category"
     >
 
-    <button>
-    🔍 Search
-    </button>
-
-    </form>
-
-    <br>
-
-    <form method="POST" action="/add_faq">
-
-    Keyword
-
-    Category
-
-    <br>
-
-    <select name="category">
-
-    <option>
-    Customs
-    </option>
-
-    <option>
-    Shipping
-    </option>
-
-    <option>
-    Warehouse
-    </option>
-
-    <option>
-    Trucking
-    </option>
-
-    <option>
-    Insurance
-    </option>
-
-    <option>
-    Cross Border
-    </option>
-
-    <option>
-    General
-    </option>
-
-    </select>
+    Category Name
 
     <br><br>
 
-    <input name="keyword">
-
-    <br><br>
-
-    Answer
-
-    <br>
-
-    <textarea
-    name="answer"
-    rows="8"
-    cols="60">
-    </textarea>
+    <input name="category_name">
 
     <br><br>
 
     <button>
-    SAVE
+    ADD CATEGORY
     </button>
 
     </form>
@@ -4760,29 +4690,20 @@ def faq_management():
         "
         >
 
-        <b>Category:</b>
         {row[1]}
 
         <br><br>
 
-        <b>Keyword:</b>
-        {row[2]}
-
-        <br><br>
-
-        {row[3]}
-
-        <br><br>
-
-        <a href="/edit_faq/{row[0]}">
+        <a href="/edit_category/{row[0]}">
         ✏️ EDIT
         </a>
 
         &nbsp;&nbsp;
 
-        <a href="/delete_faq/{row[0]}">
+        <a href="/delete_category/{row[0]}">
         🗑 DELETE
         </a>
+
         </div>
 
         """
@@ -4798,6 +4719,298 @@ def faq_management():
     """
 
     return html
+
+@app.route(
+    "/add_category",
+    methods=["POST"]
+)
+def add_category():
+
+    category_name = request.form["category_name"]
+
+    cursor.execute(
+
+        """
+        INSERT INTO faq_categories
+        (
+            category_name
+        )
+        VALUES
+        (?)
+        """,
+
+        (
+            category_name,
+        )
+
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/faq_category_management"
+    )
+
+@app.route("/edit_category/<int:id>")
+def edit_category(id):
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM faq_categories
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    row = cursor.fetchone()
+
+    return f"""
+
+    <h1>Edit Category</h1>
+
+    <form
+    method="POST"
+    action="/update_category/{id}"
+    >
+
+    <input
+    name="category_name"
+    value="{row[1]}"
+    >
+
+    <br><br>
+
+    <button>
+    SAVE
+    </button>
+
+    </form>
+
+    """
+
+@app.route(
+    "/update_category/<int:id>",
+    methods=["POST"]
+)
+def update_category(id):
+
+    category_name = request.form["category_name"]
+
+    cursor.execute(
+
+        """
+        UPDATE faq_categories
+        SET category_name=?
+        WHERE id=?
+        """,
+
+        (
+            category_name,
+            id
+        )
+
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/faq_category_management"
+    )
+
+@app.route("/delete_category/<int:id>")
+def delete_category(id):
+
+    cursor.execute(
+        """
+        DELETE FROM faq_categories
+        WHERE id=?
+        """,
+        (id,)
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/faq_category_management"
+    )
+
+@app.route("/faq_management")
+def faq_management():
+
+```
+search = request.args.get(
+    "search",
+    ""
+)
+
+if search:
+
+    cursor.execute(
+        """
+        SELECT rowid,*
+        FROM faq
+        WHERE lower(keyword) LIKE ?
+        ORDER BY keyword
+        """,
+        (
+            f"%{search.lower()}%",
+        )
+    )
+
+else:
+
+    cursor.execute(
+        """
+        SELECT rowid,*
+        FROM faq
+        ORDER BY keyword
+        """
+    )
+
+records = cursor.fetchall()
+
+# โหลด Category จาก Database
+cursor.execute(
+    """
+    SELECT category_name
+    FROM faq_categories
+    ORDER BY category_name
+    """
+)
+
+categories = cursor.fetchall()
+
+category_options = ""
+
+for category in categories:
+
+    category_options += f"""
+    <option value="{category[0]}">
+    {category[0]}
+    </option>
+    """
+
+html = f"""
+
+<h1>📚 FAQ MANAGEMENT</h1>
+
+<form method="GET">
+
+    <input
+    name="search"
+    placeholder="Search FAQ"
+    style="
+    width:300px;
+    padding:8px;
+    "
+    >
+
+    <button>
+    🔍 Search
+    </button>
+
+</form>
+
+<br>
+
+<form method="POST" action="/add_faq">
+
+    Category
+
+    <br>
+
+    <select name="category">
+
+    {category_options}
+
+    </select>
+
+    <br><br>
+
+    Keyword
+
+    <br>
+
+    <input
+    name="keyword"
+    style="width:300px;"
+    >
+
+    <br><br>
+
+    Answer
+
+    <br>
+
+    <textarea
+    name="answer"
+    rows="8"
+    cols="60"
+    ></textarea>
+
+    <br><br>
+
+    <button>
+    SAVE
+    </button>
+
+</form>
+
+<hr>
+
+"""
+
+for row in records:
+
+    html += f"""
+
+    <div
+    style="
+    border:1px solid #ddd;
+    padding:15px;
+    margin:10px;
+    border-radius:10px;
+    "
+    >
+
+    <b>Category:</b> {row[1]}
+
+    <br><br>
+
+    <b>Keyword:</b> {row[2]}
+
+    <br><br>
+
+    {row[3]}
+
+    <br><br>
+
+    <a href="/edit_faq/{row[0]}">
+    ✏️ EDIT
+    </a>
+
+    &nbsp;&nbsp;
+
+    <a href="/delete_faq/{row[0]}">
+    🗑 DELETE
+    </a>
+
+    </div>
+
+    """
+
+html += """
+
+<br>
+
+<a href="/admin">
+🔙 BACK
+</a>
+
+"""
+
+return html
 
 @app.route(
     "/add_faq",
