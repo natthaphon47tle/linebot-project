@@ -2694,28 +2694,18 @@ def add_courier():
         "/courier_management"
     )
 
-@app.route("/delete_courier/<company>")
-def delete_courier(company):
+@app.route("/delete_courier/<int:id>")
+def delete_courier(id):
 
     cursor.execute(
-
         """
         DELETE FROM courier_service
-        WHERE company=?
+        WHERE id=?
         """,
-
-        (company,)
+        (id,)
     )
 
     conn.commit()
-
-    return redirect("/courier_management")
-
-    log_action(
-        "admin",
-        "DELETE COURIER",
-        id
-    )
 
     return redirect(
         "/courier_management"
