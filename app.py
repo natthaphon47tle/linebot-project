@@ -5011,6 +5011,18 @@ def faq_management():
  
     return html
 
+@app.route("/check_category")
+def check_category():
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM faq_categories
+        """
+    )
+
+    return str(cursor.fetchall())
+
 @app.route(
     "/add_faq",
     methods=["POST"]
