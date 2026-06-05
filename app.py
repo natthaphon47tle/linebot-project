@@ -4203,6 +4203,36 @@ def dashboard():
 
     online_users = cursor.fetchone()[0]
 
+    cursor.execute(
+        "SELECT COUNT(*) FROM courier_service"
+    )
+    courier_count = cursor.fetchone()[0]
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM customs_service"
+    )
+    customs_count = cursor.fetchone()[0]
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM packing_service"
+    )
+    packing_count = cursor.fetchone()[0]
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM cross_border_service"
+    )
+    cross_count = cursor.fetchone()[0]
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM insurance_service"
+    )
+    insurance_count = cursor.fetchone()[0]
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM trucking_service"
+    )
+    trucking_count = cursor.fetchone()[0]
+
     html = f"""
 
 <html>
@@ -4255,6 +4285,8 @@ body{{
 
 .card{{
     background:white;
+
+    border-left:6px solid #0F95F5;
 
     border-radius:20px;
 
@@ -4312,11 +4344,11 @@ body{{
 <div class="header">
 
     <h1>
-    🚚 Logistics Dashboard
+    📊 LEO Logistics Dashboard
     </h1>
 
     <p>
-    LEO Global Logistics
+    Business Solutions & New Ventures
     </p>
 
 </div>
@@ -4348,7 +4380,37 @@ body{{
         <h1>{online_users}</h1>
     </div>
 
-</div>
+    <div class="card">
+        <h2>🚚 Courier</h2>
+        <h1>{courier_count}</h1>
+    </div>
+
+    <div class="card">
+        <h2>📄 Customs</h2>
+        <h1>{customs_count}</h1>
+    </div>
+
+    <div class="card">
+        <h2>📦 Packing</h2>
+        <h1>{packing_count}</h1>
+    </div>
+
+    <div class="card">
+        <h2>🌏 Cross Border</h2>
+        <h1>{cross_count}</h1>
+    </div>
+
+    <div class="card">
+        <h2>🛡 Insurance</h2>
+        <h1>{insurance_count}</h1>
+    </div>
+
+    <div class="card">
+        <h2>🚛 Trucking</h2>
+        <h1>{trucking_count}</h1>
+    </div>
+
+    </div>
 
 <div class="menu">
 
