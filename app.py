@@ -4838,7 +4838,6 @@ def delete_category(id):
 @app.route("/faq_management")
 def faq_management():
 
-```
 search = request.args.get(
     "search",
     ""
