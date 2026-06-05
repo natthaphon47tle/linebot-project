@@ -4920,9 +4920,9 @@ def handle_message(event):
     # SEARCH CUSTOMS
     # =========================
 
-    cursor.execute(
+    if text.lower() == "customs":
 
-        """
+        cursor.execute("""
         SELECT
         company,
         contact,
@@ -4930,37 +4930,26 @@ def handle_message(event):
         tel,
         base
         FROM customs_service
-        WHERE lower(company)
-        LIKE ?
-        """,
+        """)
 
-        (
-            f"%{text.lower()}%",
-        )
+        results = cursor.fetchall()
 
-    )
+        reply = "📄 CUSTOMS\n\n"
 
-    results = cursor.fetchall()
+        for row in results:
 
-    if results:
-
-        row = results[0]
-
-        reply = f"""
-    📄 CUSTOMS
-
+            reply += f"""
     Company : {row[0]}
     Contact : {row[1]}
     Email : {row[2]}
     Tel : {row[3]}
     Base : {row[4]}
+
     """
 
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(
-                text=reply
-            )
+            TextSendMessage(text=reply[:5000])
         )
 
         return
@@ -4969,9 +4958,9 @@ def handle_message(event):
     # SEARCH PACKING
     # =========================
 
-    cursor.execute(
+    if text.lower() == "packing":
 
-        """
+        cursor.execute("""
         SELECT
         company,
         contact,
@@ -4980,38 +4969,27 @@ def handle_message(event):
         service,
         base
         FROM packing_service
-        WHERE lower(company)
-        LIKE ?
-        """,
+        """)
 
-        (
-            f"%{text.lower()}%",
-        )
+        results = cursor.fetchall()
 
-    )
+        reply = "📦 PACKING\n\n"
 
-    results = cursor.fetchall()
+        for row in results:
 
-    if results:
-
-        row = results[0]
-
-        reply = f"""
-    📦 PACKING
-
+            reply += f"""
     Company : {row[0]}
     Contact : {row[1]}
     Email : {row[2]}
     Tel : {row[3]}
     Service : {row[4]}
     Base : {row[5]}
+   
     """
 
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(
-                text=reply
-            )
+            TextSendMessage(text=reply[:5000])
         )
 
         return
@@ -5020,9 +4998,9 @@ def handle_message(event):
     # SEARCH CROSS_BORDER
     # =========================
 
-    cursor.execute(
+    if text.lower() == "cross border":
 
-        """
+        cursor.execute("""
         SELECT
         company,
         contact,
@@ -5030,37 +5008,26 @@ def handle_message(event):
         tel,
         route
         FROM cross_border_service
-        WHERE lower(company)
-        LIKE ?
-        """,
+        """)
 
-        (
-            f"%{text.lower()}%",
-        )
+        results = cursor.fetchall()
 
-    )
+        reply = "🌏 CROSS BORDER\n\n"
 
-    results = cursor.fetchall()
+        for row in results:
 
-    if results:
-
-        row = results[0]
-
-        reply = f"""
-    🌏 CROSS BORDER
-
+            reply += f"""
     Company : {row[0]}
     Contact : {row[1]}
     Email : {row[2]}
     Tel : {row[3]}
     Route : {row[4]}
+
     """
 
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(
-                text=reply
-            )
+            TextSendMessage(text=reply[:5000])
         )
 
         return
@@ -5083,8 +5050,9 @@ def handle_message(event):
             """
         )
 
-        print("INSURANCE RESULTS =", results)
         results = cursor.fetchall()
+
+        print("INSURANCE RESULTS =", results)
 
         reply = "🛡 INSURANCE\n\n"
         print("TOTAL =", len(results))
@@ -5112,9 +5080,9 @@ def handle_message(event):
     # SEARCH TRUCKING
     # =========================
 
-    cursor.execute(
+    if text.lower() == "trucking":
 
-        """
+        cursor.execute("""
         SELECT
         company,
         contact,
@@ -5123,37 +5091,27 @@ def handle_message(event):
         type,
         base
         FROM trucking_service
-        WHERE lower(company)
-        LIKE ?
-        """,
+        """)
 
-        (
-            f"%{text.lower()}%",
-        )
+        results = cursor.fetchall()
 
-    )
+        reply = "🚛 TRUCKING\n\n"
 
-    results = cursor.fetchall()
+        for row in results:
 
-    if results:
-        row = results[0]
-
-        reply = f"""
-    🚛 TRUCKING
-
+            reply += f"""
     Company : {row[0]}
     Contact : {row[1]}
     Email : {row[2]}
     Tel : {row[3]}
     Type : {row[4]}
     Base : {row[5]}
+
     """
 
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(
-                text=reply
-            )
+            TextSendMessage(text=reply[:5000])
         )
 
         return
