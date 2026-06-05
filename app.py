@@ -139,6 +139,7 @@ CREATE TABLE IF NOT EXISTS tracking (
 # FAQ TABLE
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS faq (
+    category TEXT,
     keyword TEXT,
     answer TEXT
 )
