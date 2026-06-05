@@ -5397,193 +5397,193 @@ Base : {row[5]}
 
         return
 
-search_reply = ""
-found = False
+    search_reply = ""
+    found = False
 
-# COURIER
+    # COURIER
 
-cursor.execute(
-    """
-    SELECT company, contact
-    FROM courier_service
-    WHERE lower(company) LIKE ?
-    """,
-    (
-        f"%{text.lower()}%",
-    )
-)
-
-results = cursor.fetchall()
-
-if results:
-
-    found = True
-
-    search_reply += "\n🚚 COURIER\n"
-
-    for row in results:
-
-        search_reply += f"""
-Company : {row[0]}
-Contact : {row[1]}
-
-"""
-
-# CUSTOMS
-
-cursor.execute(
-    """
-    SELECT company, contact
-    FROM customs_service
-    WHERE lower(company) LIKE ?
-    """,
-    (
-        f"%{text.lower()}%",
-    )
-)
-
-results = cursor.fetchall()
-
-if results:
-
-    found = True
-
-    search_reply += "\n📄 CUSTOMS\n"
-
-    for row in results:
-
-        search_reply += f"""
-Company : {row[0]}
-Contact : {row[1]}
-
-"""
-
-# PACKING
-
-cursor.execute(
-    """
-    SELECT company, contact
-    FROM packing_service
-    WHERE lower(company) LIKE ?
-    """,
-    (
-        f"%{text.lower()}%",
-    )
-)
-
-results = cursor.fetchall()
-
-if results:
-
-    found = True
-
-    search_reply += "\n📦 PACKING\n"
-
-    for row in results:
-
-        search_reply += f"""
-Company : {row[0]}
-Contact : {row[1]}
-
-"""
-
-# CROSS BORDER
-
-cursor.execute(
-    """
-    SELECT company, contact
-    FROM cross_border_service
-    WHERE lower(company) LIKE ?
-    """,
-    (
-        f"%{text.lower()}%",
-    )
-)
-
-results = cursor.fetchall()
-
-if results:
-
-    found = True
-
-    search_reply += "\n🌏 CROSS BORDER\n"
-
-    for row in results:
-
-        search_reply += f"""
-Company : {row[0]}
-Contact : {row[1]}
-
-"""
-
-# INSURANCE
-
-cursor.execute(
-    """
-    SELECT company, contact
-    FROM insurance_service
-    WHERE lower(company) LIKE ?
-    """,
-    (
-        f"%{text.lower()}%",
-    )
-)
-
-results = cursor.fetchall()
-
-if results:
-
-    found = True
-
-    search_reply += "\n🛡 INSURANCE\n"
-
-    for row in results:
-
-        search_reply += f"""
-Company : {row[0]}
-Contact : {row[1]}
-
-"""
-
-# TRUCKING
-
-cursor.execute(
-    """
-    SELECT company, contact
-    FROM trucking_service
-    WHERE lower(company) LIKE ?
-    """,
-    (
-        f"%{text.lower()}%",
-    )
-)
-
-results = cursor.fetchall()
-
-if results:
-
-    found = True
-
-    search_reply += "\n🚛 TRUCKING\n"
-
-    for row in results:
-
-        search_reply += f"""
-Company : {row[0]}
-Contact : {row[1]}
-
-"""
-
-if found:
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(
-            text=search_reply[:5000]
+    cursor.execute(
+        """
+        SELECT company, contact
+        FROM courier_service
+        WHERE lower(company) LIKE ?
+        """,
+        (
+            f"%{text.lower()}%",
         )
     )
 
-    return
+    results = cursor.fetchall()
+
+    if results:
+
+        found = True
+
+        search_reply += "\n🚚 COURIER\n"
+
+        for row in results:
+
+            search_reply += f"""
+    Company : {row[0]}
+    Contact : {row[1]}
+
+    """
+
+    # CUSTOMS
+
+    cursor.execute(
+        """
+        SELECT company, contact
+        FROM customs_service
+        WHERE lower(company) LIKE ?
+        """,
+        (
+            f"%{text.lower()}%",
+        )
+    )
+
+    results = cursor.fetchall()
+
+    if results:
+
+        found = True
+
+        search_reply += "\n📄 CUSTOMS\n"
+
+        for row in results:
+
+            search_reply += f"""
+    Company : {row[0]}
+    Contact : {row[1]}
+
+    """
+
+    # PACKING
+
+    cursor.execute(
+        """
+        SELECT company, contact
+        FROM packing_service
+        WHERE lower(company) LIKE ?
+        """,
+        (
+            f"%{text.lower()}%",
+        )
+    )
+
+    results = cursor.fetchall()
+
+    if results:
+
+        found = True
+
+        search_reply += "\n📦 PACKING\n"
+
+        for row in results:
+
+            search_reply += f"""
+    Company : {row[0]}
+    Contact : {row[1]}
+
+    """
+
+    # CROSS BORDER
+
+    cursor.execute(
+        """
+        SELECT company, contact
+        FROM cross_border_service
+        WHERE lower(company) LIKE ?
+        """,
+        (
+            f"%{text.lower()}%",
+        )
+    )
+
+    results = cursor.fetchall()
+
+    if results:
+
+        found = True
+
+        search_reply += "\n🌏 CROSS BORDER\n"
+
+        for row in results:
+
+            search_reply += f"""
+    Company : {row[0]}
+    Contact : {row[1]}
+
+    """
+
+    # INSURANCE
+
+    cursor.execute(
+        """
+        SELECT company, contact
+        FROM insurance_service
+        WHERE lower(company) LIKE ?
+        """,
+        (
+            f"%{text.lower()}%",
+        )
+    )
+
+    results = cursor.fetchall()
+
+    if results:
+
+        found = True
+
+        search_reply += "\n🛡 INSURANCE\n"
+
+        for row in results:
+
+            search_reply += f"""
+    Company : {row[0]}
+    Contact : {row[1]}
+
+    """
+
+    # TRUCKING
+
+    cursor.execute(
+        """
+        SELECT company, contact
+        FROM trucking_service
+        WHERE lower(company) LIKE ?
+        """,
+        (
+            f"%{text.lower()}%",
+        )
+    )
+
+    results = cursor.fetchall()
+
+    if results:
+
+        found = True
+
+        search_reply += "\n🚛 TRUCKING\n"
+
+        for row in results:
+
+            search_reply += f"""
+    Company : {row[0]}
+    Contact : {row[1]}
+  
+    """
+
+    if found:
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(
+                text=search_reply[:5000]
+            )
+        )
+
+        return
 
     # =========================
     # DEFAULT
