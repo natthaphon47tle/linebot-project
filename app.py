@@ -4682,6 +4682,44 @@ def faq_management():
 
     Keyword
 
+    Category
+
+    <br>
+
+    <select name="category">
+
+    <option>
+    Customs
+    </option>
+
+    <option>
+    Shipping
+    </option>
+
+    <option>
+    Warehouse
+    </option>
+
+    <option>
+    Trucking
+    </option>
+
+    <option>
+    Insurance
+    </option>
+
+    <option>
+    Cross Border
+    </option>
+
+    <option>
+    General
+    </option>
+
+    </select>
+
+    <br><br>
+
     <input name="keyword">
 
     <br><br>
@@ -4721,12 +4759,17 @@ def faq_management():
         "
         >
 
-        <b>Keyword:</b>
+        <b>Category:</b>
         {row[1]}
 
         <br><br>
 
+        <b>Keyword:</b>
         {row[2]}
+
+        <br><br>
+
+        {row[3]}
 
         <br><br>
 
@@ -4761,6 +4804,8 @@ def faq_management():
 )
 def add_faq():
 
+    category = request.form["category"]
+    
     keyword = request.form["keyword"]
 
     answer = request.form["answer"]
@@ -4770,14 +4815,16 @@ def add_faq():
         """
         INSERT INTO faq
         (
+            category,            
             keyword,
             answer
         )
         VALUES
-        (?, ?)
+        (?, ?, ?)
         """,
 
         (
+            category,            
             keyword.lower(),
             answer
         )
@@ -4830,13 +4877,23 @@ def edit_faq(id):
     action="/update_faq/{id}"
     >
 
+    Category
+
+    <br>
+
+    <input
+    name="category"
+    value="{row[1]}"
+    >
+
+    <br><br>
     Keyword
 
     <br>
 
     <input
     name="keyword"
-    value="{row[1]}"
+    value="{row[2]}"
     style="width:400px;"
     >
 
@@ -4850,7 +4907,7 @@ def edit_faq(id):
     name="answer"
     rows="10"
     cols="80"
-    >{row[2]}</textarea>
+    >{row[3]}</textarea>
 
     <br><br>
 
@@ -4885,12 +4942,14 @@ def update_faq(id):
         """
         UPDATE faq
         SET
+        category=?,
         keyword=?,
         answer=?
         WHERE rowid=?
         """,
 
         (
+            category,
             keyword.lower(),
             answer,
             id
