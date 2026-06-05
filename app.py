@@ -4329,7 +4329,7 @@ def dashboard():
     gap:20px;
 
     margin-top:30px;
-}
+}}
 
 .quick-card{{
 
@@ -4347,7 +4347,7 @@ def dashboard():
     0 4px 12px rgba(0,0,0,0.1);
 
     transition:0.3s;
-}
+}}
 
 .quick-card:hover{{
 
@@ -4355,7 +4355,7 @@ def dashboard():
 
     box-shadow:
     0 8px 20px rgba(0,0,0,0.15);
-}
+}}
 
 .quick-title{{
 
@@ -4364,12 +4364,12 @@ def dashboard():
     font-weight:bold;
 
     margin-bottom:10px;
-}
+}}
 
 .quick-desc{{
 
     color:#666;
-}
+}}
 
 .menu a{{
     display:inline-block;
