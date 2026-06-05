@@ -5424,8 +5424,10 @@ Base : {row[5]}
         for row in results:
 
             search_reply += f"""
-    Company : {row[0]}
-    Contact : {row[1]}
+Company : {row[0]}
+Contact : {row[1]}
+E-mail : {row[2]}
+Tel : {row[3]}
 
     """
 
@@ -5453,8 +5455,11 @@ Base : {row[5]}
         for row in results:
 
             search_reply += f"""
-    Company : {row[0]}
-    Contact : {row[1]}
+Company : {row[0]}
+Contact : {row[1]}
+Email : {row[2]}
+Tel : {row[3]}
+Base : {row[4]}
 
     """
 
@@ -5482,8 +5487,12 @@ Base : {row[5]}
         for row in results:
 
             search_reply += f"""
-    Company : {row[0]}
-    Contact : {row[1]}
+Company : {row[0]}
+Contact : {row[1]}
+Email : {row[2]}
+Tel : {row[3]}
+Service : {row[4]}
+Base : {row[5]}
 
     """
 
@@ -5511,8 +5520,11 @@ Base : {row[5]}
         for row in results:
 
             search_reply += f"""
-    Company : {row[0]}
-    Contact : {row[1]}
+Company : {row[0]}
+Contact : {row[1]}
+Email : {row[2]}
+Tel : {row[3]}
+Route : {row[4]}
 
     """
 
@@ -5540,8 +5552,10 @@ Base : {row[5]}
         for row in results:
 
             search_reply += f"""
-    Company : {row[0]}
-    Contact : {row[1]}
+Company : {row[0]}
+Contact : {row[2]}
+E-mail : {row[3]}
+Tel : {row[4]}
 
     """
 
@@ -5569,8 +5583,12 @@ Base : {row[5]}
         for row in results:
 
             search_reply += f"""
-    Company : {row[0]}
-    Contact : {row[1]}
+Company : {row[0]}
+Contact : {row[1]}
+Email : {row[2]}
+Tel : {row[3]}
+Type : {row[4]}
+Base : {row[5]}
   
     """
 
