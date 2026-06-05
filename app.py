@@ -850,6 +850,10 @@ button:hover{
     🚛 TRUCKING MANAGEMENT
     </a>
 
+    <a href="/faq_management">
+    📚 FAQ MANAGEMENT
+    </a>
+
     </div>
 
     <hr>
@@ -4616,6 +4620,144 @@ def check_users():
 
     return str(cursor.fetchall())
 
+@app.route("/faq_management")
+def faq_management():
+
+    cursor.execute("""
+    SELECT rowid,* FROM faq
+    ORDER BY keyword
+    """)
+
+    records = cursor.fetchall()
+
+    html = """
+
+    <h1>📚 FAQ MANAGEMENT</h1>
+
+    <form method="POST" action="/add_faq">
+
+    Keyword
+
+    <input name="keyword">
+
+    <br><br>
+
+    Answer
+
+    <br>
+
+    <textarea
+    name="answer"
+    rows="8"
+    cols="60">
+    </textarea>
+
+    <br><br>
+
+    <button>
+    SAVE
+    </button>
+
+    </form>
+
+    <hr>
+
+    """
+
+    for row in records:
+
+        html += f"""
+
+        <div
+        style="
+        border:1px solid #ddd;
+        padding:15px;
+        margin:10px;
+        border-radius:10px;
+        "
+        >
+
+        <b>Keyword:</b>
+        {row[1]}
+
+        <br><br>
+
+        {row[2]}
+
+        <br><br>
+
+        <a href="/delete_faq/{row[0]}">
+        🗑 DELETE
+        </a>
+
+        </div>
+
+        """
+
+    html += """
+
+    <br>
+
+    <a href="/admin">
+    🔙 BACK
+    </a>
+
+    """
+
+    return html
+
+@app.route(
+    "/add_faq",
+    methods=["POST"]
+)
+def add_faq():
+
+    keyword = request.form["keyword"]
+
+    answer = request.form["answer"]
+
+    cursor.execute(
+
+        """
+        INSERT INTO faq
+        (
+            keyword,
+            answer
+        )
+        VALUES
+        (?, ?)
+        """,
+
+        (
+            keyword.lower(),
+            answer
+        )
+
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/faq_management"
+    )
+
+@app.route("/delete_faq/<int:id>")
+def delete_faq(id):
+
+    cursor.execute(
+        """
+        DELETE FROM faq
+        WHERE rowid=?
+        """,
+        (id,)
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/faq_management"
+    )
+
 # =========================
 # WEBHOOK
 # =========================
@@ -5599,6 +5741,40 @@ Base : {row[5]}
             TextSendMessage(
                 text=search_reply[:5000]
             )
+        )
+
+        return
+
+    # =========================
+    # FAQ
+    # =========================
+
+    cursor.execute(
+
+        """
+        SELECT answer
+        FROM faq
+        WHERE lower(keyword)=?
+        """,
+
+        (
+            text.lower(),
+        )
+
+    )
+
+    faq = cursor.fetchone()
+
+    if faq:
+
+        line_bot_api.reply_message(
+
+            event.reply_token,
+
+            TextSendMessage(
+                text=faq[0]
+            )
+
         )
 
         return
