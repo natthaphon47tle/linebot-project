@@ -4447,11 +4447,11 @@ document.getElementById(
 'serviceChart'
 );
 
-new Chart(ctx, {
+new Chart(ctx, {{
 
     type: 'bar',
 
-    data: {
+    data: {{
 
         labels: [
 
@@ -4464,7 +4464,7 @@ new Chart(ctx, {
 
         ],
 
-        datasets: [{
+        datasets: [{{
 
             label:
             'Companies',
@@ -4482,27 +4482,27 @@ new Chart(ctx, {
 
             borderWidth: 1
 
-        }]
+        }}]
 
-    },
+    }},
 
-    options: {
+    options: {{
 
         responsive: true,
 
-        plugins: {
+        plugins: {{
 
-            legend: {
+            legend: {{
 
                 display: false
 
-            }
+            }}
 
-        }
+        }}
 
-    }
+    }}
 
-});
+}});
 
 </script>
 
