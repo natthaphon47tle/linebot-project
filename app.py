@@ -5404,7 +5404,7 @@ Base : {row[5]}
 
     cursor.execute(
         """
-        SELECT company, contact
+        SELECT company, contact, E-mail, Tel
         FROM courier_service
         WHERE lower(company) LIKE ?
         """,
@@ -5435,7 +5435,7 @@ Tel : {row[3]}
 
     cursor.execute(
         """
-        SELECT company, contact
+        SELECT company, contact, Email, Tel, Base
         FROM customs_service
         WHERE lower(company) LIKE ?
         """,
@@ -5467,7 +5467,7 @@ Base : {row[4]}
 
     cursor.execute(
         """
-        SELECT company, contact
+        SELECT company, contact, Email, Tel, Service, Base
         FROM packing_service
         WHERE lower(company) LIKE ?
         """,
@@ -5500,7 +5500,7 @@ Base : {row[5]}
 
     cursor.execute(
         """
-        SELECT company, contact
+        SELECT company, contact, Email, Tel, Route
         FROM cross_border_service
         WHERE lower(company) LIKE ?
         """,
@@ -5532,7 +5532,7 @@ Route : {row[4]}
 
     cursor.execute(
         """
-        SELECT company, contact
+        SELECT company, contact, E-mail, Tel
         FROM insurance_service
         WHERE lower(company) LIKE ?
         """,
@@ -5563,7 +5563,7 @@ Tel : {row[4]}
 
     cursor.execute(
         """
-        SELECT company, contact
+        SELECT company, contact, Email, Tel, Type, Base
         FROM trucking_service
         WHERE lower(company) LIKE ?
         """,
