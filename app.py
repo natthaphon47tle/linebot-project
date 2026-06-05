@@ -4319,6 +4319,58 @@ body{{
     margin-top:30px;
 }}
 
+.quick-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:20px;
+
+    margin-top:30px;
+}
+
+.quick-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    text-decoration:none;
+
+    color:black;
+
+    box-shadow:
+    0 4px 12px rgba(0,0,0,0.1);
+
+    transition:0.3s;
+}
+
+.quick-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,0.15);
+}
+
+.quick-title{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+}
+
+.quick-desc{
+
+    color:#666;
+}
+
 .menu a{{
     display:inline-block;
 
@@ -4421,6 +4473,56 @@ body{{
     </h2>
 
     <canvas id="serviceChart"></canvas>
+
+</div>
+
+<h2>
+⚡ Quick Access
+</h2>
+
+<div class="quick-grid">
+
+<a href="/courier_management" class="quick-card">
+    <div class="quick-title">🚚 Courier</div>
+    <div class="quick-desc">
+    Manage Courier Data
+    </div>
+</a>
+
+<a href="/customs_management" class="quick-card">
+    <div class="quick-title">📄 Customs</div>
+    <div class="quick-desc">
+    Manage Customs Data
+    </div>
+</a>
+
+<a href="/packing_management" class="quick-card">
+    <div class="quick-title">📦 Packing</div>
+    <div class="quick-desc">
+    Manage Packing Data
+    </div>
+</a>
+
+<a href="/cross_management" class="quick-card">
+    <div class="quick-title">🌏 Cross Border</div>
+    <div class="quick-desc">
+    Manage Cross Border Data
+    </div>
+</a>
+
+<a href="/insurance_management" class="quick-card">
+    <div class="quick-title">🛡 Insurance</div>
+    <div class="quick-desc">
+    Manage Insurance Data
+    </div>
+</a>
+
+<a href="/trucking_management" class="quick-card">
+    <div class="quick-title">🚛 Trucking</div>
+    <div class="quick-desc">
+    Manage Trucking Data
+    </div>
+</a>
 
 </div>
 
