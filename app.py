@@ -7,6 +7,7 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import pandas as pd
 from datetime import datetime
+from datetime import timedelta
 from zoneinfo import ZoneInfo
 courier_df = pd.read_excel("courier.xlsx")
 cross_df = pd.read_excel("cross_border.xlsx")
@@ -81,7 +82,9 @@ def log_action(
             username,
             action,
             target,
-            datetime.now().strftime(
+            datetime.now(
+                ZoneInfo("Asia/Bangkok")
+            ).strftime(
                 "%Y-%m-%d %H:%M:%S"
             )
         )
