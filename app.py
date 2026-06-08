@@ -3598,6 +3598,7 @@ def insurance_management():
     cursor.execute(
         """
         SELECT *
+        FROM insurance_service
         """
     )
 
