@@ -5669,16 +5669,15 @@ Route : {row[4]}
 
     if text.lower() == "insurance":
 
-            cursor.execute("""
-            SELECT
-            company,
-            department,
-            contact,
-            email,
-            tel
-            FROM insurance_service
-            """
-        )
+        cursor.execute("""
+        SELECT
+        company,
+        department,
+        contact,
+        email,
+        tel
+        FROM insurance_service
+        """)
 
         results = cursor.fetchall()
 
