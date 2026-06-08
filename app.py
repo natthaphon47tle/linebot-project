@@ -5683,10 +5683,7 @@ Route : {row[4]}
 
         results = cursor.fetchall()
 
-        print("INSURANCE RESULTS =", results)
-
         reply = "🛡 INSURANCE\n\n"
-        print("TOTAL =", len(results))
 
         for row in results:
 
