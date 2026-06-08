@@ -5669,8 +5669,7 @@ Route : {row[4]}
 
     if text.lower() == "insurance":
 
-        cursor.execute(
-            """
+            cursor.execute("""
             SELECT
             company,
             department,
