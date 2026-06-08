@@ -3598,7 +3598,6 @@ def insurance_management():
     cursor.execute(
         """
         SELECT *
-        FROM insurance_service
         """
     )
 
@@ -5693,6 +5692,7 @@ Route : {row[4]}
 
             reply += f"""
 Company : {row[0]}
+Department : {row[1]}
 Contact : {row[2]}
 E-mail : {row[3]}
 Tel : {row[4]}
