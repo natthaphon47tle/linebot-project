@@ -2580,6 +2580,7 @@ def build_management_page(
     columns,
     edit_url,
     delete_url,
+    add_form_html="",
     page=1,
     per_page=10,
     back_url="/admin"
@@ -2602,6 +2603,12 @@ rel="stylesheet">
 <div class="container mt-4">
 
 <h2>{title}</h2>
+
+<hr>
+
+{add_form_html}
+
+<hr>
 
 <a
 class="btn btn-secondary mb-3"
@@ -2687,6 +2694,50 @@ def courier_management():
         )
     )
 
+form_html = """
+
+<form method="POST" action="/add_courier">
+
+<div class="row mb-3">
+
+<div class="col">
+<input class="form-control"
+name="company"
+placeholder="Company">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="contact"
+placeholder="Contact">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="email"
+placeholder="Email">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="tel"
+placeholder="Tel">
+</div>
+
+<div class="col">
+<button
+class="btn btn-success"
+type="submit">
+SAVE
+</button>
+</div>
+
+</div>
+
+</form>
+
+"""
+
     return build_management_page(
         "🚚 COURIER MANAGEMENT",
         records,
@@ -2700,7 +2751,7 @@ def courier_management():
         ],
         "/edit_courier",
         "/delete_courier",
-        page
+        form_html
     )
 
 @app.route(
@@ -2898,6 +2949,54 @@ def customs_management():
         )
     )
 
+form_html = """
+
+<form method="POST" action="/add_customs">
+
+<div class="row mb-3">
+
+<div class="col">
+<input class="form-control"
+name="company"
+placeholder="Company">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="contact"
+placeholder="Contact">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="email"
+placeholder="Email">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="tel"
+placeholder="Tel">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="base"
+placeholder="Base">
+</div>
+
+<div class="col">
+<button class="btn btn-success">
+SAVE
+</button>
+</div>
+
+</div>
+
+</form>
+
+"""
+
     return build_management_page(
         "📄 CUSTOMS MANAGEMENT",
         records,
@@ -2910,6 +3009,7 @@ def customs_management():
         ],
         "/edit_customs",
         "/delete_customs"
+        form_html
     )
 
 @app.route("/delete_customs/<int:id>")
@@ -3103,6 +3203,60 @@ def packing_management():
         )
     )
 
+form_html = """
+
+<form method="POST" action="/add_packing">
+
+<div class="row mb-3">
+
+<div class="col">
+<input class="form-control"
+name="company"
+placeholder="Company">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="contact"
+placeholder="Contact">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="email"
+placeholder="Email">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="tel"
+placeholder="Tel">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="service"
+placeholder="Service">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="base"
+placeholder="Base">
+</div>
+
+<div class="col">
+<button class="btn btn-success">
+SAVE
+</button>
+</div>
+
+</div>
+
+</form>
+
+"""
+
     return build_management_page(
         "📦 PACKING MANAGEMENT",
         records,
@@ -3116,6 +3270,7 @@ def packing_management():
         ],
         "/edit_packing",
         "/delete_packing"
+        form_html
     )
 
 @app.route("/delete_packing/<int:id>")
@@ -3322,6 +3477,54 @@ def cross_management():
         )
     )
 
+form_html = """
+
+<form method="POST" action="/add_cross_border">
+
+<div class="row mb-3">
+
+<div class="col">
+<input class="form-control"
+name="company"
+placeholder="Company">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="contact"
+placeholder="Contact">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="email"
+placeholder="Email">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="tel"
+placeholder="Tel">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="route"
+placeholder="Route">
+</div>
+
+<div class="col">
+<button class="btn btn-success">
+SAVE
+</button>
+</div>
+
+</div>
+
+</form>
+
+"""
+
     return build_management_page(
         "🌏 CROSS BORDER MANAGEMENT",
         records,
@@ -3334,6 +3537,7 @@ def cross_management():
         ],
         "/edit_cross",
         "/delete_cross"
+        form_html
     )
 
 @app.route(
@@ -3515,6 +3719,54 @@ def insurance_management():
         )
     )
 
+form_html = """
+
+<form method="POST" action="/add_insurance">
+
+<div class="row mb-3">
+
+<div class="col">
+<input class="form-control"
+name="company"
+placeholder="Company">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="department"
+placeholder="Department">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="contact"
+placeholder="Contact">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="email"
+placeholder="Email">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="tel"
+placeholder="Tel">
+</div>
+
+<div class="col">
+<button class="btn btn-success">
+SAVE
+</button>
+</div>
+
+</div>
+
+</form>
+
+"""
+
     return build_management_page(
         "🛡 INSURANCE MANAGEMENT",
         records,
@@ -3527,6 +3779,7 @@ def insurance_management():
         ],
         "/edit_insurance",
         "/delete_insurance"
+        form_html
     )
 
 @app.route(
@@ -3719,6 +3972,60 @@ def trucking_management():
         )
     )
 
+form_html = """
+
+<form method="POST" action="/add_customs">
+
+<div class="row mb-3">
+
+<div class="col">
+<input class="form-control"
+name="company"
+placeholder="Company">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="contact"
+placeholder="Contact">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="email"
+placeholder="Email">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="tel"
+placeholder="Tel">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="type"
+placeholder="Type">
+</div>
+
+<div class="col">
+<input class="form-control"
+name="base"
+placeholder="Base">
+</div>
+
+<div class="col">
+<button class="btn btn-success">
+SAVE
+</button>
+</div>
+
+</div>
+
+</form>
+
+"""
+
     return build_management_page(
         "🚛 TRUCKING MANAGEMENT",
         records,
@@ -3732,6 +4039,7 @@ def trucking_management():
         ],
         "/edit_trucking",
         "/delete_trucking"
+        form_html
     )
 
 @app.route(
