@@ -3269,7 +3269,7 @@ SAVE
             "Base"
         ],
         "/edit_packing",
-        "/delete_packing"
+        "/delete_packing",
         form_html
     )
 
@@ -3536,7 +3536,7 @@ SAVE
             "Route"
         ],
         "/edit_cross",
-        "/delete_cross"
+        "/delete_cross",
         form_html
     )
 
@@ -3778,7 +3778,7 @@ SAVE
             "Tel"
         ],
         "/edit_insurance",
-        "/delete_insurance"
+        "/delete_insurance",
         form_html
     )
 
@@ -4038,7 +4038,7 @@ SAVE
             "Base"
         ],
         "/edit_trucking",
-        "/delete_trucking"
+        "/delete_trucking",
         form_html
     )
 
