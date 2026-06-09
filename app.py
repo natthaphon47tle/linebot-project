@@ -2937,6 +2937,12 @@ def customs_management():
         <b>Base:</b> {row[5]}
         <br><br>
 
+        <a href="/edit_customs/{row[0]}">
+        ✏️ EDIT
+        </a>
+
+        &nbsp;&nbsp;
+
         <a href="/delete_customs/{row[0]}">
         🗑 DELETE
         </a>
@@ -3087,6 +3093,40 @@ def edit_customs(id):
     </form>
 
     """
+
+@app.route(
+    "/update_customs/<int:id>",
+    methods=["POST"]
+)
+def update_customs(id):
+
+    cursor.execute(
+        """
+        UPDATE customs_service
+        SET
+            company=?,
+            contact=?,
+            email=?,
+            tel=?,
+            base=?
+        WHERE id=?
+        """,
+        (
+            request.form["company"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"],
+            request.form["base"],
+            id
+        )
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/customs_management"
+    )
+
 @app.route("/check_customs")
 def check_customs():
 
@@ -3347,6 +3387,42 @@ def edit_packing(id):
     </form>
 
     """
+
+@app.route(
+    "/update_packing/<int:id>",
+    methods=["POST"]
+)
+def update_packing(id):
+
+    cursor.execute(
+        """
+        UPDATE packing_service
+        SET
+            company=?,
+            contact=?,
+            email=?,
+            tel=?,
+            service=?,
+            base=?
+        WHERE id=?
+        """,
+        (
+            request.form["company"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"],
+            request.form["service"],
+            request.form["base"],
+            id
+        )
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/packing_management"
+    )
+
 @app.route("/check_packing")
 def check_packing():
 
@@ -3591,6 +3667,38 @@ def edit_cross(id):
     </form>
 
     """
+@app.route(
+    "/update_cross/<int:id>",
+    methods=["POST"]
+)
+def update_cross(id):
+
+    cursor.execute(
+        """
+        UPDATE cross_border_service
+        SET
+            company=?,
+            contact=?,
+            email=?,
+            tel=?,
+            route=?
+        WHERE id=?
+        """,
+        (
+            request.form["company"],
+            request.form["contact"],
+            request.form["email"],
+            request.form["tel"],
+            request.form["route"],
+            id
+        )
+    )
+
+    conn.commit()
+
+    return redirect(
+        "/cross_management"
+    )
 
 @app.route("/insurance_management")
 def insurance_management():
