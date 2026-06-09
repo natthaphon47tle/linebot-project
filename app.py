@@ -2949,7 +2949,7 @@ def customs_management():
         )
     )
 
-form_html = """
+    form_html = """
 
 <form method="POST" action="/add_customs">
 
@@ -3203,7 +3203,7 @@ def packing_management():
         )
     )
 
-form_html = """
+    form_html = """
 
 <form method="POST" action="/add_packing">
 
@@ -3477,7 +3477,7 @@ def cross_management():
         )
     )
 
-form_html = """
+    form_html = """
 
 <form method="POST" action="/add_cross_border">
 
@@ -3719,8 +3719,8 @@ def insurance_management():
         )
     )
 
-form_html = """
-
+    form_html = """
+ 
 <form method="POST" action="/add_insurance">
 
 <div class="row mb-3">
@@ -3972,7 +3972,7 @@ def trucking_management():
         )
     )
 
-form_html = """
+    form_html = """
 
 <form method="POST" action="/add_customs">
 
