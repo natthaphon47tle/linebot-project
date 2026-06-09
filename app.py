@@ -2580,8 +2580,23 @@ def build_management_page(
     columns,
     edit_url,
     delete_url,
+    page=1,
+    per_page=10,
     back_url="/admin"
 ):
+
+total_records = len(records)
+
+start = (page - 1) * per_page
+end = start + per_page
+
+records = records[start:end]
+
+import math
+
+total_pages = math.ceil(
+    total_records / per_page
+)
 
     html = f"""
 
@@ -2601,6 +2616,31 @@ content="width=device-width, initial-scale=1"
 <link
 href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 rel="stylesheet"
+>
+
+html = f"""
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1"
+>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet"
+>
+
+<link
+rel="stylesheet"
+href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"
 >
 
 </head>
@@ -2673,7 +2713,63 @@ Delete
 
 </table>
 
+<nav>
+
+<ul class="pagination justify-content-center">
+
+"""
+
+for p in range(
+    1,
+    total_pages + 1
+):
+
+    active = ""
+
+    if p == page:
+        active = "active"
+
+    html += f"""
+
+    <li
+    class="page-item {active}"
+    >
+
+        <a
+        class="page-link"
+        href="?page={p}"
+        >
+        {p}
+        </a>
+
+    </li>
+
+    """
+    html += """
+
+</ul>
+
+</nav>
+
 </div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+$(document).ready(function(){
+
+    $('#dataTable').DataTable({
+
+        pageLength:10
+
+    });
+
+});
+
+</script>
 
 </body>
 
@@ -2692,6 +2788,13 @@ def courier_management():
 
     records = cursor.fetchall()
 
+    page = int(
+        request.args.get(
+            "page",
+            1
+        )
+    )
+
     return build_management_page(
         "🚚 COURIER MANAGEMENT",
         records,
@@ -2704,7 +2807,8 @@ def courier_management():
             "Base"
         ],
         "/edit_courier",
-        "/delete_courier"
+        "/delete_courier",
+        page
     )
 
 @app.route(
@@ -2894,6 +2998,13 @@ def customs_management():
     )
 
     records = cursor.fetchall()
+
+    page = int(
+        request.args.get(
+            "page",
+            1
+        )
+    )
 
     return build_management_page(
         "📄 CUSTOMS MANAGEMENT",
@@ -3092,6 +3203,13 @@ def packing_management():
     )
 
     records = cursor.fetchall()
+
+    page = int(
+        request.args.get(
+            "page",
+            1
+        )
+    )
 
     return build_management_page(
         "📦 PACKING MANAGEMENT",
@@ -3305,6 +3423,13 @@ def cross_management():
 
     records = cursor.fetchall()
 
+    page = int(
+        request.args.get(
+            "page",
+            1
+        )
+    )
+
     return build_management_page(
         "🌏 CROSS BORDER MANAGEMENT",
         records,
@@ -3490,6 +3615,13 @@ def insurance_management():
     )
 
     records = cursor.fetchall()
+
+    page = int(
+        request.args.get(
+            "page",
+            1
+        )
+    )
 
     return build_management_page(
         "🛡 INSURANCE MANAGEMENT",
@@ -3687,6 +3819,13 @@ def trucking_management():
     )
 
     records = cursor.fetchall()
+
+    page = int(
+        request.args.get(
+            "page",
+            1
+        )
+    )
 
     return build_management_page(
         "🚛 TRUCKING MANAGEMENT",
@@ -5445,8 +5584,14 @@ Tel : {row[4]}
         tel,
         type,
         base
-        FROM trucking_service
-        """)
+        LIMIT ?
+        OFFSET ?
+        """,
+        (
+            per_page,
+            offset
+        )
+    )
 
         results = cursor.fetchall()
 
