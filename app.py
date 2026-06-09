@@ -5265,6 +5265,8 @@ def edit_faq(id):
 )
 def update_faq(id):
 
+    category = request.form["category"]
+
     keyword = request.form["keyword"]
 
     answer = request.form["answer"]
