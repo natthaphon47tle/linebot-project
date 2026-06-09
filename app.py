@@ -2694,7 +2694,7 @@ def courier_management():
         )
     )
 
-form_html = """
+    form_html = """
 
 <form method="POST" action="/add_courier">
 
