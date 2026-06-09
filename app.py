@@ -3008,7 +3008,7 @@ SAVE
             "Base"
         ],
         "/edit_customs",
-        "/delete_customs"
+        "/delete_customs",
         form_html
     )
 
