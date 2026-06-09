@@ -5450,6 +5450,30 @@ def handle_message(event):
     user_id = event.source.user_id
     text = event.message.text.strip()
 
+    cursor.execute(
+        """
+        SELECT answer
+        FROM faq
+        WHERE LOWER(keyword)=?
+        """,
+        (
+            text.lower(),
+        )
+    )
+
+    faq = cursor.fetchone()
+
+    if faq:
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(
+                text=faq[0]
+            )
+        )
+
+        return
+
     if DEBUG_MODE:
 
         print(
