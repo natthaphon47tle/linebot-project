@@ -2585,7 +2585,7 @@ def build_management_page(
     back_url="/admin"
 ):
 
-total_records = len(records)
+    total_records = len(records)
 
 start = (page - 1) * per_page
 end = start + per_page
@@ -2617,8 +2617,6 @@ content="width=device-width, initial-scale=1"
 href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 rel="stylesheet"
 >
-
-html = f"""
 
 <!DOCTYPE html>
 
@@ -2719,10 +2717,10 @@ Delete
 
 """
 
-for p in range(
-    1,
-    total_pages + 1
-):
+    for p in range(
+        1,
+        total_pages + 1
+    ):
 
     active = ""
 
