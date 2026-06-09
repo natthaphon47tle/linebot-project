@@ -2574,104 +2574,138 @@ def test_log():
 
     return "OK"
 
+def build_management_page(
+    title,
+    records,
+    columns,
+    edit_url,
+    delete_url,
+    back_url="/admin"
+):
+
+    html = f"""
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1"
+>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet"
+>
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-4">
+
+<h2>{title}</h2>
+
+<a
+class="btn btn-secondary mb-3"
+href="{back_url}"
+>
+🔙 BACK
+</a>
+
+<table
+class="table table-striped table-hover table-bordered"
+>
+
+<thead class="table-primary">
+
+<tr>
+
+<th>ID</th>
+
+"""
+
+    for col in columns:
+        html += f"<th>{col}</th>"
+
+    html += "<th>Action</th></tr></thead><tbody>"
+
+    for row in records:
+
+        html += "<tr>"
+
+        for value in row:
+            html += f"<td>{value}</td>"
+
+        html += f"""
+
+<td>
+
+<a
+class="btn btn-warning btn-sm"
+href="{edit_url}/{row[0]}"
+>
+Edit
+</a>
+
+<a
+class="btn btn-danger btn-sm"
+href="{delete_url}/{row[0]}"
+onclick="return confirm('Delete?')"
+>
+Delete
+</a>
+
+</td>
+
+</tr>
+
+"""
+
+    html += """
+
+</tbody>
+
+</table>
+
+</div>
+
+</body>
+
+</html>
+
+"""
+
+    return html
+
 @app.route("/courier_management")
 def courier_management():
 
     cursor.execute(
-        """
-        SELECT *
-        FROM courier_service
-        """
+        "SELECT * FROM courier_service"
     )
 
     records = cursor.fetchall()
 
-    html = """
-
-    <h1>
-    🚚 COURIER MANAGEMENT
-    </h1>
-
-    <form
-        method="POST"
-        action="/add_courier"
-    >
-
-    Company
-
-    <input name="company">
-
-    Contact
-
-    <input name="contact">
-
-    Email
-
-    <input name="email">
-
-    Tel
-
-    <input name="tel">
-
-    <button>
-    SAVE
-    </button>
-
-    </form>
-
-    <hr>
-
-    """
-
-    for row in records:
-
-        html += f"""
-
-        <div
-        style="
-        border:1px solid #ddd;
-        padding:15px;
-        margin-bottom:10px;
-        border-radius:10px;
-        "
-        >
-
-        <b>Company:</b> {row[1]}
-
-        <br>
-
-        <b>Contact:</b> {row[2]}
-
-        <br>
-
-        <b>Email:</b> {row[3]}
-
-        <br>
- 
-        <b>Tel:</b> {row[4]}
-
-        <br><br>
-
-        <a href="/edit_courier/{row[0]}">
-        ✏️ EDIT
-        </a>
-
-        <a href="/delete_courier/{row[0]}">
-        🗑 DELETE
-        </a>
-
-        </div>
-
-        """
-
-    html += """
-    <br>
-    <a href="/admin">
-    🔙 BACK
-    </a>
-    """
-
-    return html
+    return build_management_page(
+        "🚚 COURIER MANAGEMENT",
+        records,
+        [
+            "Company",
+            "Contact",
+            "Email",
+            "Tel",
+            "Service Type",
+            "Base"
+        ],
+        "/edit_courier",
+        "/delete_courier"
+    )
 
 @app.route(
     "/add_courier",
@@ -2856,112 +2890,24 @@ def check_courier_table():
 def customs_management():
 
     cursor.execute(
-        """
-        SELECT *
-        FROM customs_service
-        """
+        "SELECT * FROM customs_service"
     )
 
     records = cursor.fetchall()
 
-    html = """
-
-    <h1>
-    📄 CUSTOMS MANAGEMENT
-    </h1>
-
-    """
-
-    html += """
-
-    <form
-    method="POST"
-    action="/add_customs"
-    >
-
-    Company
-
-    <input name="company">
-
-    Contact
-
-    <input name="contact">
-
-    Email
-
-    <input name="email">
-
-    Tel
-
-    <input name="tel">
-
-    Base
-
-    <input name="base">
-
-    <button>
-    SAVE
-    </button>
-
-    </form>
-
-    <hr>
-
-    """
-
-    for row in records:
-
-        html += f"""
-
-        <div
-        style="
-        border:1px solid #ddd;
-        padding:15px;
-        margin-bottom:10px;
-        border-radius:10px;
-        "
-        >
-
-        <b>Company:</b> {row[1]}
-        <br>
-
-        <b>Contact:</b> {row[2]}
-        <br>
-
-        <b>Email:</b> {row[3]}
-        <br>
-
-        <b>Tel:</b> {row[4]}
-        <br>
-
-        <b>Base:</b> {row[5]}
-        <br><br>
-
-        <a href="/edit_customs/{row[0]}">
-        ✏️ EDIT
-        </a>
-
-        &nbsp;&nbsp;
-
-        <a href="/delete_customs/{row[0]}">
-        🗑 DELETE
-        </a>
-
-        </div>
-
-        """
-
-    html += """
-
-    <br>
-
-    <a href="/admin">
-    🔙 BACK
-    </a>
-
-    """
-
-    return html
+    return build_management_page(
+        "📄 CUSTOMS MANAGEMENT",
+        records,
+        [
+            "Company",
+            "Contact",
+            "Email",
+            "Tel",
+            "Base"
+        ],
+        "/edit_customs",
+        "/delete_customs"
+    )
 
 @app.route("/delete_customs/<int:id>")
 def delete_customs(id):
@@ -3142,109 +3088,25 @@ def check_customs():
 def packing_management():
 
     cursor.execute(
-        """
-        SELECT *
-        FROM packing_service
-        """
+        "SELECT * FROM packing_service"
     )
 
     records = cursor.fetchall()
 
-    html = """
-
-    <h1>
-    📦 PACKING MANAGEMENT
-    </h1>
-
-    <form
-    method="POST"
-    action="/add_packing"
-    >
-
-    Company
-    <input name="company">
-
-    Contact
-    <input name="contact">
-
-    Email
-    <input name="email">
-
-    Tel
-    <input name="tel">
-
-    Service
-    <input name="service">
-
-    Base
-    <input name="base">
-
-    <button>
-    SAVE
-    </button>
-
-    </form>
-
-    <hr>
-
-    """
-
-    for row in records:
-
-        html += f"""
-
-        <div
-        style="
-        border:1px solid #ddd;
-        padding:15px;
-        margin-bottom:10px;
-        border-radius:10px;
-        "
-        >
-
-        <b>Company:</b> {row[1]}
-        <br>
-
-        <b>Contact:</b> {row[2]}
-        <br>
-
-        <b>Email:</b> {row[3]}
-        <br>
-
-        <b>Tel:</b> {row[4]}
-        <br>
-
-        <b>Service:</b> {row[5]}
-        <br>
-
-        <b>Base:</b> {row[6]}
-        <br><br>
-
-        <a href="/edit_packing/{row[0]}">
-        ✏️ EDIT
-        </a>
-
-        &nbsp;&nbsp;
-
-        <a href="/delete_packing/{row[0]}">
-        🗑 DELETE
-        </a>
-
-        </div>
-
-        """
-
-    html += """
-
-    <br>
-
-    <a href="/admin">
-    🔙 BACK
-    </a>
-
-    """
-
-    return html
+    return build_management_page(
+        "📦 PACKING MANAGEMENT",
+        records,
+        [
+            "Company",
+            "Contact",
+            "Email",
+            "Tel",
+            "Service",
+            "Base"
+        ],
+        "/edit_packing",
+        "/delete_packing"
+    )
 
 @app.route("/delete_packing/<int:id>")
 def delete_packing(id):
@@ -3438,103 +3300,24 @@ def check_packing():
 def cross_management():
 
     cursor.execute(
-        """
-        SELECT *
-        FROM cross_border_service
-        """
+        "SELECT * FROM cross_border_service"
     )
 
     records = cursor.fetchall()
 
-    html = """
-
-    <h1>
-    🌏 CROSS BORDER MANAGEMENT
-    </h1>
-
-    <form
-    method="POST"
-    action="/add_cross"
-    >
-
-    Company
-    <input name="company">
-
-    Contact
-    <input name="contact">
-
-    Email
-    <input name="email">
-
-    Tel
-    <input name="tel">
-
-    Route
-    <input name="route">
-
-    <button>
-    SAVE
-    </button>
-
-    </form>
-
-    <hr>
-
-    """
-
-    for row in records:
-
-        html += f"""
-
-        <div
-        style="
-        border:1px solid #ddd;
-        padding:15px;
-        margin-bottom:10px;
-        border-radius:10px;
-        "
-        >
-
-        <b>Company:</b> {row[1]}
-        <br>
-
-        <b>Contact:</b> {row[2]}
-        <br>
-
-        <b>Email:</b> {row[3]}
-        <br>
-
-        <b>Tel:</b> {row[4]}
-        <br>
-
-        <b>Route:</b> {row[5]}
-        <br><br>
-
-        <a href="/edit_cross/{row[0]}">
-        ✏️ EDIT
-        </a>
-
-        &nbsp;&nbsp;
-
-        <a href="/delete_cross/{row[0]}">
-        🗑 DELETE
-        </a>
-
-        </div>
-
-        """
-
-    html += """
-
-    <br>
-
-    <a href="/admin">
-    🔙 BACK
-    </a>
-
-    """
-
-    return html
+    return build_management_page(
+        "🌏 CROSS BORDER MANAGEMENT",
+        records,
+        [
+            "Company",
+            "Contact",
+            "Email",
+            "Tel",
+            "Route"
+        ],
+        "/edit_cross",
+        "/delete_cross"
+    )
 
 @app.route(
     "/add_cross",
@@ -3699,108 +3482,28 @@ def update_cross(id):
     return redirect(
         "/cross_management"
     )
-
 @app.route("/insurance_management")
 def insurance_management():
 
     cursor.execute(
-        """
-        SELECT *
-        FROM insurance_service
-        """
+        "SELECT * FROM insurance_service"
     )
 
     records = cursor.fetchall()
 
-    html = """
-
-    <h1>
-    🛡 INSURANCE MANAGEMENT
-    </h1>
-
-    <form
-    method="POST"
-    action="/add_insurance"
-    >
-
-    Company
-    <input name="company">
-
-    Department
-    <input name="department">
-
-    Contact
-    <input name="contact">
-
-    Email
-    <input name="email">
-
-    Tel
-    <input name="tel">
-
-    <button>
-    SAVE
-    </button>
-
-    </form>
-
-    <hr>
-
-    """
-
-    for row in records:
-
-        html += f"""
-
-        <div
-        style="
-        border:1px solid #ddd;
-        padding:15px;
-        margin-bottom:10px;
-        border-radius:10px;
-        "
-        >
-
-        <b>Company:</b> {row[1]}
-        <br>
-
-        <b>Department:</b> {row[2]}
-        <br>
-
-        <b>Contact:</b> {row[3]}
-        <br>
-
-        <b>Email:</b> {row[4]}
-        <br>
-
-        <b>Tel:</b> {row[5]}
-        <br><br>
-
-        <a href="/edit_insurance/{row[0]}">
-        ✏️ EDIT
-        </a>
-
-        &nbsp;&nbsp;
-
-        <a href="/delete_insurance/{row[0]}">
-        🗑 DELETE
-        </a>
-
-        </div>
-
-        """
-
-    html += """
-
-    <br>
-
-    <a href="/admin">
-    🔙 BACK
-    </a>
-
-    """
-
-    return html
+    return build_management_page(
+        "🛡 INSURANCE MANAGEMENT",
+        records,
+        [
+            "Company",
+            "Department",
+            "Contact",
+            "Email",
+            "Tel"
+        ],
+        "/edit_insurance",
+        "/delete_insurance"
+    )
 
 @app.route(
     "/add_insurance",
@@ -3980,109 +3683,25 @@ def check_insurance():
 def trucking_management():
 
     cursor.execute(
-        """
-        SELECT *
-        FROM trucking_service
-        """
+        "SELECT * FROM trucking_service"
     )
 
     records = cursor.fetchall()
 
-    html = """
-
-    <h1>
-    🚛 TRUCKING MANAGEMENT
-    </h1>
-
-    <form
-    method="POST"
-    action="/add_trucking"
-    >
-
-    Company
-    <input name="company">
-
-    Contact
-    <input name="contact">
-
-    Email
-    <input name="email">
-
-    Tel
-    <input name="tel">
-
-    Type
-    <input name="type">
-
-    Base
-    <input name="base">
-
-    <button>
-    SAVE
-    </button>
-
-    </form>
-
-    <hr>
-
-    """
-
-    for row in records:
-
-        html += f"""
-
-        <div
-        style="
-        border:1px solid #ddd;
-        padding:15px;
-        margin-bottom:10px;
-        border-radius:10px;
-        "
-        >
-
-        <b>Company:</b> {row[1]}
-        <br>
-
-        <b>Contact:</b> {row[2]}
-        <br>
-
-        <b>Email:</b> {row[3]}
-        <br>
-
-        <b>Tel:</b> {row[4]}
-        <br>
-
-        <b>Type:</b> {row[5]}
-        <br>
-
-        <b>Base:</b> {row[6]}
-        <br><br>
-
-        <a href="/edit_trucking/{row[0]}">
-        ✏️ EDIT
-        </a>
-
-        &nbsp;&nbsp;
-
-        <a href="/delete_trucking/{row[0]}">
-        🗑 DELETE
-        </a>
-
-        </div>
-
-        """
-
-    html += """
-
-    <br>
-
-    <a href="/admin">
-    🔙 BACK
-    </a>
-
-    """
-
-    return html
+    return build_management_page(
+        "🚛 TRUCKING MANAGEMENT",
+        records,
+        [
+            "Company",
+            "Contact",
+            "Email",
+            "Tel",
+            "Type",
+            "Base"
+        ],
+        "/edit_trucking",
+        "/delete_trucking"
+    )
 
 @app.route(
     "/add_trucking",
