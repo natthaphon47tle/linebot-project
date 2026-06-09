@@ -2585,61 +2585,15 @@ def build_management_page(
     back_url="/admin"
 ):
 
-    total_records = len(records)
-
-start = (page - 1) * per_page
-end = start + per_page
-
-records = records[start:end]
-
-import math
-
-total_pages = math.ceil(
-    total_records / per_page
-)
-
     html = f"""
-
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
 <meta charset="utf-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1"
->
 
 <link
 href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet"
->
-
-<!DOCTYPE html>
-
-<html>
-
-<head>
-
-<meta charset="utf-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1"
->
-
-<link
-href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet"
->
-
-<link
-rel="stylesheet"
-href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"
->
+rel="stylesheet">
 
 </head>
 
@@ -2651,27 +2605,30 @@ href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"
 
 <a
 class="btn btn-secondary mb-3"
-href="{back_url}"
->
+href="{back_url}">
 🔙 BACK
 </a>
 
 <table
-class="table table-striped table-hover table-bordered"
->
+class="table table-striped table-hover table-bordered">
 
 <thead class="table-primary">
 
 <tr>
 
 <th>ID</th>
-
 """
 
     for col in columns:
         html += f"<th>{col}</th>"
 
-    html += "<th>Action</th></tr></thead><tbody>"
+    html += """
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+"""
 
     for row in records:
 
@@ -2681,98 +2638,35 @@ class="table table-striped table-hover table-bordered"
             html += f"<td>{value}</td>"
 
         html += f"""
-
 <td>
 
 <a
 class="btn btn-warning btn-sm"
-href="{edit_url}/{row[0]}"
->
+href="{edit_url}/{row[0]}">
 Edit
 </a>
 
 <a
 class="btn btn-danger btn-sm"
-href="{delete_url}/{row[0]}"
-onclick="return confirm('Delete?')"
->
+href="{delete_url}/{row[0]}">
 Delete
 </a>
 
 </td>
 
 </tr>
-
 """
 
     html += """
-
 </tbody>
 
 </table>
 
-<nav>
-
-<ul class="pagination justify-content-center">
-
-"""
-
-    for p in range(
-        1,
-        total_pages + 1
-    ):
-
-    active = ""
-
-    if p == page:
-        active = "active"
-
-    html += f"""
-
-    <li
-    class="page-item {active}"
-    >
-
-        <a
-        class="page-link"
-        href="?page={p}"
-        >
-        {p}
-        </a>
-
-    </li>
-
-    """
-    html += """
-
-</ul>
-
-</nav>
-
 </div>
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-
-<script>
-
-$(document).ready(function(){
-
-    $('#dataTable').DataTable({
-
-        pageLength:10
-
-    });
-
-});
-
-</script>
 
 </body>
 
 </html>
-
 """
 
     return html
