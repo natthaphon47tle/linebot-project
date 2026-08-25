@@ -1525,10 +1525,133 @@ def delete_user(username):
 # RESET PASSWORD
 # =========================
 
-@app.route("/reset_password/<username>")
+@app.route("/reset_password/<username>", methods=["GET", "POST"])
 def reset_password(username):
 
-    new_password = "1234"
+    if request.method == "GET":
+
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Reset Password</title>
+
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    background: #f5f7fb;
+                    text-align: center;
+                    padding-top: 80px;
+                }}
+
+                .box {{
+                    background: white;
+                    width: 400px;
+                    margin: auto;
+                    padding: 30px;
+                    border-radius: 15px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                }}
+
+                input {{
+                    width: 90%;
+                    padding: 12px;
+                    margin: 10px 0;
+                    border: 1px solid #ccc;
+                    border-radius: 8px;
+                    font-size: 16px;
+                }}
+
+                button {{
+                    width: 95%;
+                    padding: 12px;
+                    background: #ff9800;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    cursor: pointer;
+                }}
+
+                button:hover {{
+                    background: #e68900;
+                }}
+
+                a {{
+                    display: block;
+                    margin-top: 20px;
+                }}
+            </style>
+        </head>
+
+        <body>
+
+            <div class="box">
+
+                <h2>🔑 RESET PASSWORD</h2>
+
+                <p>
+                    Username:
+                    <b>{username}</b>
+                </p>
+
+                <form method="POST">
+
+                    <input
+                        type="password"
+                        name="new_password"
+                        placeholder="กรอกรหัสผ่านใหม่"
+                        required
+                    >
+
+                    <input
+                        type="password"
+                        name="confirm_password"
+                        placeholder="ยืนยันรหัสผ่านใหม่"
+                        required
+                    >
+
+                    <button type="submit">
+                        RESET PASSWORD
+                    </button>
+
+                </form>
+
+                <a href="/users">
+                    ← กลับไป User List
+                </a>
+
+            </div>
+
+        </body>
+        </html>
+        """
+
+    # =========================
+    # POST = บันทึกรหัสใหม่
+    # =========================
+
+    new_password = request.form.get("new_password")
+    confirm_password = request.form.get("confirm_password")
+
+    if new_password != confirm_password:
+
+        return """
+        <script>
+            alert("❌ รหัสผ่านไม่ตรงกัน");
+            history.back();
+        </script>
+        """
+
+    if not new_password:
+
+        return """
+        <script>
+            alert("❌ กรุณากรอกรหัสผ่านใหม่");
+            history.back();
+        </script>
+        """
 
     hashed_password = generate_password_hash(new_password)
 
@@ -1538,12 +1661,16 @@ def reset_password(username):
         SET password = ?
         WHERE username = ?
         """,
-        (hashed_password, username)
+        (
+            hashed_password,
+            username
+        )
     )
 
     conn.commit()
 
     if cursor.rowcount == 0:
+
         return f"""
         <h2>❌ ไม่พบ Username: {username}</h2>
         <a href="/users">กลับไป User List</a>
@@ -1556,31 +1683,33 @@ def reset_password(username):
     )
 
     return f"""
+    <!DOCTYPE html>
     <html>
+
     <head>
         <meta charset="UTF-8">
-        <title>Reset Password</title>
+        <title>Reset Password Success</title>
     </head>
 
-    <body style="font-family:Arial; text-align:center; padding:50px;">
+    <body style="font-family:Arial;text-align:center;padding:50px;">
 
         <h2>✅ RESET PASSWORD SUCCESS</h2>
 
         <p>
-            Username: <b>{username}</b>
+            Username:
+            <b>{username}</b>
         </p>
 
         <p>
-            New Password: <b>1234</b>
+            เปลี่ยนรหัสผ่านเรียบร้อยแล้ว
         </p>
 
-        <br>
-
         <a href="/users">
-            ⬅ กลับไป User List
+            ← กลับไป User List
         </a>
 
     </body>
+
     </html>
     """
 # =========================
