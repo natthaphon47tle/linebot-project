@@ -5776,45 +5776,53 @@ Tel : {row[4]}
     # SEARCH TRUCKING
     # =========================
 
-    if text.lower() == "trucking":
+    if "trucking" in text.lower():
 
         cursor.execute("""
-        SELECT
-        company,
-        contact,
-        email,
-        tel,
-        type,
-        base
-        LIMIT ?
-        OFFSET ?
-        """,
-        (
-            per_page,
-            offset
-        )
-    )
+            SELECT
+                company,
+                contact,
+                email,
+                tel,
+                type,
+                base
+            FROM trucking_service
+        """)
 
         results = cursor.fetchall()
 
-        reply = "🚛 TRUCKING\n\n"
+        if results:
 
-        for row in results:
+            reply = "🚛 TRUCKING\n\n"
 
-            reply += f"""
-Company : {row[0]}
-Contact : {row[1]}
-Email : {row[2]}
-Tel : {row[3]}
-Type : {row[4]}
-Base : {row[5]}
+            for row in results:
 
+                reply += f"""
+    Company : {row[0]}
+    Contact : {row[1]}
+    Email : {row[2]}
+    Tel : {row[3]}
+    Type : {row[4]}
+    Base : {row[5]}
+
+    ----------------
     """
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=reply[:5000])
-        )
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(
+                    text=reply[:5000]
+                )
+            )
+
+        else:
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(
+                    text="ไม่พบข้อมูล Trucking"
+                )
+            )
 
         return
 
@@ -5890,33 +5898,33 @@ Base : {row[5]}
 
     if "customs" in text.lower():
 
-        cursor.execute(
-            """
+        cursor.execute("""
             SELECT
-            company,
-            contact,
-            email,
-            tel,
-            base
+                company,
+                contact,
+                email,
+                tel,
+                base
             FROM customs_service
-            """
-        )
+        """)
 
         records = cursor.fetchall()
 
-        if results:
+        if records:
+
+            reply = "📄 CUSTOMS CLEARANCE\n\n"
 
             for row in records:
 
                 reply += f"""
-        📄 {row[0]}
-        👤 {row[1]}
-        📧 {row[2]}
-        📞 {row[3]}
-        📍 {row[4]}
+    Company : {row[0]}
+    Contact : {row[1]}
+    Email : {row[2]}
+    Tel : {row[3]}
+    Base : {row[4]}
 
-        ----------------
-        """
+    ----------------
+    """
 
             line_bot_api.reply_message(
                 event.reply_token,
@@ -5925,7 +5933,16 @@ Base : {row[5]}
                 )
             )
 
-            return
+        else:
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(
+                    text="ไม่พบข้อมูล Customs Clearance"
+                )
+            )
+
+        return
 
     # =========================
     # COURIER
