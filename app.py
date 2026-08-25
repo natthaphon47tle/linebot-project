@@ -1704,7 +1704,7 @@ def reset_password(username):
             เปลี่ยนรหัสผ่านเรียบร้อยแล้ว
         </p>
 
-        <a href="/users">
+        <a href="/admin">
             ← กลับไป User List
         </a>
 
