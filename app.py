@@ -1618,7 +1618,7 @@ def reset_password(username):
 
                 </form>
 
-                <a href="/users">
+                <a href="/admin">
                     ← กลับไป User List
                 </a>
 
@@ -1673,7 +1673,7 @@ def reset_password(username):
 
         return f"""
         <h2>❌ ไม่พบ Username: {username}</h2>
-        <a href="/users">กลับไป User List</a>
+        <a href="/admin">กลับไป User List</a>
         """
 
     log_action(
