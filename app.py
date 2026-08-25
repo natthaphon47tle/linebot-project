@@ -922,6 +922,7 @@ button:hover{
         <input
             type="file"
             name="file"
+            multiple
         >
 
         <button type="submit">
@@ -1021,366 +1022,417 @@ def upload_excel():
     global reefer_df
     global users_df
 
-    file = request.files["file"]
-
-    filename = file.filename
-
-    file.save(filename)
-
     # =========================
-    # USERS
+    # รับหลายไฟล์
     # =========================
 
-    if filename == "users.xlsx":
+    files = request.files.getlist("file")
 
-        users_df = pd.read_excel(
-            "users.xlsx"
-        )
+    uploaded_files = []
 
-        for index, row in users_df.iterrows():
+    # =========================
+    # LOOP ทุกไฟล์
+    # =========================
 
-            username = str(
-                row["username"]
-            ).strip()
+    for file in files:
 
-            password = str(
-                row["password"]
-            ).strip()
+        if not file or not file.filename:
+            continue
 
-            hashed_password = generate_password_hash(
-                password
+        filename = file.filename
+
+        # บันทึกไฟล์
+        file.save(filename)
+
+        # =========================
+        # USERS
+        # =========================
+
+        if filename == "users.xlsx":
+
+            users_df = pd.read_excel(
+                "users.xlsx"
+            )
+
+            for index, row in users_df.iterrows():
+
+                username = str(
+                    row["username"]
+                ).strip()
+
+                password = str(
+                    row["password"]
+                ).strip()
+
+                hashed_password = generate_password_hash(
+                    password
+                )
+
+                cursor.execute(
+                    "SELECT * FROM users WHERE username=?",
+                    (username,)
+                )
+
+                existing = cursor.fetchone()
+
+                # UPDATE
+                if existing:
+
+                    cursor.execute(
+                        """
+                        UPDATE users
+                        SET password=?
+                        WHERE username=?
+                        """,
+                        (
+                            hashed_password,
+                            username
+                        )
+                    )
+
+                # INSERT
+                else:
+
+                    cursor.execute(
+                        """
+                        INSERT INTO users
+                        VALUES (?, ?, ?)
+                        """,
+                        (
+                            username,
+                            hashed_password,
+                            "active"
+                        )
+                    )
+
+            conn.commit()
+
+        # =========================
+        # COURIER
+        # =========================
+
+        elif filename == "courier.xlsx":
+
+            courier_df = pd.read_excel(
+                "courier.xlsx"
             )
 
             cursor.execute(
-                "SELECT * FROM users WHERE username=?",
-                (username,)
+                "DELETE FROM courier_service"
             )
 
-            existing = cursor.fetchone()
-
-            # UPDATE
-            if existing:
+            for index, row in courier_df.iterrows():
 
                 cursor.execute(
-
                     """
-                    UPDATE users
-                    SET password=?
-                    WHERE username=?
-                    """,
-
+                    INSERT INTO courier_service
                     (
-                        hashed_password,
-                        username
+                        company,
+                        contact,
+                        email,
+                        tel,
+                        service_type,
+                        base_location
+                    )
+                    VALUES
+                    (?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        str(row["company"]),
+                        str(row["contact"]),
+                        str(row["email"]),
+                        str(row["tel"]),
+                        "",
+                        ""
                     )
                 )
 
-            # INSERT
-            else:
+            conn.commit()
+
+        # =========================
+        # CUSTOMS
+        # =========================
+
+        elif filename == "customs_clearance.xlsx":
+
+            customs_df = pd.read_excel(
+                "customs_clearance.xlsx"
+            )
+
+            cursor.execute(
+                "DELETE FROM customs_service"
+            )
+
+            for index, row in customs_df.iterrows():
 
                 cursor.execute(
-
                     """
-                    INSERT INTO users
-                    VALUES (?, ?, ?)
-                    """,
-
+                    INSERT INTO customs_service
                     (
-                        username,
-                        hashed_password,
-                        "active"
+                        company,
+                        contact,
+                        email,
+                        tel,
+                        base
+                    )
+                    VALUES
+                    (?, ?, ?, ?, ?)
+                    """,
+                    (
+                        str(row["company"]),
+                        str(row["contact"]),
+                        str(row["email"]),
+                        str(row["tel"]),
+                        str(row["base"])
                     )
                 )
 
-        conn.commit()
-        os.remove(filename)
+            conn.commit()
 
-    # =========================
-    # COURIER
-    # =========================
+        # =========================
+        # PACKING
+        # =========================
 
-    elif filename == "courier.xlsx":
+        elif filename == "packing.xlsx":
 
-        courier_df = pd.read_excel(
-            "courier.xlsx"
-        )
-
-        cursor.execute(
-            "DELETE FROM courier_service"
-        )
-
-        for index, row in courier_df.iterrows():
-
-            cursor.execute(
-
-                """
-                INSERT INTO courier_service
-                (
-                    company,
-                    contact,
-                    email,
-                    tel,
-                    service_type,
-                    base_location
-                )
-                VALUES
-                (?, ?, ?, ?, ?, ?)
-                """,
-
-                (
-                    str(row["company"]),
-                    str(row["contact"]),
-                    str(row["email"]),
-                    str(row["tel"]),
-                    "",
-                    ""
-                )
-
+            packing_df = pd.read_excel(
+                "packing.xlsx"
             )
 
-        conn.commit()
-        os.remove(filename)
-
-
-    # =========================
-    # CUSTOMS
-    # =========================
- 
-    elif filename == "customs_clearance.xlsx":
-
-        customs_df = pd.read_excel(
-            "customs_clearance.xlsx"
-        )
-
-        cursor.execute(
-            "DELETE FROM customs_service"
-        )
-
-        for index, row in customs_df.iterrows():
-
             cursor.execute(
-
-                """
-                INSERT INTO customs_service
-                (
-                    company,
-                    contact,
-                    email,
-                    tel,
-                    base
-                )
-                VALUES
-                (?, ?, ?, ?, ?)
-                """,
-
-                (
-                    str(row["company"]),
-                    str(row["contact"]),
-                    str(row["email"]),
-                    str(row["tel"]),
-                    str(row["base"])
-                )
-
+                "DELETE FROM packing_service"
             )
 
-        conn.commit()
-        os.remove(filename)
+            for index, row in packing_df.iterrows():
 
-    # =========================
-    # PACKING
-    # =========================
-
-    elif filename == "packing.xlsx":
-
-        packing_df = pd.read_excel(
-            "packing.xlsx"
-        )
-
-        cursor.execute(
-            "DELETE FROM packing_service"
-        )
-
-        for index,row in packing_df.iterrows():
-
-            cursor.execute(
-
-                """
-                INSERT INTO packing_service
-                (
-                    company,
-                    contact,
-                    email,
-                    tel,
-                    service,
-                    base
-                )
-                VALUES
-                (?, ?, ?, ?, ?, ?)
-                """,
-
-                (
-                    str(row["company"]),
-                    str(row["contact"]),
-                    str(row["email"]),
-                    str(row["tel"]),
-                    str(row["service"]),
-                    str(row["base"])
+                cursor.execute(
+                    """
+                    INSERT INTO packing_service
+                    (
+                        company,
+                        contact,
+                        email,
+                        tel,
+                        service,
+                        base
+                    )
+                    VALUES
+                    (?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        str(row["company"]),
+                        str(row["contact"]),
+                        str(row["email"]),
+                        str(row["tel"]),
+                        str(row["service"]),
+                        str(row["base"])
+                    )
                 )
 
+            conn.commit()
+
+        # =========================
+        # CROSS BORDER
+        # =========================
+
+        elif filename == "cross_border.xlsx":
+
+            cross_df = pd.read_excel(
+                "cross_border.xlsx"
             )
 
-        conn.commit()
-    # =========================
-    # CROSS BORDER
-    # =========================
-
-    elif filename == "cross_border.xlsx":
-
-        cross_df = pd.read_excel(
-            "cross_border.xlsx"
-        )
-
-        cursor.execute(
-            "DELETE FROM cross_border_service"
-        )
-
-        for index,row in cross_df.iterrows():
-
             cursor.execute(
-
-                """
-                INSERT INTO cross_border_service
-                (
-                    company,
-                    contact,
-                    email,
-                    tel,
-                    route
-                )
-                VALUES
-                (?, ?, ?, ?, ?)
-                """,
-
-                (
-                    str(row["company"]),
-                    str(row["contact"]),
-                    str(row["email"]),
-                    str(row["tel"]),
-                    str(row["route"])
-                )
-
+                "DELETE FROM cross_border_service"
             )
 
-        conn.commit()
+            for index, row in cross_df.iterrows():
 
-    # =========================
-    # INSURANCE
-    # =========================
-
-    elif filename == "cargo_insurance.xlsx":
-
-        insurance_df = pd.read_excel(
-            "cargo_insurance.xlsx"
-        )
-
-        cursor.execute(
-            "DELETE FROM insurance_service"
-        )
-
-        for index,row in insurance_df.iterrows():
-
-            cursor.execute(
-
-                """
-                INSERT INTO insurance_service
-                (
-                    company,
-                    department,
-                    contact,
-                    email,
-                    tel
-                )
-                VALUES
-                (?, ?, ?, ?, ?)
-                """,
-
-                (
-                    str(row["company"]),
-                    str(row["department"]),
-                    str(row["contact"]),
-                    str(row["email"]),
-                    str(row["tel"])
+                cursor.execute(
+                    """
+                    INSERT INTO cross_border_service
+                    (
+                        company,
+                        contact,
+                        email,
+                        tel,
+                        route
+                    )
+                    VALUES
+                    (?, ?, ?, ?, ?)
+                    """,
+                    (
+                        str(row["company"]),
+                        str(row["contact"]),
+                        str(row["email"]),
+                        str(row["tel"]),
+                        str(row["route"])
+                    )
                 )
 
+            conn.commit()
+
+        # =========================
+        # INSURANCE
+        # =========================
+
+        elif filename == "cargo_insurance.xlsx":
+
+            insurance_df = pd.read_excel(
+                "cargo_insurance.xlsx"
             )
 
-        conn.commit()
-
-    # =========================
-    # TRUCKING
-    # =========================
-
-    elif filename == "tracking_reefer.xlsx":
-
-        reefer_df = pd.read_excel(
-            "tracking_reefer.xlsx"
-        )
-
-        cursor.execute(
-            "DELETE FROM trucking_service"
-        )
-
-        for index,row in reefer_df.iterrows():
-
             cursor.execute(
-
-                """
-                INSERT INTO trucking_service
-                (
-                    company,
-                    contact,
-                    email,
-                    tel,
-                    type,
-                    base
-                )
-                VALUES
-                (?, ?, ?, ?, ?, ?)
-                """,
-
-                (
-                    str(row["company"]),
-                    str(row["contact"]),
-                    str(row["email"]),
-                    str(row["tel"]),
-                    str(row["Type"]),
-                    str(row["Base"])
-                )
-
+                "DELETE FROM insurance_service"
             )
 
-        conn.commit()
+            for index, row in insurance_df.iterrows():
 
-    log_action(
-        "admin",
-        "UPLOAD FILE",
-        filename
-    )
+                cursor.execute(
+                    """
+                    INSERT INTO insurance_service
+                    (
+                        company,
+                        department,
+                        contact,
+                        email,
+                        tel
+                    )
+                    VALUES
+                    (?, ?, ?, ?, ?)
+                    """,
+                    (
+                        str(row["company"]),
+                        str(row["department"]),
+                        str(row["contact"]),
+                        str(row["email"]),
+                        str(row["tel"])
+                    )
+                )
+
+            conn.commit()
+
+        # =========================
+        # TRUCKING
+        # =========================
+
+        elif filename == "tracking_reefer.xlsx":
+
+            reefer_df = pd.read_excel(
+                "tracking_reefer.xlsx"
+            )
+
+            cursor.execute(
+                "DELETE FROM trucking_service"
+            )
+
+            for index, row in reefer_df.iterrows():
+
+                cursor.execute(
+                    """
+                    INSERT INTO trucking_service
+                    (
+                        company,
+                        contact,
+                        email,
+                        tel,
+                        type,
+                        base
+                    )
+                    VALUES
+                    (?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        str(row["company"]),
+                        str(row["contact"]),
+                        str(row["email"]),
+                        str(row["tel"]),
+                        str(row["Type"]),
+                        str(row["Base"])
+                    )
+                )
+
+            conn.commit()
+
+        # =========================
+        # ไม่รู้จักชื่อไฟล์
+        # =========================
+
+        else:
+
+            print(
+                "UNKNOWN FILE:",
+                filename
+            )
+
+            # ลบไฟล์ที่ไม่ตรงกับระบบ
+            if os.path.exists(filename):
+                os.remove(filename)
+
+            continue
+
+        # =========================
+        # LOG
+        # =========================
+
+        log_action(
+            "admin",
+            "UPLOAD FILE",
+            filename
+        )
+
+        uploaded_files.append(filename)
+
+        # =========================
+        # ลบไฟล์หลังประมวลผล
+        # =========================
+
+        if os.path.exists(filename):
+            os.remove(filename)
+
+    # =========================
+    # แสดงผล
+    # =========================
+
+    if not uploaded_files:
+
+        return """
+        <h2>
+        ❌ No valid files uploaded
+        </h2>
+
+        <a href="/admin">
+        🔙 BACK
+        </a>
+        """
+
+    files_html = ""
+
+    for filename in uploaded_files:
+
+        files_html += f"""
+        <li>
+            {filename}
+        </li>
+        """
+
     return f"""
-
     <h2>
     ✅ Upload Success
     </h2>
 
     <p>
-    FILE:
-    {filename}
+    Uploaded Files:
     </p>
+
+    <ul>
+        {files_html}
+    </ul>
+
+    <br>
 
     <a href="/admin">
     🔙 BACK
     </a>
-
     """
 
 # =========================
