@@ -1530,23 +1530,24 @@ def reset_password(username):
 
     new_password = "1234"
 
-    hashed_password = generate_password_hash(
-        new_password
-    )
+    hashed_password = generate_password_hash(new_password)
 
     cursor.execute(
         """
         UPDATE users
-        SET password=?
-        WHERE username=?
+        SET password = ?
+        WHERE username = ?
         """,
-        (
-            hashed_password,
-            username
-        )
+        (hashed_password, username)
     )
 
     conn.commit()
+
+    if cursor.rowcount == 0:
+        return f"""
+        <h2>❌ ไม่พบ Username: {username}</h2>
+        <a href="/users">กลับไป User List</a>
+        """
 
     log_action(
         "admin",
@@ -1555,7 +1556,32 @@ def reset_password(username):
     )
 
     return f"""
-    ...
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Reset Password</title>
+    </head>
+
+    <body style="font-family:Arial; text-align:center; padding:50px;">
+
+        <h2>✅ RESET PASSWORD SUCCESS</h2>
+
+        <p>
+            Username: <b>{username}</b>
+        </p>
+
+        <p>
+            New Password: <b>1234</b>
+        </p>
+
+        <br>
+
+        <a href="/users">
+            ⬅ กลับไป User List
+        </a>
+
+    </body>
+    </html>
     """
 # =========================
 # ACTION LOGS
