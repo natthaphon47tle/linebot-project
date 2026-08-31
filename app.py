@@ -3686,7 +3686,7 @@ def cross_management():
 
     form_html = """
 
-<form method="POST" action="/add_cross_border">
+<form method="POST" action="/add_cross">
 
 <div class="row mb-3">
 
@@ -4181,7 +4181,7 @@ def trucking_management():
 
     form_html = """
 
-<form method="POST" action="/add_customs">
+<form method="POST" action="/add_trucking">
 
 <div class="row mb-3">
 
